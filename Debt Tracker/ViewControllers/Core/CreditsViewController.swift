@@ -11,27 +11,25 @@ class CreditsViewController: UIViewController {
     
     let creditsTableView = UITableView()
     let contentView = UIView()
-    
-    var credits: [CreditModel] = [
-//        CreditModel(name: "Enpara - Nakit Avans", entryDebt: 2000000, paidCount: 2, monthlyDebt: 21872, paymentDate: "01.12.2023", currendDebt: 12000),
-//        CreditModel(name: "test", entryDebt: 10000000, paidCount: 4, monthlyDebt: 250000, paymentDate: "02.07.2021", currendDebt: 10000000),
-//        CreditModel(name: "test2", entryDebt: 10000000, paidCount: 7, monthlyDebt: 500000, paymentDate: "02.07.2021", currendDebt: 10000000),
-//        CreditModel(name: "test3", entryDebt: 10000000, paidCount: 11, monthlyDebt: 2000, paymentDate: "02.07.2021", currendDebt: 10000000),
-//        CreditModel(name: "test4", entryDebt: 10000000, paidCount: 0, monthlyDebt: 250000, paymentDate: "02.07.2021", currendDebt: 10000000),
-//        CreditModel(name: "test5", entryDebt: 10000000, paidCount: 1, monthlyDebt: 250000, paymentDate: "02.07.2021", currendDebt: 10000000),
-    ]
+
+    private var credits: [CreditItem] = []
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
         configureViewController()
         configureTableView()
+        fetchFromCoredata()
     }
     
     private func configureViewController() {
         view.backgroundColor = .systemBackground
         title = "Credits"
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(rightBarButtonTapped))
+        
+        NotificationCenter.default.addObserver(forName: NSNotification.Name("saveTapped"), object: nil, queue: nil) { [weak self] _ in
+            self?.fetchFromCoredata()
+        }
     }
     
     private func configureTableView() {
@@ -44,15 +42,38 @@ class CreditsViewController: UIViewController {
         contentView.backgroundColor = .systemGray5
         
         creditsTableView.frame = view.bounds
-//        creditsTableView.translatesAutoresizingMaskIntoConstraints = false
-//        creditsTableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
-//        creditsTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
-//        creditsTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
-//        creditsTableView.heightAnchor.constraint(equalToConstant: scrol).isActive = true
+
         creditsTableView.delegate = self
         creditsTableView.dataSource = self
         creditsTableView.rowHeight = 200
         creditsTableView.register(CreditsTableViewCell.self, forCellReuseIdentifier:CreditsTableViewCell.identifier)
+    }
+    
+    private func fetchFromCoredata() {
+        PersistenceManager.shared.fetchCredits { [weak self] result in
+            guard let self = self else { return }
+            
+            switch result {
+            case .success(let success):
+                
+                if success.isEmpty {
+//                    self.emptyState = PAEmptyStateView(message: "Currently don't have a Pomodoro\nAdd from (+) ")
+//                    self.emptyState?.frame = self.view.bounds
+//                    self.view.addSubview(self.emptyState!)
+                    
+                } else {
+//                    self.emptyState?.removeFromSuperview()
+                    self.credits = success
+                    
+                    DispatchQueue.main.async {
+                        self.creditsTableView.reloadData()
+                    }
+                }
+                
+            case .failure(_):
+                self.presentDefaultError()
+            }
+        }
     }
     
     @objc func rightBarButtonTapped() {
@@ -74,6 +95,34 @@ extension CreditsViewController: UITableViewDelegate, UITableViewDataSource {
         
         cell.set(credit: credits[indexPath.row])
         return cell
+    }
+    
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+       
+        switch editingStyle {
+        case .delete:
+            PersistenceManager.shared.deleteCreditWith(model: credits[indexPath.row]) { [weak self] result in
+                guard let self = self else { return }
+                
+                switch result {
+                case .success():
+                    self.credits.remove(at: indexPath.row)
+                    if self.credits.isEmpty {
+//                        self.configureSearchController()
+//                        self.emptyState = PAEmptyStateView(message: "Currently don't have a Pomodoro\nAdd from (+) ")
+//                        self.emptyState?.frame = self.view.bounds
+//                        self.view.addSubview(self.emptyState!)
+                    }
+
+                case .failure(_):
+                    self.presentDefaultError()
+                }
+                
+                tableView.deleteRows(at: [indexPath], with: .fade)
+            }
+        default:
+            break
+        }
     }
 }
 

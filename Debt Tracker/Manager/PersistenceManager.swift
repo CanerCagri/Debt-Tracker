@@ -42,4 +42,34 @@ class PersistenceManager {
             completion(.failure(DatabaseError.failedToDataSave))
         }
     }
+    
+    func fetchCredits(completion: @escaping(Result<[CreditItem], Error> )-> Void) {
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
+        
+        let context = appDelegate.persistentContainer.viewContext
+        let request: NSFetchRequest<CreditItem>
+        request = CreditItem.fetchRequest()
+        
+        do {
+            let credits = try context.fetch(request)
+            completion(.success(credits))
+            
+        } catch {
+            completion(.failure(DatabaseError.failedToFetchData))
+        }
+    }
+    
+    func deleteCreditWith(model: CreditItem, completion: @escaping (Result<Void, Error>) -> Void) {
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
+        
+        let context = appDelegate.persistentContainer.viewContext
+        context.delete(model)
+        
+        do {
+            try context.save()
+            completion(.success(()))
+        } catch {
+            completion(.failure(DatabaseError.failedToDeleteData))
+        }
+    }
 }

@@ -24,6 +24,10 @@
 		011E8C6429848B6200F163D4 /* DTTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 011E8C6329848B6200F163D4 /* DTTextField.swift */; };
 		011E8C67298497A900F163D4 /* DTButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 011E8C66298497A900F163D4 /* DTButton.swift */; };
 		011E8C6E29849F5F00F163D4 /* DTDatePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 011E8C6D29849F5F00F163D4 /* DTDatePicker.swift */; };
+		011E8C702984A8C300F163D4 /* Int+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 011E8C6F2984A8C300F163D4 /* Int+Ext.swift */; };
+		011E8C7329858BC600F163D4 /* DTAlertViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 011E8C7229858BC600F163D4 /* DTAlertViewController.swift */; };
+		011E8C7629858C1900F163D4 /* DTContainerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 011E8C7529858C1900F163D4 /* DTContainerView.swift */; };
+		011E8C7829858CD700F163D4 /* UIViewController+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 011E8C7729858CD700F163D4 /* UIViewController+Ext.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -46,6 +50,10 @@
 		011E8C6329848B6200F163D4 /* DTTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DTTextField.swift; sourceTree = "<group>"; };
 		011E8C66298497A900F163D4 /* DTButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DTButton.swift; sourceTree = "<group>"; };
 		011E8C6D29849F5F00F163D4 /* DTDatePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DTDatePicker.swift; sourceTree = "<group>"; };
+		011E8C6F2984A8C300F163D4 /* Int+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Int+Ext.swift"; sourceTree = "<group>"; };
+		011E8C7229858BC600F163D4 /* DTAlertViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DTAlertViewController.swift; sourceTree = "<group>"; };
+		011E8C7529858C1900F163D4 /* DTContainerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DTContainerView.swift; sourceTree = "<group>"; };
+		011E8C7729858CD700F163D4 /* UIViewController+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Ext.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -121,6 +129,8 @@
 		011E8C4429834CAC00F163D4 /* CustomComponents */ = {
 			isa = PBXGroup;
 			children = (
+				011E8C7429858C0700F163D4 /* Views */,
+				011E8C7129858BB400F163D4 /* ViewControllers */,
 				011E8C6C29849F4900F163D4 /* DatePickers */,
 				011E8C65298497A200F163D4 /* Buttons */,
 				011E8C6229848B5500F163D4 /* TextFields */,
@@ -133,6 +143,8 @@
 			isa = PBXGroup;
 			children = (
 				011E8C4C298352C700F163D4 /* UIView+Ext.swift */,
+				011E8C6F2984A8C300F163D4 /* Int+Ext.swift */,
+				011E8C7729858CD700F163D4 /* UIViewController+Ext.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -194,6 +206,22 @@
 				011E8C6D29849F5F00F163D4 /* DTDatePicker.swift */,
 			);
 			path = DatePickers;
+			sourceTree = "<group>";
+		};
+		011E8C7129858BB400F163D4 /* ViewControllers */ = {
+			isa = PBXGroup;
+			children = (
+				011E8C7229858BC600F163D4 /* DTAlertViewController.swift */,
+			);
+			path = ViewControllers;
+			sourceTree = "<group>";
+		};
+		011E8C7429858C0700F163D4 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				011E8C7529858C1900F163D4 /* DTContainerView.swift */,
+			);
+			path = Views;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -266,6 +294,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				011E8C7829858CD700F163D4 /* UIViewController+Ext.swift in Sources */,
 				011E8C3C298348DE00F163D4 /* CreditsAddViewController.swift in Sources */,
 				011E8C6E29849F5F00F163D4 /* DTDatePicker.swift in Sources */,
 				011E8C3E29834A1800F163D4 /* CreditsTableViewCell.swift in Sources */,
@@ -276,11 +305,14 @@
 				011E8C5D2984014200F163D4 /* PersistenceManager.swift in Sources */,
 				011E8C67298497A900F163D4 /* DTButton.swift in Sources */,
 				011E8C4129834C4D00F163D4 /* CreditsDetailViewController.swift in Sources */,
+				011E8C7629858C1900F163D4 /* DTContainerView.swift in Sources */,
 				011E8C2C298346BE00F163D4 /* CreditsViewController.swift in Sources */,
 				011E8C28298346BE00F163D4 /* AppDelegate.swift in Sources */,
 				011E8C502983535400F163D4 /* CreditModel.swift in Sources */,
 				011E8C5A2983FE4400F163D4 /* CreditModel.xcdatamodeld in Sources */,
 				011E8C2A298346BE00F163D4 /* SceneDelegate.swift in Sources */,
+				011E8C702984A8C300F163D4 /* Int+Ext.swift in Sources */,
+				011E8C7329858BC600F163D4 /* DTAlertViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

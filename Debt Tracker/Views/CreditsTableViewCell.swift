@@ -74,7 +74,7 @@ class CreditsTableViewCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func set(credit: CreditModel) {
+    func set(credit: CreditItem) {
         
         let formatter = NumberFormatter()
         formatter.numberStyle = .decimal
@@ -85,25 +85,25 @@ class CreditsTableViewCell: UITableViewCell {
         
         nameLabel.text = credit.name
         
-        let entryDebtFormatted = formatter.string(from: credit.entryDebt as NSNumber)
+        let entryDebtFormatted = formatter.string(from: credit.entry_debt as NSNumber)
         entryDebt.text = entryDebtFormatted ?? ""
         
-        count = credit.paidCount
+        count = Int(credit.paid_count)
         
-        let monthlyFormatted = formatter.string(from: credit.monthlyDebt as NSNumber)
+        let monthlyFormatted = formatter.string(from: credit.montly_debt as NSNumber)
         monthlyDepth.text = monthlyFormatted ?? ""
         
-        nextPayment.text = "Next Payment: \(credit.paymentDate)"
+        nextPayment.text = "Next Payment: \(credit.payment_date ?? "")"
         
-        let totalDebtFormatted = formatter.string(from: credit.remainingDebt as NSNumber)
+        let totalDebtFormatted = formatter.string(from: credit.remaining_debt as NSNumber)
         totalDebt.text = totalDebtFormatted ?? ""
         
-        let paidCalculate = Double(credit.paidCount) * credit.monthlyDebt
+        let paidCalculate = Double(credit.paid_count) * credit.montly_debt
         let paidTextFormatted = formatter.string(from: paidCalculate as NSNumber)
         let paidText = paidTextFormatted ?? ""
         paid.text = paidText
         
-        let calculateRemaining = credit.remainingDebt - paidCalculate
+        let calculateRemaining = credit.remaining_debt - paidCalculate
         let remainingTextFormatted = formatter.string(from: calculateRemaining as NSNumber)
         remaining.text = remainingTextFormatted ?? ""
     }
