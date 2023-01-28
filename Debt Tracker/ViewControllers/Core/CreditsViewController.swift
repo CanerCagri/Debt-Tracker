@@ -13,12 +13,12 @@ class CreditsViewController: UIViewController {
     let contentView = UIView()
     
     var credits: [CreditModel] = [
-        CreditModel(name: "Enpara - Nakit Avans", entryDebt: 2000000, paidCount: 2, monthlyDebt: 21872, paymentDate: "01.12.2023", currendDebt: 12000),
-        CreditModel(name: "test", entryDebt: 10000000, paidCount: 4, monthlyDebt: 250000, paymentDate: "02.07.2021", currendDebt: 10000000),
-        CreditModel(name: "test2", entryDebt: 10000000, paidCount: 7, monthlyDebt: 500000, paymentDate: "02.07.2021", currendDebt: 10000000),
-        CreditModel(name: "test3", entryDebt: 10000000, paidCount: 11, monthlyDebt: 2000, paymentDate: "02.07.2021", currendDebt: 10000000),
-        CreditModel(name: "test4", entryDebt: 10000000, paidCount: 0, monthlyDebt: 250000, paymentDate: "02.07.2021", currendDebt: 10000000),
-        CreditModel(name: "test5", entryDebt: 10000000, paidCount: 1, monthlyDebt: 250000, paymentDate: "02.07.2021", currendDebt: 10000000),
+//        CreditModel(name: "Enpara - Nakit Avans", entryDebt: 2000000, paidCount: 2, monthlyDebt: 21872, paymentDate: "01.12.2023", currendDebt: 12000),
+//        CreditModel(name: "test", entryDebt: 10000000, paidCount: 4, monthlyDebt: 250000, paymentDate: "02.07.2021", currendDebt: 10000000),
+//        CreditModel(name: "test2", entryDebt: 10000000, paidCount: 7, monthlyDebt: 500000, paymentDate: "02.07.2021", currendDebt: 10000000),
+//        CreditModel(name: "test3", entryDebt: 10000000, paidCount: 11, monthlyDebt: 2000, paymentDate: "02.07.2021", currendDebt: 10000000),
+//        CreditModel(name: "test4", entryDebt: 10000000, paidCount: 0, monthlyDebt: 250000, paymentDate: "02.07.2021", currendDebt: 10000000),
+//        CreditModel(name: "test5", entryDebt: 10000000, paidCount: 1, monthlyDebt: 250000, paymentDate: "02.07.2021", currendDebt: 10000000),
     ]
 
     override func viewDidLoad() {

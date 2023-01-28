@@ -19,9 +19,11 @@
 		011E8C4829834D1F00F163D4 /* DTBodyLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 011E8C4729834D1F00F163D4 /* DTBodyLabel.swift */; };
 		011E8C4D298352C700F163D4 /* UIView+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 011E8C4C298352C700F163D4 /* UIView+Ext.swift */; };
 		011E8C502983535400F163D4 /* CreditModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 011E8C4F2983535400F163D4 /* CreditModel.swift */; };
-		011E8C532983559300F163D4 /* DTTotalDebtViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 011E8C522983559300F163D4 /* DTTotalDebtViewController.swift */; };
-		011E8C55298355B400F163D4 /* DTPaidViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 011E8C54298355B400F163D4 /* DTPaidViewController.swift */; };
-		011E8C57298355C300F163D4 /* DTRemainingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 011E8C56298355C300F163D4 /* DTRemainingViewController.swift */; };
+		011E8C5A2983FE4400F163D4 /* CreditModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 011E8C582983FE4400F163D4 /* CreditModel.xcdatamodeld */; };
+		011E8C5D2984014200F163D4 /* PersistenceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 011E8C5C2984014200F163D4 /* PersistenceManager.swift */; };
+		011E8C6429848B6200F163D4 /* DTTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 011E8C6329848B6200F163D4 /* DTTextField.swift */; };
+		011E8C67298497A900F163D4 /* DTButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 011E8C66298497A900F163D4 /* DTButton.swift */; };
+		011E8C6E29849F5F00F163D4 /* DTDatePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 011E8C6D29849F5F00F163D4 /* DTDatePicker.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -39,9 +41,11 @@
 		011E8C4729834D1F00F163D4 /* DTBodyLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DTBodyLabel.swift; sourceTree = "<group>"; };
 		011E8C4C298352C700F163D4 /* UIView+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Ext.swift"; sourceTree = "<group>"; };
 		011E8C4F2983535400F163D4 /* CreditModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreditModel.swift; sourceTree = "<group>"; };
-		011E8C522983559300F163D4 /* DTTotalDebtViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DTTotalDebtViewController.swift; sourceTree = "<group>"; };
-		011E8C54298355B400F163D4 /* DTPaidViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DTPaidViewController.swift; sourceTree = "<group>"; };
-		011E8C56298355C300F163D4 /* DTRemainingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DTRemainingViewController.swift; sourceTree = "<group>"; };
+		011E8C592983FE4400F163D4 /* CreditModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = CreditModel.xcdatamodel; sourceTree = "<group>"; };
+		011E8C5C2984014200F163D4 /* PersistenceManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistenceManager.swift; sourceTree = "<group>"; };
+		011E8C6329848B6200F163D4 /* DTTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DTTextField.swift; sourceTree = "<group>"; };
+		011E8C66298497A900F163D4 /* DTButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DTButton.swift; sourceTree = "<group>"; };
+		011E8C6D29849F5F00F163D4 /* DTDatePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DTDatePicker.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -77,10 +81,12 @@
 				011E8C4E2983534500F163D4 /* Models */,
 				011E8C4B298352B900F163D4 /* Extensions */,
 				011E8C4329834C8400F163D4 /* SupportingFiles */,
+				011E8C5B298400CC00F163D4 /* Manager */,
 				011E8C4429834CAC00F163D4 /* CustomComponents */,
 				011E8C3F29834BE400F163D4 /* ViewControllers */,
 				011E8C4229834C6600F163D4 /* Views */,
 				011E8C35298346BF00F163D4 /* Info.plist */,
+				011E8C582983FE4400F163D4 /* CreditModel.xcdatamodeld */,
 			);
 			path = "Debt Tracker";
 			sourceTree = "<group>";
@@ -88,10 +94,7 @@
 		011E8C3F29834BE400F163D4 /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
-				011E8C2B298346BE00F163D4 /* CreditsViewController.swift */,
-				011E8C3B298348DE00F163D4 /* CreditsAddViewController.swift */,
-				011E8C4029834C4D00F163D4 /* CreditsDetailViewController.swift */,
-				011E8C512983556600F163D4 /* ItemInfoVc */,
+				011E8C6829849B6700F163D4 /* Core */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -118,8 +121,10 @@
 		011E8C4429834CAC00F163D4 /* CustomComponents */ = {
 			isa = PBXGroup;
 			children = (
-				011E8C4529834CDD00F163D4 /* DTTitleLabel.swift */,
-				011E8C4729834D1F00F163D4 /* DTBodyLabel.swift */,
+				011E8C6C29849F4900F163D4 /* DatePickers */,
+				011E8C65298497A200F163D4 /* Buttons */,
+				011E8C6229848B5500F163D4 /* TextFields */,
+				011E8C6129848B4A00F163D4 /* Labels */,
 			);
 			path = CustomComponents;
 			sourceTree = "<group>";
@@ -140,14 +145,55 @@
 			path = Models;
 			sourceTree = "<group>";
 		};
-		011E8C512983556600F163D4 /* ItemInfoVc */ = {
+		011E8C5B298400CC00F163D4 /* Manager */ = {
 			isa = PBXGroup;
 			children = (
-				011E8C522983559300F163D4 /* DTTotalDebtViewController.swift */,
-				011E8C54298355B400F163D4 /* DTPaidViewController.swift */,
-				011E8C56298355C300F163D4 /* DTRemainingViewController.swift */,
+				011E8C5C2984014200F163D4 /* PersistenceManager.swift */,
 			);
-			path = ItemInfoVc;
+			path = Manager;
+			sourceTree = "<group>";
+		};
+		011E8C6129848B4A00F163D4 /* Labels */ = {
+			isa = PBXGroup;
+			children = (
+				011E8C4529834CDD00F163D4 /* DTTitleLabel.swift */,
+				011E8C4729834D1F00F163D4 /* DTBodyLabel.swift */,
+			);
+			path = Labels;
+			sourceTree = "<group>";
+		};
+		011E8C6229848B5500F163D4 /* TextFields */ = {
+			isa = PBXGroup;
+			children = (
+				011E8C6329848B6200F163D4 /* DTTextField.swift */,
+			);
+			path = TextFields;
+			sourceTree = "<group>";
+		};
+		011E8C65298497A200F163D4 /* Buttons */ = {
+			isa = PBXGroup;
+			children = (
+				011E8C66298497A900F163D4 /* DTButton.swift */,
+			);
+			path = Buttons;
+			sourceTree = "<group>";
+		};
+		011E8C6829849B6700F163D4 /* Core */ = {
+			isa = PBXGroup;
+			children = (
+				011E8C2B298346BE00F163D4 /* CreditsViewController.swift */,
+				011E8C3B298348DE00F163D4 /* CreditsAddViewController.swift */,
+				011E8C4029834C4D00F163D4 /* CreditsDetailViewController.swift */,
+			);
+			path = Core;
+			sourceTree = "<group>";
+		};
+		011E8C6C29849F4900F163D4 /* DatePickers */ = {
+			isa = PBXGroup;
+			children = (
+				011E8C6D29849F5F00F163D4 /* DTDatePicker.swift */,
+			);
+			path = DatePickers;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -221,17 +267,19 @@
 			buildActionMask = 2147483647;
 			files = (
 				011E8C3C298348DE00F163D4 /* CreditsAddViewController.swift in Sources */,
+				011E8C6E29849F5F00F163D4 /* DTDatePicker.swift in Sources */,
 				011E8C3E29834A1800F163D4 /* CreditsTableViewCell.swift in Sources */,
 				011E8C4D298352C700F163D4 /* UIView+Ext.swift in Sources */,
 				011E8C4829834D1F00F163D4 /* DTBodyLabel.swift in Sources */,
-				011E8C532983559300F163D4 /* DTTotalDebtViewController.swift in Sources */,
 				011E8C4629834CDD00F163D4 /* DTTitleLabel.swift in Sources */,
+				011E8C6429848B6200F163D4 /* DTTextField.swift in Sources */,
+				011E8C5D2984014200F163D4 /* PersistenceManager.swift in Sources */,
+				011E8C67298497A900F163D4 /* DTButton.swift in Sources */,
 				011E8C4129834C4D00F163D4 /* CreditsDetailViewController.swift in Sources */,
 				011E8C2C298346BE00F163D4 /* CreditsViewController.swift in Sources */,
-				011E8C57298355C300F163D4 /* DTRemainingViewController.swift in Sources */,
-				011E8C55298355B400F163D4 /* DTPaidViewController.swift in Sources */,
 				011E8C28298346BE00F163D4 /* AppDelegate.swift in Sources */,
 				011E8C502983535400F163D4 /* CreditModel.swift in Sources */,
+				011E8C5A2983FE4400F163D4 /* CreditModel.xcdatamodeld in Sources */,
 				011E8C2A298346BE00F163D4 /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -450,6 +498,19 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		011E8C582983FE4400F163D4 /* CreditModel.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				011E8C592983FE4400F163D4 /* CreditModel.xcdatamodel */,
+			);
+			currentVersion = 011E8C592983FE4400F163D4 /* CreditModel.xcdatamodel */;
+			path = CreditModel.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = 011E8C1C298346BE00F163D4 /* Project object */;
 }

@@ -95,14 +95,16 @@ class CreditsTableViewCell: UITableViewCell {
         
         nextPayment.text = "Next Payment: \(credit.paymentDate)"
         
-        let totalDebtFormatted = formatter.string(from: credit.currendDebt as NSNumber)
+        let totalDebtFormatted = formatter.string(from: credit.remainingDebt as NSNumber)
         totalDebt.text = totalDebtFormatted ?? ""
         
-        let paidTextFormatted = formatter.string(from: credit.paidCount * credit.monthlyDebt as NSNumber)
+        let paidCalculate = Double(credit.paidCount) * credit.monthlyDebt
+        let paidTextFormatted = formatter.string(from: paidCalculate as NSNumber)
         let paidText = paidTextFormatted ?? ""
         paid.text = paidText
         
-        let remainingTextFormatted = formatter.string(from: credit.currendDebt - (credit.paidCount * credit.monthlyDebt) as NSNumber)
+        let calculateRemaining = credit.remainingDebt - paidCalculate
+        let remainingTextFormatted = formatter.string(from: calculateRemaining as NSNumber)
         remaining.text = remainingTextFormatted ?? ""
     }
     
