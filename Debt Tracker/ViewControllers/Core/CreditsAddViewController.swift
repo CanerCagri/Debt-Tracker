@@ -60,6 +60,8 @@ class CreditsAddViewController: UIViewController {
         
         let saveButton = UIBarButtonItem(barButtonSystemItem: .save, target: self, action: #selector(rightBarButtonTapped))
         navigationItem.rightBarButtonItem = saveButton
+        navigationItem.rightBarButtonItem?.isEnabled = false
+        
         
         paymentDatePicker.datePickerMode = .date
         paymentDatePicker.addTarget(self, action: #selector(datePickerValueChanged), for: .valueChanged)
@@ -102,13 +104,15 @@ class CreditsAddViewController: UIViewController {
             return
         }
         
+        navigationItem.rightBarButtonItem?.isEnabled = true
+        
         let labelText = entryDebt
         let number = Int(labelText)!
         currentDebt = number + number / 100 * 5
         let monthlyDebt = Double(currentDebt) / 12
         let roundedMonthlyDebt = String(format: "%.2f", monthlyDebt)
         
-        calculatedCurrentDebt.text = "12 Month Installment Calculated Debt: \(String(currentDebt))"
+        calculatedCurrentDebt.text = "12 Month Calculated Debt: \(String(currentDebt))"
         
         for i in 0..<12 {
             let label = DTTitleLabel(textAlignment: .left, fontSize: 10)
@@ -206,7 +210,7 @@ class CreditsAddViewController: UIViewController {
             return
         }
         
-        let viewModel = CreditModel(name: name, entryDebt: Int(entryDebt)!, paidCount: 0, monthlyDebt: Double(monthlyDebt)!, paymentDate: debtDate, currentDebt: currentDebt, remainingDebt: Double(currentDebt))
+        let viewModel = CreditModel(id: UUID().uuidString, name: name, entryDebt: Int(entryDebt)!, paidCount: 0, monthlyDebt: Double(monthlyDebt)!, paymentDate: dateLabels[0].text!, currentDebt: currentDebt, remainingDebt: Double(currentDebt))
         
         PersistenceManager.shared.downloadWithModel(model: viewModel) { result in
             switch result {

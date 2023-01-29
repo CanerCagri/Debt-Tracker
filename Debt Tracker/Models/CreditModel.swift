@@ -8,7 +8,7 @@
 import Foundation
 
 struct CreditModel {
-    var id = UUID()
+    var id: String
     var name: String
     var entryDebt: Int
     var paidCount: Int

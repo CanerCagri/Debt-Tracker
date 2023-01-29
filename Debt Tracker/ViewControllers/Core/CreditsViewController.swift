@@ -12,7 +12,7 @@ class CreditsViewController: UIViewController {
     let creditsTableView = UITableView()
     let contentView = UIView()
 
-    private var credits: [CreditItem] = []
+    private var credits: [CreditItems] = []
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -25,14 +25,7 @@ class CreditsViewController: UIViewController {
     private func configureViewController() {
         view.backgroundColor = .systemBackground
         title = "Credits"
-        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(rightBarButtonTapped))
         
-        NotificationCenter.default.addObserver(forName: NSNotification.Name("saveTapped"), object: nil, queue: nil) { [weak self] _ in
-            self?.fetchFromCoredata()
-        }
-    }
-    
-    private func configureTableView() {
         view.addSubviews(contentView)
         contentView.translatesAutoresizingMaskIntoConstraints = false
         contentView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
@@ -41,6 +34,19 @@ class CreditsViewController: UIViewController {
         contentView.addSubview(creditsTableView)
         contentView.backgroundColor = .systemGray5
         
+        
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(rightBarButtonTapped))
+        
+        NotificationCenter.default.addObserver(forName: NSNotification.Name("saveTapped"), object: nil, queue: nil) { [weak self] _ in
+            self?.fetchFromCoredata()
+        }
+        
+        NotificationCenter.default.addObserver(forName: NSNotification.Name("paymentUpdated"), object: nil, queue: nil) { [weak self] _ in
+            self?.fetchFromCoredata()
+        }
+    }
+    
+    private func configureTableView() {
         creditsTableView.frame = view.bounds
 
         creditsTableView.delegate = self
@@ -95,6 +101,16 @@ extension CreditsViewController: UITableViewDelegate, UITableViewDataSource {
         
         cell.set(credit: credits[indexPath.row])
         return cell
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
+        tableView.deselectRow(at: indexPath, animated: true)
+       
+        let selectedCredit = credits[indexPath.row]
+        let detailVc = CreditsDetailViewController()
+        detailVc.creditModel = selectedCredit
+        navigationController?.pushViewController(detailVc, animated: true)
     }
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {

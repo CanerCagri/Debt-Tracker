@@ -23,9 +23,9 @@ class PersistenceManager {
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
         
         let context = appDelegate.persistentContainer.viewContext
-        let item = CreditItem(context: context)
+        let item = CreditItems(context: context)
         
-        item.id = UUID()
+        item.id = model.id
         item.name = model.name
         item.current_debt = Int32(model.currentDebt)
         item.entry_debt = Int32(model.entryDebt)
@@ -43,12 +43,12 @@ class PersistenceManager {
         }
     }
     
-    func fetchCredits(completion: @escaping(Result<[CreditItem], Error> )-> Void) {
+    func fetchCredits(completion: @escaping(Result<[CreditItems], Error> )-> Void) {
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
         
         let context = appDelegate.persistentContainer.viewContext
-        let request: NSFetchRequest<CreditItem>
-        request = CreditItem.fetchRequest()
+        let request: NSFetchRequest<CreditItems>
+        request = CreditItems.fetchRequest()
         
         do {
             let credits = try context.fetch(request)
@@ -59,7 +59,7 @@ class PersistenceManager {
         }
     }
     
-    func deleteCreditWith(model: CreditItem, completion: @escaping (Result<Void, Error>) -> Void) {
+    func deleteCreditWith(model: CreditItems, completion: @escaping (Result<Void, Error>) -> Void) {
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
         
         let context = appDelegate.persistentContainer.viewContext
@@ -71,5 +71,36 @@ class PersistenceManager {
         } catch {
             completion(.failure(DatabaseError.failedToDeleteData))
         }
+    }
+    
+    func editCreditDetails(model: CreditModel) {
+        
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
+        
+        let context = appDelegate.persistentContainer.viewContext
+        
+        let id = model.id
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CreditItems")
+        fetchRequest.predicate = NSPredicate(format: "id == %@", id)
+
+        do {
+            let result = try context.fetch(fetchRequest)
+            if let entity = result.first as? CreditItems {
+                // Update the properties of the entity
+                entity.payment_date = model.paymentDate
+                entity.remaining_debt = model.remainingDebt
+                entity.paid_count = Int32(model.paidCount)
+                // Save the managed object context
+                try context.save()
+            }
+        } catch {
+            print("Error fetching data: \(error)")
+        }
+
+
+
+
+
+
     }
 }

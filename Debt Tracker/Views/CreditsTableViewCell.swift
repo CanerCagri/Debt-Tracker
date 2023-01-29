@@ -11,33 +11,22 @@ class CreditsTableViewCell: UITableViewCell {
     
     static let identifier = "CreditsTableViewCell"
     
-    var nameLabel = DTTitleLabel(textAlignment: .left, fontSize: 14)
-    var entryDebt = DTTitleLabel(textAlignment: .left, fontSize: 17)
-    var paidCount = DTTitleLabel(textAlignment: .left, fontSize: 12, textColor: .systemGray2)
-    var remainingCount = DTTitleLabel(textAlignment: .left, fontSize: 12, textColor: .systemGray2)
-    
-    let progressBar: UIProgressView = {
-        let progressBar = UIProgressView()
-        progressBar.translatesAutoresizingMaskIntoConstraints = false
-        return progressBar
-    }()
-    
-    var monthlyDepth = DTTitleLabel(textAlignment: .left, fontSize: 12, textColor: .systemGray2)
-    var nextPayment = DTTitleLabel(textAlignment: .left, fontSize: 12, textColor: .systemGray2)
-    
-    var totalDebtLabel = DTTitleLabel(textAlignment: .center, fontSize: 11, textColor: .systemGray2)
-    var totalDebt = DTTitleLabel(textAlignment: .center, fontSize: 14, textColor: .label)
-    
-    var paidLabel = DTTitleLabel(textAlignment: .center, fontSize: 11, textColor: .systemGray2)
-    var paid = DTTitleLabel(textAlignment: .center, fontSize: 14, textColor: .systemGreen)
-    
-    var remainingLabel = DTTitleLabel(textAlignment: .center, fontSize: 11, textColor: .systemGray2)
-    var remaining = DTTitleLabel(textAlignment: .center, fontSize: 14, textColor: .systemRed)
-    
     var containerViewOne = UIView()
     var containerViewTwo = UIView()
     var containerViewThree = UIView()
     
+    var nameLabel = DTTitleLabel(textAlignment: .left, fontSize: 14)
+    var entryDebt = DTTitleLabel(textAlignment: .left, fontSize: 17)
+    var paidCount = DTTitleLabel(textAlignment: .left, fontSize: 12, textColor: .systemGray2)
+    var remainingCount = DTTitleLabel(textAlignment: .left, fontSize: 12, textColor: .systemGray2)
+    var monthlyDepth = DTTitleLabel(textAlignment: .left, fontSize: 12, textColor: .systemGray2)
+    var nextPayment = DTTitleLabel(textAlignment: .left, fontSize: 12, textColor: .systemGray2)
+    var totalDebtLabel = DTTitleLabel(textAlignment: .center, fontSize: 11, textColor: .systemGray2)
+    var totalDebt = DTTitleLabel(textAlignment: .center, fontSize: 14, textColor: .label)
+    var paidLabel = DTTitleLabel(textAlignment: .center, fontSize: 11, textColor: .systemGray2)
+    var paid = DTTitleLabel(textAlignment: .center, fontSize: 14, textColor: .systemGreen)
+    var remainingLabel = DTTitleLabel(textAlignment: .center, fontSize: 11, textColor: .systemGray2)
+    var remaining = DTTitleLabel(textAlignment: .center, fontSize: 14, textColor: .systemRed)
     
     var count = 0 {
         didSet {
@@ -47,34 +36,31 @@ class CreditsTableViewCell: UITableViewCell {
         }
     }
     
+    let progressBar: UIProgressView = {
+        let progressBar = UIProgressView()
+        progressBar.translatesAutoresizingMaskIntoConstraints = false
+        return progressBar
+    }()
+    
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
+    
+        containerViewOne.backgroundColor = .systemGray5
+        containerViewTwo.backgroundColor = .systemGray5
+        containerViewThree.backgroundColor = .systemGray5
         
         totalDebtLabel.text = "Total Debt"
         paidLabel.text = "Paid"
         remainingLabel.text = "Remaining"
         
-        nameLabel.text = "Enpara - Nakit Avans"
-
-        totalDebt.text = "99.999,99 tl"
-        remaining.text = "55.555,00 tl"
-        
-
-        
-        containerViewOne.backgroundColor = .systemGray5
-        containerViewTwo.backgroundColor = .systemGray5
-        containerViewThree.backgroundColor = .systemGray5
-        
         applyConstraints()
-        
-        
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func set(credit: CreditItem) {
+    func set(credit: CreditItems) {
         
         let formatter = NumberFormatter()
         formatter.numberStyle = .decimal
@@ -95,7 +81,7 @@ class CreditsTableViewCell: UITableViewCell {
         
         nextPayment.text = "Next Payment: \(credit.payment_date ?? "")"
         
-        let totalDebtFormatted = formatter.string(from: credit.remaining_debt as NSNumber)
+        let totalDebtFormatted = formatter.string(from: credit.current_debt as NSNumber)
         totalDebt.text = totalDebtFormatted ?? ""
         
         let paidCalculate = Double(credit.paid_count) * credit.montly_debt
@@ -103,7 +89,7 @@ class CreditsTableViewCell: UITableViewCell {
         let paidText = paidTextFormatted ?? ""
         paid.text = paidText
         
-        let calculateRemaining = credit.remaining_debt - paidCalculate
+        let calculateRemaining = Double(credit.current_debt) - paidCalculate
         let remainingTextFormatted = formatter.string(from: calculateRemaining as NSNumber)
         remaining.text = remainingTextFormatted ?? ""
     }

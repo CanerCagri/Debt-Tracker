@@ -28,6 +28,7 @@
 		011E8C7329858BC600F163D4 /* DTAlertViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 011E8C7229858BC600F163D4 /* DTAlertViewController.swift */; };
 		011E8C7629858C1900F163D4 /* DTContainerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 011E8C7529858C1900F163D4 /* DTContainerView.swift */; };
 		011E8C7829858CD700F163D4 /* UIViewController+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 011E8C7729858CD700F163D4 /* UIViewController+Ext.swift */; };
+		011E8C7A2985C92300F163D4 /* CreditsDetailTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 011E8C792985C92300F163D4 /* CreditsDetailTableViewCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -54,6 +55,7 @@
 		011E8C7229858BC600F163D4 /* DTAlertViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DTAlertViewController.swift; sourceTree = "<group>"; };
 		011E8C7529858C1900F163D4 /* DTContainerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DTContainerView.swift; sourceTree = "<group>"; };
 		011E8C7729858CD700F163D4 /* UIViewController+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Ext.swift"; sourceTree = "<group>"; };
+		011E8C792985C92300F163D4 /* CreditsDetailTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreditsDetailTableViewCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -111,6 +113,7 @@
 			isa = PBXGroup;
 			children = (
 				011E8C3D29834A1800F163D4 /* CreditsTableViewCell.swift */,
+				011E8C792985C92300F163D4 /* CreditsDetailTableViewCell.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -304,6 +307,7 @@
 				011E8C6429848B6200F163D4 /* DTTextField.swift in Sources */,
 				011E8C5D2984014200F163D4 /* PersistenceManager.swift in Sources */,
 				011E8C67298497A900F163D4 /* DTButton.swift in Sources */,
+				011E8C7A2985C92300F163D4 /* CreditsDetailTableViewCell.swift in Sources */,
 				011E8C4129834C4D00F163D4 /* CreditsDetailViewController.swift in Sources */,
 				011E8C7629858C1900F163D4 /* DTContainerView.swift in Sources */,
 				011E8C2C298346BE00F163D4 /* CreditsViewController.swift in Sources */,
