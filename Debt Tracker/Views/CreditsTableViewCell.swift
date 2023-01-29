@@ -17,8 +17,8 @@ class CreditsTableViewCell: UITableViewCell {
     
     var nameLabel = DTTitleLabel(textAlignment: .left, fontSize: 14)
     var entryDebt = DTTitleLabel(textAlignment: .left, fontSize: 17)
-    var paidCount = DTTitleLabel(textAlignment: .left, fontSize: 12, textColor: .systemGray2)
-    var remainingCount = DTTitleLabel(textAlignment: .left, fontSize: 12, textColor: .systemGray2)
+    var paidCount = DTTitleLabel(textAlignment: .left, fontSize: 12, textColor: .label)
+    var remainingCount = DTTitleLabel(textAlignment: .left, fontSize: 12, textColor: .label)
     var monthlyDepth = DTTitleLabel(textAlignment: .left, fontSize: 12, textColor: .systemGray2)
     var nextPayment = DTTitleLabel(textAlignment: .left, fontSize: 12, textColor: .systemGray2)
     var totalDebtLabel = DTTitleLabel(textAlignment: .center, fontSize: 11, textColor: .systemGray2)
@@ -77,7 +77,7 @@ class CreditsTableViewCell: UITableViewCell {
         count = Int(credit.paid_count)
         
         let monthlyFormatted = formatter.string(from: credit.montly_debt as NSNumber)
-        monthlyDepth.text = monthlyFormatted ?? ""
+        monthlyDepth.text = "Monthly Installment: \(monthlyFormatted ?? "")"
         
         nextPayment.text = "Next Payment: \(credit.payment_date ?? "")"
         

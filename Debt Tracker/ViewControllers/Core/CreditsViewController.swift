@@ -22,6 +22,11 @@ class CreditsViewController: UIViewController {
         fetchFromCoredata()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        navigationController?.navigationBar.prefersLargeTitles = false
+    }
+    
     private func configureViewController() {
         view.backgroundColor = .systemBackground
         title = "Credits"
@@ -141,4 +146,3 @@ extension CreditsViewController: UITableViewDelegate, UITableViewDataSource {
         }
     }
 }
-

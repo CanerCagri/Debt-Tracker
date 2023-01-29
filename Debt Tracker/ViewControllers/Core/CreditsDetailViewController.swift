@@ -18,11 +18,15 @@ class CreditsDetailViewController: UIViewController {
             title = creditModel.name
             next12MonthsString = creditModel.payment_date
             calculatedRowCount = (12 - Int(creditModel.paid_count))
+            remainingDebtLabel.text = "Remaining Debt: \(String(creditModel.remaining_debt))"
+            totalPaidMonth.text = "Total Number Of Paid Months: \(String(creditModel.paid_count))"
         }
     }
     
     var paymentTitleLabel = DTTitleLabel(textAlignment: .left, fontSize: 20)
     var detailTableView = UITableView()
+    var remainingDebtLabel = DTTitleLabel(textAlignment: .center, fontSize: 18)
+    var totalPaidMonth = DTTitleLabel(textAlignment: .center, fontSize: 18)
     
     let dateFormatter = DateFormatter()
     var date = Date()
@@ -38,11 +42,12 @@ class CreditsDetailViewController: UIViewController {
         super.viewDidLoad()
 
         view.backgroundColor = .systemBackground
+        navigationController?.navigationBar.prefersLargeTitles = true
         
         configureTableView()
         applyConstraints()
         
-        paymentTitleLabel.text = "Payments"
+        paymentTitleLabel.text = "Pay Installment"
         dateFormatter.dateFormat = "dd.MM.yyyy"
         date = dateFormatter.date(from: creditModel.payment_date!)!
         next12Months = date
@@ -52,23 +57,29 @@ class CreditsDetailViewController: UIViewController {
     private func configureTableView() {
         detailTableView.delegate = self
         detailTableView.dataSource = self
-        detailTableView.rowHeight = 25
+        detailTableView.rowHeight = 40
         detailTableView.register(CreditsDetailTableViewCell.self, forCellReuseIdentifier:CreditsDetailTableViewCell.identifier)
         
     }
     
     func applyConstraints() {
-        view.addSubviews(paymentTitleLabel, detailTableView)
+        view.addSubviews(paymentTitleLabel, detailTableView, remainingDebtLabel, totalPaidMonth)
         detailTableView.translatesAutoresizingMaskIntoConstraints = false
         
         paymentTitleLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 5).isActive = true
-        paymentTitleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 5).isActive = true
+        paymentTitleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10).isActive = true
         
         
         detailTableView.topAnchor.constraint(equalTo: paymentTitleLabel.bottomAnchor, constant: 10).isActive = true
         detailTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
         detailTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
         detailTableView.heightAnchor.constraint(equalToConstant: 400).isActive = true
+        
+        remainingDebtLabel.topAnchor.constraint(equalTo: detailTableView.bottomAnchor, constant: 10).isActive = true
+        remainingDebtLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        
+        totalPaidMonth.topAnchor.constraint(equalTo: remainingDebtLabel.bottomAnchor, constant: 10).isActive = true
+        totalPaidMonth.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
     }
 }
 
@@ -83,10 +94,11 @@ extension CreditsDetailViewController: UITableViewDelegate, UITableViewDataSourc
         cell.nameLabel.text = "\(indexPath.row + Int(creditModel.paid_count) + 1). month:"
         cell.priceLabel.text = String(creditModel.montly_debt)
         
-        cell.dateLabel.text = next12MonthsString
-        next12Months = calendar.date(byAdding: .month, value: 1, to: next12Months)!
-        next12MonthsString = dateFormatter.string(from: next12Months)
-  
+        if cell.dateLabel.text == nil || cell.dateLabel.text == "" {
+            cell.dateLabel.text = next12MonthsString
+            next12Months = calendar.date(byAdding: .month, value: 1, to: next12Months)!
+            next12MonthsString = dateFormatter.string(from: next12Months)
+        }
         
         if indexPath.row == 0 {
             cell.isUserInteractionEnabled = true
@@ -129,7 +141,7 @@ extension CreditsDetailViewController: UITableViewDelegate, UITableViewDataSourc
         }
 
         let noAction = UIAlertAction(title: "No, I didnt pay yet.", style: .cancel) { (action) in
-            // code to execute when "No" is tapped
+            tableView.deselectRow(at: indexPath, animated: true)
         }
 
         alert.addAction(yesAction)
@@ -138,5 +150,9 @@ extension CreditsDetailViewController: UITableViewDelegate, UITableViewDataSourc
         self.present(alert, animated: true, completion: nil)
     }
     
-    
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        if indexPath.row == 0 {
+            cell.backgroundColor = UIColor.systemGreen
+        }
+    }
 }

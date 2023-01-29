@@ -71,7 +71,6 @@ class CreditsAddViewController: UIViewController {
  
         datePickerValueChanged(sender: paymentDatePicker)
         
-        
         view.addSubview(scrollView)
         scrollView.backgroundColor = .systemBackground
         scrollView.addSubview(containerView)
@@ -80,7 +79,6 @@ class CreditsAddViewController: UIViewController {
         NotificationCenter.default.addObserver(forName: NSNotification.Name("dismissVc"), object: nil, queue: nil) { [weak self] (notification) in
             self?.dismissVC()
         }
-
     }
     
     @objc func datePickerValueChanged(sender: UIDatePicker){
@@ -229,8 +227,6 @@ class CreditsAddViewController: UIViewController {
                 print(failure.localizedDescription)
             }
         }
-        
-        
     }
     
     @objc func dismissVC() {
@@ -269,6 +265,5 @@ class CreditsAddViewController: UIViewController {
         calculateButton.topAnchor.constraint(equalTo: calculatedCurrentDebt.bottomAnchor, constant: 30).isActive = true
         calculateButton.heightAnchor.constraint(equalToConstant: 70).isActive = true
         calculateButton.widthAnchor.constraint(equalToConstant: buttonWidth + 30).isActive = true
-        
     }
 }
