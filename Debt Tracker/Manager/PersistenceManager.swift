@@ -33,6 +33,7 @@ class PersistenceManager {
         item.montly_debt = model.monthlyDebt
         item.remaining_debt = model.remainingDebt
         item.paid_count = Int32(model.paidCount)
+        item.paid_debt = model.paidDebt
         
         
         do {
@@ -90,6 +91,7 @@ class PersistenceManager {
                 entity.payment_date = model.paymentDate
                 entity.remaining_debt = model.remainingDebt
                 entity.paid_count = Int32(model.paidCount)
+                entity.paid_debt = model.paidDebt
                 // Save the managed object context
                 try context.save()
             }

@@ -29,6 +29,7 @@
 		011E8C7629858C1900F163D4 /* DTContainerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 011E8C7529858C1900F163D4 /* DTContainerView.swift */; };
 		011E8C7829858CD700F163D4 /* UIViewController+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 011E8C7729858CD700F163D4 /* UIViewController+Ext.swift */; };
 		011E8C7A2985C92300F163D4 /* CreditsDetailTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 011E8C792985C92300F163D4 /* CreditsDetailTableViewCell.swift */; };
+		011E8C7C2986A14300F163D4 /* DTEmptyStateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 011E8C7B2986A14300F163D4 /* DTEmptyStateView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -56,6 +57,7 @@
 		011E8C7529858C1900F163D4 /* DTContainerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DTContainerView.swift; sourceTree = "<group>"; };
 		011E8C7729858CD700F163D4 /* UIViewController+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Ext.swift"; sourceTree = "<group>"; };
 		011E8C792985C92300F163D4 /* CreditsDetailTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreditsDetailTableViewCell.swift; sourceTree = "<group>"; };
+		011E8C7B2986A14300F163D4 /* DTEmptyStateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DTEmptyStateView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -223,6 +225,7 @@
 			isa = PBXGroup;
 			children = (
 				011E8C7529858C1900F163D4 /* DTContainerView.swift */,
+				011E8C7B2986A14300F163D4 /* DTEmptyStateView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -302,6 +305,7 @@
 				011E8C6E29849F5F00F163D4 /* DTDatePicker.swift in Sources */,
 				011E8C3E29834A1800F163D4 /* CreditsTableViewCell.swift in Sources */,
 				011E8C4D298352C700F163D4 /* UIView+Ext.swift in Sources */,
+				011E8C7C2986A14300F163D4 /* DTEmptyStateView.swift in Sources */,
 				011E8C4829834D1F00F163D4 /* DTBodyLabel.swift in Sources */,
 				011E8C4629834CDD00F163D4 /* DTTitleLabel.swift in Sources */,
 				011E8C6429848B6200F163D4 /* DTTextField.swift in Sources */,

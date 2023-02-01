@@ -9,7 +9,7 @@ import UIKit
 
 class CreditsAddViewController: UIViewController {
     
-    lazy var contentSize = CGSize(width: self.view.frame.width, height: self.view.frame.height - 200)
+    lazy var contentSize = CGSize(width: self.view.frame.width, height: self.view.frame.height - 100)
     
     var containers: [UIView] = []
     
@@ -32,9 +32,10 @@ class CreditsAddViewController: UIViewController {
     }()
     
     var nameTextField = DTTextField(placeholder: "Enter a Credit name ", placeHolderSize: 17)
-    var entryDebt = DTTextField(placeholder: "Enter a Price", placeHolderSize: 15)
+    var entryDebtTextField = DTTextField(placeholder: "Enter a Price", placeHolderSize: 15)
     var paymentDatePicker = UIDatePicker()
-    var calculatedCurrentDebt = DTTitleLabel(textAlignment: .left, fontSize: 20)
+    var calculatedCurrentDebtLabel = DTTitleLabel(textAlignment: .left, fontSize: 15)
+    var calculatedCurrentDebtTextField = DTTextField(placeholder: "Enter a Calculated Price", placeHolderSize: 15)
     var calculateButton = DTButton(title: "Calculate", color: .systemRed, systemImageName: "gear")
     
     var labels = [DTTitleLabel]()
@@ -68,17 +69,31 @@ class CreditsAddViewController: UIViewController {
         
         calculateButton.addTarget(self, action: #selector(calculateButtonTapped), for: .touchUpInside)
         
- 
+        
         datePickerValueChanged(sender: paymentDatePicker)
+        
+        entryDebtTextField.keyboardType = .numberPad
+        calculatedCurrentDebtTextField.keyboardType = .numberPad
+        let toolbar = UIToolbar()
+        let nextButton = UIBarButtonItem(title: "Next", style: .done, target: self, action: #selector(moveToNextTextField))
+        toolbar.items = [nextButton]
+        toolbar.sizeToFit()
+        
+        nameTextField.inputAccessoryView = toolbar
         
         view.addSubview(scrollView)
         scrollView.backgroundColor = .systemBackground
         scrollView.addSubview(containerView)
         containerView.backgroundColor = .systemBackground
+        calculatedCurrentDebtTextField.isHidden = true
         
         NotificationCenter.default.addObserver(forName: NSNotification.Name("dismissVc"), object: nil, queue: nil) { [weak self] (notification) in
             self?.dismissVC()
         }
+    }
+    
+    @objc func moveToNextTextField() {
+        entryDebtTextField.becomeFirstResponder()
     }
     
     @objc func datePickerValueChanged(sender: UIDatePicker){
@@ -93,15 +108,36 @@ class CreditsAddViewController: UIViewController {
         
         debtDate = "\(calculatedDay).\(calculatedMonth).\(year)"
         print(debtDate)
+        
+        
+        if !dateLabels.isEmpty {
+            let formatter = DateFormatter()
+            formatter.dateFormat = "dd.MM.yyyy"
+            
+            let entryDate = formatter.date(from: debtDate)!
+            
+            for i in 1...12 {
+                
+                let newDate = calendar.date(byAdding: .day, value: 30 * i, to: entryDate)!
+                let newDateString = formatter.string(from: newDate)
+               
+                    dateLabels[i - 1].text = newDateString
+                
+            }
+        }
     }
     
     @objc func calculateButtonTapped() {
-    
-        guard let entryDebt = entryDebt.text, !entryDebt.isEmpty else {
-//            presentAlert(title: "Warning", message: "Please enter a Pomodoro name", buttonTitle: "Ok")
+        
+        guard let entryDebt = entryDebtTextField.text, !entryDebt.isEmpty else {
+            presentAlert(title: "Warning", message: "Please enter a Price", buttonTitle: "Ok")
             return
         }
         
+        labels.removeAll()
+        textFields.removeAll()
+        dateLabels.removeAll()
+        view.endEditing(true)
         navigationItem.rightBarButtonItem?.isEnabled = true
         
         let labelText = entryDebt
@@ -110,7 +146,10 @@ class CreditsAddViewController: UIViewController {
         let monthlyDebt = Double(currentDebt) / 12
         let roundedMonthlyDebt = String(format: "%.2f", monthlyDebt)
         
-        calculatedCurrentDebt.text = "12 Month Calculated Debt: \(String(currentDebt))"
+        calculatedCurrentDebtLabel.text = "New Calculated Debt:"
+        calculatedCurrentDebtTextField.isHidden = false
+        calculatedCurrentDebtTextField.text = String(currentDebt)
+        
         
         for i in 0..<12 {
             let label = DTTitleLabel(textAlignment: .left, fontSize: 10)
@@ -158,7 +197,8 @@ class CreditsAddViewController: UIViewController {
             
         }
         
-        for i in 0..<12 {
+        
+        for i in 0...11 {
             let dateLabel = DTTitleLabel(textAlignment: .center, fontSize: 10)
             dateLabel.translatesAutoresizingMaskIntoConstraints = false
             containerView.addSubview(dateLabel)
@@ -168,20 +208,26 @@ class CreditsAddViewController: UIViewController {
             dateLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -20).isActive = true
             // Add the label to the array
             dateLabels.append(dateLabel)
+            
         }
         
-        //Date labels texts
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "dd.MM.yyyy"
-        let date = dateFormatter.date(from: debtDate)!
-
+        let formatter = DateFormatter()
+        formatter.dateFormat = "dd.MM.yyyy"
+        
+        let entryDate = formatter.date(from: debtDate)!
+        
+        
         let calendar = Calendar.current
-        var next12Months = date
-        for i in 0...11 {
-            next12Months = calendar.date(byAdding: .month, value: 1, to: next12Months)!
-            let next12MonthsString = dateFormatter.string(from: next12Months)
-            dateLabels[i].text = next12MonthsString
+
+        for i in 1...12 {
+            
+            let newDate = calendar.date(byAdding: .day, value: 30 * i, to: entryDate)!
+            let newDateString = formatter.string(from: newDate)
+           
+            dateLabels[i - 1].text = newDateString
+            
         }
+        
     }
     
     @objc func textFieldDidChange(_ textField: UITextField) {
@@ -194,21 +240,28 @@ class CreditsAddViewController: UIViewController {
     @objc func rightBarButtonTapped() {
         
         guard let name = nameTextField.text, !name.isEmpty else {
-//            presentAlert(title: "Warning", message: "Please enter a Pomodoro name", buttonTitle: "Ok")
+            presentAlert(title: "Warning", message: "Please enter a Credit name", buttonTitle: "Ok")
             return
         }
         
-        guard let entryDebt = entryDebt.text, !entryDebt.isEmpty else {
-//            presentAlert(title: "Warning", message: "Please enter a Pomodoro name", buttonTitle: "Ok")
+        guard let entryDebt = entryDebtTextField.text, !entryDebt.isEmpty else {
+            presentAlert(title: "Warning", message: "Please enter a Price", buttonTitle: "Ok")
             return
         }
         
         guard let monthlyDebt = textFields[0].text, !monthlyDebt.isEmpty else {
-//            presentAlert(title: "Warning", message: "Please enter a Pomodoro name", buttonTitle: "Ok")
+            presentAlert(title: "Warning", message: "Please enter a Monthly Installment", buttonTitle: "Ok")
             return
         }
         
-        let viewModel = CreditModel(id: UUID().uuidString, name: name, entryDebt: Int(entryDebt)!, paidCount: 0, monthlyDebt: Double(monthlyDebt)!, paymentDate: dateLabels[0].text!, currentDebt: currentDebt, remainingDebt: Double(currentDebt))
+        guard let calculatedDebt = calculatedCurrentDebtTextField.text, !calculatedDebt.isEmpty else {
+            presentAlert(title: "Warning", message: "Please enter a Calculated Price", buttonTitle: "Ok")
+            return
+        }
+        
+        let currentDebtTextFieldText = calculatedCurrentDebtTextField.text
+        
+        let viewModel = CreditModel(id: UUID().uuidString, name: name, entryDebt: Int(entryDebt)!, paidCount: 0, monthlyDebt: Double(monthlyDebt)!, paymentDate: dateLabels[0].text!, currentDebt: Int(currentDebtTextFieldText!)!, remainingDebt: Double(currentDebtTextFieldText!)!, paidDebt: 0.0)
         
         PersistenceManager.shared.downloadWithModel(model: viewModel) { result in
             switch result {
@@ -219,10 +272,10 @@ class CreditsAddViewController: UIViewController {
                 let deleteButton = UIAlertAction(title: "OK", style: .default) { _ in
                     self.dismissVC()
                 }
-            
+                
                 alertController.addAction(deleteButton)
                 self.present(alertController, animated: true)
-             
+                
             case .failure(let failure):
                 print(failure.localizedDescription)
             }
@@ -234,7 +287,7 @@ class CreditsAddViewController: UIViewController {
     }
     
     private func applyConstraints() {
-        containers = [nameTextField, entryDebt, paymentDatePicker, calculatedCurrentDebt, calculateButton]
+        containers = [nameTextField, entryDebtTextField, paymentDatePicker, calculatedCurrentDebtLabel, calculatedCurrentDebtTextField, calculateButton]
         for containerViews in containers {
             containerView.addSubview(containerViews)
             containerViews.translatesAutoresizingMaskIntoConstraints = false
@@ -249,20 +302,25 @@ class CreditsAddViewController: UIViewController {
         nameTextField.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -20).isActive = true
         nameTextField.heightAnchor.constraint(equalToConstant: 40).isActive = true
         
-        entryDebt.topAnchor.constraint(equalTo: nameTextField.bottomAnchor, constant: 30).isActive = true
-        entryDebt.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 20).isActive = true
-        entryDebt.widthAnchor.constraint(equalToConstant: textFieldWidth - 20).isActive = true
-        entryDebt.heightAnchor.constraint(equalToConstant: 35).isActive = true
+        entryDebtTextField.topAnchor.constraint(equalTo: nameTextField.bottomAnchor, constant: 30).isActive = true
+        entryDebtTextField.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 20).isActive = true
+        entryDebtTextField.widthAnchor.constraint(equalToConstant: textFieldWidth - 20).isActive = true
+        entryDebtTextField.heightAnchor.constraint(equalToConstant: 35).isActive = true
         
         paymentDatePicker.topAnchor.constraint(equalTo: nameTextField.bottomAnchor, constant: 30).isActive = true
         paymentDatePicker.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -20).isActive = true
         
-        calculatedCurrentDebt.topAnchor.constraint(equalTo: entryDebt.bottomAnchor, constant: 10).isActive = true
-        calculatedCurrentDebt.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 20).isActive = true
-        calculatedCurrentDebt.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -20).isActive = true
-
+        calculatedCurrentDebtLabel.topAnchor.constraint(equalTo: entryDebtTextField.bottomAnchor, constant: 20).isActive = true
+        calculatedCurrentDebtLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 20).isActive = true
+        
+        
+        calculatedCurrentDebtTextField.topAnchor.constraint(equalTo: entryDebtTextField.bottomAnchor , constant: 10).isActive = true
+        calculatedCurrentDebtTextField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20).isActive = true
+        calculatedCurrentDebtTextField.leadingAnchor.constraint(equalTo: calculatedCurrentDebtLabel.trailingAnchor, constant: 10).isActive = true
+        calculatedCurrentDebtTextField.heightAnchor.constraint(equalToConstant: 35).isActive = true
+        
         calculateButton.centerXAnchor.constraint(equalTo: containerView.centerXAnchor).isActive = true
-        calculateButton.topAnchor.constraint(equalTo: calculatedCurrentDebt.bottomAnchor, constant: 30).isActive = true
+        calculateButton.topAnchor.constraint(equalTo: calculatedCurrentDebtTextField.bottomAnchor, constant: 30).isActive = true
         calculateButton.heightAnchor.constraint(equalToConstant: 70).isActive = true
         calculateButton.widthAnchor.constraint(equalToConstant: buttonWidth + 30).isActive = true
     }

@@ -16,4 +16,5 @@ struct CreditModel {
     var paymentDate: String
     var currentDebt: Int
     var remainingDebt: Double
+    var paidDebt: Double
 }

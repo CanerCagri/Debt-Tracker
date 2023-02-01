@@ -11,6 +11,7 @@ class CreditsViewController: UIViewController {
     
     let creditsTableView = UITableView()
     let contentView = UIView()
+    var emptyState: DTEmptyStateView?
 
     private var credits: [CreditItems] = []
 
@@ -68,12 +69,12 @@ class CreditsViewController: UIViewController {
             case .success(let success):
                 
                 if success.isEmpty {
-//                    self.emptyState = PAEmptyStateView(message: "Currently don't have a Pomodoro\nAdd from (+) ")
-//                    self.emptyState?.frame = self.view.bounds
-//                    self.view.addSubview(self.emptyState!)
+                    self.emptyState = DTEmptyStateView(message: "Currently don't have a Credit\nAdd from (+) ")
+                    self.emptyState?.frame = self.view.bounds
+                    self.view.addSubview(self.emptyState!)
                     
                 } else {
-//                    self.emptyState?.removeFromSuperview()
+                    self.emptyState?.removeFromSuperview()
                     self.credits = success
                     
                     DispatchQueue.main.async {
@@ -129,10 +130,9 @@ extension CreditsViewController: UITableViewDelegate, UITableViewDataSource {
                 case .success():
                     self.credits.remove(at: indexPath.row)
                     if self.credits.isEmpty {
-//                        self.configureSearchController()
-//                        self.emptyState = PAEmptyStateView(message: "Currently don't have a Pomodoro\nAdd from (+) ")
-//                        self.emptyState?.frame = self.view.bounds
-//                        self.view.addSubview(self.emptyState!)
+                        self.emptyState = DTEmptyStateView(message: "Currently don't have a Credit\nAdd from (+) ")
+                        self.emptyState?.frame = self.view.bounds
+                        self.view.addSubview(self.emptyState!)
                     }
 
                 case .failure(_):

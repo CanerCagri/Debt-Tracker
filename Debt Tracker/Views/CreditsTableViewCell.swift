@@ -84,12 +84,10 @@ class CreditsTableViewCell: UITableViewCell {
         let totalDebtFormatted = formatter.string(from: credit.current_debt as NSNumber)
         totalDebt.text = totalDebtFormatted ?? ""
         
-        let paidCalculate = Double(credit.paid_count) * credit.montly_debt
-        let paidTextFormatted = formatter.string(from: paidCalculate as NSNumber)
-        let paidText = paidTextFormatted ?? ""
-        paid.text = paidText
+        let totalPaidDebtFormatted = formatter.string(from: credit.paid_debt as NSNumber)
+        paid.text = totalPaidDebtFormatted ?? ""
         
-        let calculateRemaining = Double(credit.current_debt) - paidCalculate
+        let calculateRemaining = Double(credit.current_debt) - credit.paid_debt
         let remainingTextFormatted = formatter.string(from: calculateRemaining as NSNumber)
         remaining.text = remainingTextFormatted ?? ""
     }
