@@ -13,12 +13,14 @@ class CreditsBottomSheetVc: UIViewController {
     let numbers = [3, 6, 9, 12, 18, 24, 30, 36]
     
     private let nextButton = DTButton(title: "Next", color: .systemPink, systemImageName: "checkmark.circle")
+    private let cancelButton = DTButton(title: "Cancel", color: .systemPink, systemImageName: "xmark.circle.fill")
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
         view.backgroundColor = .systemBackground
         nextButton.addTarget(self, action: #selector(nextButtonTapped), for: .touchUpInside)
+        cancelButton.addTarget(self, action: #selector(cancelButtonTapped), for: .touchUpInside)
         
         configurePickerView()
         addConstraints()
@@ -41,16 +43,19 @@ class CreditsBottomSheetVc: UIViewController {
         let userInfo = ["selectedCount": selectedValue]
         NotificationCenter.default.post(Notification(name: Notification.Name("nextTapped"), userInfo: userInfo))
         dismiss(animated: true)
-        
-        
-        
-       
-           
-        
+    }
+    
+    @objc func cancelButtonTapped() {
+        dismiss(animated: true)
     }
     
     private func addConstraints() {
-        view.addSubviews(nextButton)
+        view.addSubviews(cancelButton, nextButton)
+        
+        cancelButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 5).isActive = true
+        cancelButton.topAnchor.constraint(equalTo: view.topAnchor, constant: 5).isActive = true
+        cancelButton.heightAnchor.constraint(equalToConstant: 40).isActive = true
+        cancelButton.widthAnchor.constraint(equalToConstant: 120).isActive = true
         
         nextButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -5).isActive = true
         nextButton.topAnchor.constraint(equalTo: view.topAnchor, constant: 5).isActive = true
@@ -67,8 +72,6 @@ extension CreditsBottomSheetVc: UIPickerViewDataSource, UIPickerViewDelegate {
       func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
           return numbers.count
       }
-      
-      // MARK: - UIPickerViewDelegate
       
       func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
           return "\(numbers[row])"

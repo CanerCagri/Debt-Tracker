@@ -37,6 +37,7 @@
 		011E8C87298A890300F163D4 /* CreditDetailsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 011E8C86298A890300F163D4 /* CreditDetailsModel.swift */; };
 		011E8C89298A911A00F163D4 /* CreditsPopupVc.swift in Sources */ = {isa = PBXBuildFile; fileRef = 011E8C88298A911A00F163D4 /* CreditsPopupVc.swift */; };
 		011E8C8F298B2D0700F163D4 /* CreditsBottomSheetVc.swift in Sources */ = {isa = PBXBuildFile; fileRef = 011E8C8E298B2D0700F163D4 /* CreditsBottomSheetVc.swift */; };
+		011E8C91298BF6AA00F163D4 /* CreditDetailModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 011E8C90298BF6AA00F163D4 /* CreditDetailModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -72,6 +73,7 @@
 		011E8C86298A890300F163D4 /* CreditDetailsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreditDetailsModel.swift; sourceTree = "<group>"; };
 		011E8C88298A911A00F163D4 /* CreditsPopupVc.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreditsPopupVc.swift; sourceTree = "<group>"; };
 		011E8C8E298B2D0700F163D4 /* CreditsBottomSheetVc.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreditsBottomSheetVc.swift; sourceTree = "<group>"; };
+		011E8C90298BF6AA00F163D4 /* CreditDetailModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreditDetailModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -176,6 +178,7 @@
 			children = (
 				011E8C4F2983535400F163D4 /* CreditModel.swift */,
 				011E8C86298A890300F163D4 /* CreditDetailsModel.swift */,
+				011E8C90298BF6AA00F163D4 /* CreditDetailModel.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -347,6 +350,7 @@
 				011E8C7C2986A14300F163D4 /* DTEmptyStateView.swift in Sources */,
 				011E8C80298A808300F163D4 /* CreditsAddDetailMainVc.swift in Sources */,
 				011E8C4829834D1F00F163D4 /* DTBodyLabel.swift in Sources */,
+				011E8C91298BF6AA00F163D4 /* CreditDetailModel.swift in Sources */,
 				011E8C4629834CDD00F163D4 /* DTTitleLabel.swift in Sources */,
 				011E8C6429848B6200F163D4 /* DTTextField.swift in Sources */,
 				011E8C5D2984014200F163D4 /* PersistenceManager.swift in Sources */,

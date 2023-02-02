@@ -19,8 +19,8 @@ class CreditsPopupVc: UIViewController {
     
     private let containerView = DTContainerView()
     let titleLabel = DTTitleLabel(textAlignment: .center, fontSize: 18, textColor: .label)
-    let cancelButton = DTButton(title: "Cancel", color: .systemRed, systemImageName: "xmark.circle.fill")
-    let saveButton = DTButton(title: "Save", color: .systemRed, systemImageName: "square.and.arrow.down")
+    let cancelButton = DTButton(title: "Cancel", color: .systemPink, systemImageName: "xmark.circle.fill")
+    let saveButton = DTButton(title: "Save", color: .systemPink, systemImageName: "square.and.arrow.down")
     
     let creditNameLabel = DTTitleLabel(textAlignment: .left, fontSize: 25)
     let creditDetailLabel = DTTitleLabel(textAlignment: .left, fontSize: 18)
@@ -32,11 +32,11 @@ class CreditsPopupVc: UIViewController {
     let monthlyInstallmentCountLabel = DTTitleLabel(textAlignment: .left, fontSize: 15)
     var monthlyInstallmentCountButton = DTButton(title: "12", color: .systemRed)
     
-    let rateLabel = DTTitleLabel(textAlignment: .left, fontSize: 18)
-    let rateResultLabel = DTTitleLabel(textAlignment: .left, fontSize: 18)
+    let rateLabel = DTTitleLabel(textAlignment: .left, fontSize: 18, textColor: .lightGray)
+    let rateResultLabel = DTTitleLabel(textAlignment: .left, fontSize: 18, textColor: .lightGray)
     
-    let totalPaymentLabel = DTTitleLabel(textAlignment: .left, fontSize: 18)
-    let totalPaymentResultLabel = DTTitleLabel(textAlignment: .left, fontSize: 18)
+    let totalPaymentLabel = DTTitleLabel(textAlignment: .left, fontSize: 18, textColor: .lightGray)
+    let totalPaymentResultLabel = DTTitleLabel(textAlignment: .left, fontSize: 18, textColor: .lightGray)
     
     let firstInstallmentLabel = DTTitleLabel(textAlignment: .left, fontSize: 15)
     let firstInstallmentDatePicker = UIDatePicker()
@@ -55,7 +55,7 @@ class CreditsPopupVc: UIViewController {
         view.backgroundColor = UIColor.systemGray.withAlphaComponent(0.5)
         view.frame = UIScreen.main.bounds
         titleLabel.text = "Add Credit"
-        rateLabel.text = "Rate: "
+        rateLabel.text = "Interest Rate: "
         totalPaymentLabel.text = "Total Payment:"
         monthlyInstallmentCountLabel.text = "Select Number Of Installments:"
         firstInstallmentLabel.text = "Select First Installment:"
@@ -76,6 +76,7 @@ class CreditsPopupVc: UIViewController {
         NotificationCenter.default.addObserver(forName: NSNotification.Name("nextTapped"), object: nil, queue: nil) { [weak self] (notification) in
             self?.monthCount = (notification.userInfo?["selectedCount"] as? Int)!
             self?.monthlyInstallmentCountButton.setTitle(String(self!.monthCount), for: .normal)
+            self?.calculateRateAndTotalPayment()
             
         }
         
@@ -103,20 +104,20 @@ class CreditsPopupVc: UIViewController {
     
     @objc func textFieldDidChange(_ textField: UITextField) {
        
+        calculateRateAndTotalPayment()
+    }
+    
+    func calculateRateAndTotalPayment() {
         guard let amount = amountTextField.text, !amount.isEmpty else { return }
         guard let monthly = monthlyTextField.text, !monthly.isEmpty else { return }
         
         let calculatedPayment =  Double(monthlyTextField.text!)! * Double(monthCount)
         totalPaymentResultLabel.text = String(calculatedPayment)
-        
-        
-        
+         
         let interestPrice = calculatedPayment - Double(amountTextField.text!)!
-        let interestRate = (interestPrice / Double(amountTextField.text!)!) * 12
+        let interestRate = (interestPrice / Double(amountTextField.text!)!) * Double(monthCount)
         rateResultLabel.text = "%\(String(format: "%.2f", interestRate))"
     }
-    
-    
     
     func animateOut() {
         UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 1, options: .curveEaseIn) { [weak self] in
