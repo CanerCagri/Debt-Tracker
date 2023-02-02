@@ -17,7 +17,6 @@
 		011E8C4629834CDD00F163D4 /* DTTitleLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 011E8C4529834CDD00F163D4 /* DTTitleLabel.swift */; };
 		011E8C4829834D1F00F163D4 /* DTBodyLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 011E8C4729834D1F00F163D4 /* DTBodyLabel.swift */; };
 		011E8C4D298352C700F163D4 /* UIView+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 011E8C4C298352C700F163D4 /* UIView+Ext.swift */; };
-		011E8C502983535400F163D4 /* CreditModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 011E8C4F2983535400F163D4 /* CreditModel.swift */; };
 		011E8C5A2983FE4400F163D4 /* CreditModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 011E8C582983FE4400F163D4 /* CreditModel.xcdatamodeld */; };
 		011E8C5D2984014200F163D4 /* PersistenceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 011E8C5C2984014200F163D4 /* PersistenceManager.swift */; };
 		011E8C6429848B6200F163D4 /* DTTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 011E8C6329848B6200F163D4 /* DTTextField.swift */; };
@@ -37,6 +36,7 @@
 		011E8C89298A911A00F163D4 /* CreditsPopupVc.swift in Sources */ = {isa = PBXBuildFile; fileRef = 011E8C88298A911A00F163D4 /* CreditsPopupVc.swift */; };
 		011E8C8F298B2D0700F163D4 /* CreditsBottomSheetVc.swift in Sources */ = {isa = PBXBuildFile; fileRef = 011E8C8E298B2D0700F163D4 /* CreditsBottomSheetVc.swift */; };
 		011E8C91298BF6AA00F163D4 /* CreditDetailModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 011E8C90298BF6AA00F163D4 /* CreditDetailModel.swift */; };
+		011E8C93298C6A6000F163D4 /* CreateCreditPopupVc.swift in Sources */ = {isa = PBXBuildFile; fileRef = 011E8C92298C6A6000F163D4 /* CreateCreditPopupVc.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -52,7 +52,6 @@
 		011E8C4529834CDD00F163D4 /* DTTitleLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DTTitleLabel.swift; sourceTree = "<group>"; };
 		011E8C4729834D1F00F163D4 /* DTBodyLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DTBodyLabel.swift; sourceTree = "<group>"; };
 		011E8C4C298352C700F163D4 /* UIView+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Ext.swift"; sourceTree = "<group>"; };
-		011E8C4F2983535400F163D4 /* CreditModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreditModel.swift; sourceTree = "<group>"; };
 		011E8C592983FE4400F163D4 /* CreditModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = CreditModel.xcdatamodel; sourceTree = "<group>"; };
 		011E8C5C2984014200F163D4 /* PersistenceManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistenceManager.swift; sourceTree = "<group>"; };
 		011E8C6329848B6200F163D4 /* DTTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DTTextField.swift; sourceTree = "<group>"; };
@@ -72,6 +71,7 @@
 		011E8C88298A911A00F163D4 /* CreditsPopupVc.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreditsPopupVc.swift; sourceTree = "<group>"; };
 		011E8C8E298B2D0700F163D4 /* CreditsBottomSheetVc.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreditsBottomSheetVc.swift; sourceTree = "<group>"; };
 		011E8C90298BF6AA00F163D4 /* CreditDetailModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreditDetailModel.swift; sourceTree = "<group>"; };
+		011E8C92298C6A6000F163D4 /* CreateCreditPopupVc.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateCreditPopupVc.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -174,7 +174,6 @@
 		011E8C4E2983534500F163D4 /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				011E8C4F2983535400F163D4 /* CreditModel.swift */,
 				011E8C86298A890300F163D4 /* CreditDetailsModel.swift */,
 				011E8C90298BF6AA00F163D4 /* CreditDetailModel.swift */,
 			);
@@ -217,8 +216,8 @@
 		011E8C6829849B6700F163D4 /* Core */ = {
 			isa = PBXGroup;
 			children = (
-				011E8C2B298346BE00F163D4 /* CreditsViewController.swift */,
 				011E8C7F298A808300F163D4 /* CreditsAddDetailMainVc.swift */,
+				011E8C2B298346BE00F163D4 /* CreditsViewController.swift */,
 				011E8C4029834C4D00F163D4 /* CreditsDetailViewController.swift */,
 				011E8C7D298A801200F163D4 /* MainTabBarViewController.swift */,
 			);
@@ -261,6 +260,7 @@
 		011E8C8B298A922E00F163D4 /* General */ = {
 			isa = PBXGroup;
 			children = (
+				011E8C92298C6A6000F163D4 /* CreateCreditPopupVc.swift */,
 				011E8C88298A911A00F163D4 /* CreditsPopupVc.swift */,
 				011E8C8E298B2D0700F163D4 /* CreditsBottomSheetVc.swift */,
 			);
@@ -349,6 +349,7 @@
 				011E8C91298BF6AA00F163D4 /* CreditDetailModel.swift in Sources */,
 				011E8C4629834CDD00F163D4 /* DTTitleLabel.swift in Sources */,
 				011E8C6429848B6200F163D4 /* DTTextField.swift in Sources */,
+				011E8C93298C6A6000F163D4 /* CreateCreditPopupVc.swift in Sources */,
 				011E8C5D2984014200F163D4 /* PersistenceManager.swift in Sources */,
 				011E8C67298497A900F163D4 /* DTButton.swift in Sources */,
 				011E8C7A2985C92300F163D4 /* CreditsDetailTableViewCell.swift in Sources */,
@@ -356,7 +357,6 @@
 				011E8C7629858C1900F163D4 /* DTContainerView.swift in Sources */,
 				011E8C2C298346BE00F163D4 /* CreditsViewController.swift in Sources */,
 				011E8C28298346BE00F163D4 /* AppDelegate.swift in Sources */,
-				011E8C502983535400F163D4 /* CreditModel.swift in Sources */,
 				011E8C5A2983FE4400F163D4 /* CreditModel.xcdatamodeld in Sources */,
 				011E8C2A298346BE00F163D4 /* SceneDelegate.swift in Sources */,
 				011E8C702984A8C300F163D4 /* Int+Ext.swift in Sources */,

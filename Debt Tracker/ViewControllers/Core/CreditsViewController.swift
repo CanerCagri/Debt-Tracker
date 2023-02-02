@@ -43,10 +43,6 @@ class CreditsViewController: UIViewController {
         NotificationCenter.default.addObserver(forName: NSNotification.Name("saveTapped"), object: nil, queue: nil) { [weak self] _ in
             self?.fetchFromCoredata()
         }
-        
-        NotificationCenter.default.addObserver(forName: NSNotification.Name("paymentUpdated"), object: nil, queue: nil) { [weak self] _ in
-            self?.fetchFromCoredata()
-        }
     }
     
     private func configureTableView() {
@@ -66,7 +62,7 @@ class CreditsViewController: UIViewController {
             case .success(let success):
                 
                 if success.isEmpty {
-                    self.emptyState = DTEmptyStateView(message: "Currently don't have a Credit\nAdd from (+) ")
+                    self.emptyState = DTEmptyStateView(message: "Currently don't have a Credit")
                     self.emptyState?.frame = self.view.bounds
                     self.view.addSubview(self.emptyState!)
                     
@@ -121,7 +117,7 @@ extension CreditsViewController: UITableViewDelegate, UITableViewDataSource {
                 case .success():
                     self.credits.remove(at: indexPath.row)
                     if self.credits.isEmpty {
-                        self.emptyState = DTEmptyStateView(message: "Currently don't have a Credit\nAdd from (+) ")
+                        self.emptyState = DTEmptyStateView(message: "Currently don't have a Credit")
                         self.emptyState?.frame = self.view.bounds
                         self.view.addSubview(self.emptyState!)
                     }

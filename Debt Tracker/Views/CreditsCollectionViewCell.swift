@@ -24,10 +24,10 @@ class CreditsCollectionViewCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func set(credit: CreditDetailsModel) {
+    func set(banks: CreditDetails) {
        
-        creditNameLabel.text = credit.name
-        creditDetailLabel.text = credit.detail
+        creditNameLabel.text = banks.name
+        creditDetailLabel.text = banks.detail
     }
     
     private func configure() {

@@ -20,7 +20,7 @@ class MainTabBarViewController: UITabBarController {
         vc1.tabBarItem.image = UIImage(systemName: "plus.message")
         vc2.tabBarItem.image = UIImage(systemName: "list.clipboard")
         
-        vc1.title = "Add Credit"
+        vc1.title = "Create Credit"
         vc2.title = "Credits"
         
         tabBar.tintColor = .label

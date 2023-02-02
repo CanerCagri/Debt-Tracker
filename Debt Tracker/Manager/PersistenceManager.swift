@@ -46,6 +46,24 @@ class PersistenceManager {
         }
     }
     
+    func createBank(model: CreditDetailsModel, completion: @escaping (Result<Void, Error>) -> Void) {
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
+        
+        let context = appDelegate.persistentContainer.viewContext
+        let item = CreditDetails(context: context)
+        
+        item.id = model.id
+        item.name = model.name
+        item.detail = model.detail
+        
+        do {
+            try context.save()
+            completion(.success(()))
+        } catch {
+            completion(.failure(DatabaseError.failedToDataSave))
+        }
+    }
+    
     func fetchCredits(completion: @escaping(Result<[CreditDetail], Error> )-> Void) {
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
         
@@ -56,6 +74,22 @@ class PersistenceManager {
         do {
             let credits = try context.fetch(request)
             completion(.success(credits))
+            
+        } catch {
+            completion(.failure(DatabaseError.failedToFetchData))
+        }
+    }
+    
+    func fetchBanks(completion: @escaping(Result<[CreditDetails], Error> )-> Void) {
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
+        
+        let context = appDelegate.persistentContainer.viewContext
+        let request: NSFetchRequest<CreditDetails>
+        request = CreditDetails.fetchRequest()
+        
+        do {
+            let banks = try context.fetch(request)
+            completion(.success(banks))
             
         } catch {
             completion(.failure(DatabaseError.failedToFetchData))
@@ -73,6 +107,20 @@ class PersistenceManager {
             completion(.success(()))
         } catch {
             completion(.failure(DatabaseError.failedToDeleteData))
+        }
+    }
+    
+    func deleteAllBanks() {
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
+        
+        let context = appDelegate.persistentContainer.viewContext
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CreditDetails")
+        let batchDeleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest)
+        
+        do {
+            try context.execute(batchDeleteRequest)
+        } catch {
+            print(error.localizedDescription)
         }
     }
     

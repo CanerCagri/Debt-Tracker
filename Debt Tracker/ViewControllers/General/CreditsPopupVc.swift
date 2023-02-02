@@ -10,7 +10,7 @@ import UIKit
 class CreditsPopupVc: UIViewController {
     
     let moodSelectionVc = CreditsBottomSheetVc()
-    var selectedCredit: CreditDetailsModel? {
+    var selectedCredit: CreditDetails? {
         didSet {
             creditNameLabel.text = selectedCredit?.name
             creditDetailLabel.text = selectedCredit?.detail
