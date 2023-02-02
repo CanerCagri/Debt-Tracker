@@ -24,6 +24,17 @@ class DTButton: UIButton {
         set(color: color, title: title, systemImageName: systemImageName)
     }
     
+    init(title: String, color: UIColor) {
+        super.init(frame: .zero)
+        configure()
+        configuration?.baseBackgroundColor = color
+        configuration?.baseForegroundColor = .white
+        
+        var container = AttributeContainer()
+        container.font = UIFont(name: "GillSans-SemiBold", size: 12)
+        configuration?.attributedTitle = AttributedString(title, attributes: container)
+    }
+    
     private func configure() {
         configuration = .filled()
         configuration?.cornerStyle = .medium

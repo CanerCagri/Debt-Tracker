@@ -30,6 +30,13 @@
 		011E8C7829858CD700F163D4 /* UIViewController+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 011E8C7729858CD700F163D4 /* UIViewController+Ext.swift */; };
 		011E8C7A2985C92300F163D4 /* CreditsDetailTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 011E8C792985C92300F163D4 /* CreditsDetailTableViewCell.swift */; };
 		011E8C7C2986A14300F163D4 /* DTEmptyStateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 011E8C7B2986A14300F163D4 /* DTEmptyStateView.swift */; };
+		011E8C7E298A801200F163D4 /* MainTabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 011E8C7D298A801200F163D4 /* MainTabBarViewController.swift */; };
+		011E8C80298A808300F163D4 /* CreditsAddDetailMainVc.swift in Sources */ = {isa = PBXBuildFile; fileRef = 011E8C7F298A808300F163D4 /* CreditsAddDetailMainVc.swift */; };
+		011E8C82298A84CA00F163D4 /* CreditsCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 011E8C81298A84CA00F163D4 /* CreditsCollectionViewCell.swift */; };
+		011E8C85298A885D00F163D4 /* UIHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 011E8C84298A885D00F163D4 /* UIHelper.swift */; };
+		011E8C87298A890300F163D4 /* CreditDetailsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 011E8C86298A890300F163D4 /* CreditDetailsModel.swift */; };
+		011E8C89298A911A00F163D4 /* CreditsPopupVc.swift in Sources */ = {isa = PBXBuildFile; fileRef = 011E8C88298A911A00F163D4 /* CreditsPopupVc.swift */; };
+		011E8C8F298B2D0700F163D4 /* CreditsBottomSheetVc.swift in Sources */ = {isa = PBXBuildFile; fileRef = 011E8C8E298B2D0700F163D4 /* CreditsBottomSheetVc.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -58,6 +65,13 @@
 		011E8C7729858CD700F163D4 /* UIViewController+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Ext.swift"; sourceTree = "<group>"; };
 		011E8C792985C92300F163D4 /* CreditsDetailTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreditsDetailTableViewCell.swift; sourceTree = "<group>"; };
 		011E8C7B2986A14300F163D4 /* DTEmptyStateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DTEmptyStateView.swift; sourceTree = "<group>"; };
+		011E8C7D298A801200F163D4 /* MainTabBarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabBarViewController.swift; sourceTree = "<group>"; };
+		011E8C7F298A808300F163D4 /* CreditsAddDetailMainVc.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreditsAddDetailMainVc.swift; sourceTree = "<group>"; };
+		011E8C81298A84CA00F163D4 /* CreditsCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreditsCollectionViewCell.swift; sourceTree = "<group>"; };
+		011E8C84298A885D00F163D4 /* UIHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIHelper.swift; sourceTree = "<group>"; };
+		011E8C86298A890300F163D4 /* CreditDetailsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreditDetailsModel.swift; sourceTree = "<group>"; };
+		011E8C88298A911A00F163D4 /* CreditsPopupVc.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreditsPopupVc.swift; sourceTree = "<group>"; };
+		011E8C8E298B2D0700F163D4 /* CreditsBottomSheetVc.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreditsBottomSheetVc.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -90,6 +104,7 @@
 		011E8C26298346BE00F163D4 /* Debt Tracker */ = {
 			isa = PBXGroup;
 			children = (
+				011E8C83298A884500F163D4 /* Utilities */,
 				011E8C4E2983534500F163D4 /* Models */,
 				011E8C4B298352B900F163D4 /* Extensions */,
 				011E8C4329834C8400F163D4 /* SupportingFiles */,
@@ -107,6 +122,7 @@
 			isa = PBXGroup;
 			children = (
 				011E8C6829849B6700F163D4 /* Core */,
+				011E8C8B298A922E00F163D4 /* General */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -116,6 +132,7 @@
 			children = (
 				011E8C3D29834A1800F163D4 /* CreditsTableViewCell.swift */,
 				011E8C792985C92300F163D4 /* CreditsDetailTableViewCell.swift */,
+				011E8C81298A84CA00F163D4 /* CreditsCollectionViewCell.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -158,6 +175,7 @@
 			isa = PBXGroup;
 			children = (
 				011E8C4F2983535400F163D4 /* CreditModel.swift */,
+				011E8C86298A890300F163D4 /* CreditDetailsModel.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -199,8 +217,10 @@
 			isa = PBXGroup;
 			children = (
 				011E8C2B298346BE00F163D4 /* CreditsViewController.swift */,
+				011E8C7F298A808300F163D4 /* CreditsAddDetailMainVc.swift */,
 				011E8C3B298348DE00F163D4 /* CreditsAddViewController.swift */,
 				011E8C4029834C4D00F163D4 /* CreditsDetailViewController.swift */,
+				011E8C7D298A801200F163D4 /* MainTabBarViewController.swift */,
 			);
 			path = Core;
 			sourceTree = "<group>";
@@ -228,6 +248,23 @@
 				011E8C7B2986A14300F163D4 /* DTEmptyStateView.swift */,
 			);
 			path = Views;
+			sourceTree = "<group>";
+		};
+		011E8C83298A884500F163D4 /* Utilities */ = {
+			isa = PBXGroup;
+			children = (
+				011E8C84298A885D00F163D4 /* UIHelper.swift */,
+			);
+			path = Utilities;
+			sourceTree = "<group>";
+		};
+		011E8C8B298A922E00F163D4 /* General */ = {
+			isa = PBXGroup;
+			children = (
+				011E8C88298A911A00F163D4 /* CreditsPopupVc.swift */,
+				011E8C8E298B2D0700F163D4 /* CreditsBottomSheetVc.swift */,
+			);
+			path = General;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -303,9 +340,12 @@
 				011E8C7829858CD700F163D4 /* UIViewController+Ext.swift in Sources */,
 				011E8C3C298348DE00F163D4 /* CreditsAddViewController.swift in Sources */,
 				011E8C6E29849F5F00F163D4 /* DTDatePicker.swift in Sources */,
+				011E8C7E298A801200F163D4 /* MainTabBarViewController.swift in Sources */,
 				011E8C3E29834A1800F163D4 /* CreditsTableViewCell.swift in Sources */,
 				011E8C4D298352C700F163D4 /* UIView+Ext.swift in Sources */,
+				011E8C8F298B2D0700F163D4 /* CreditsBottomSheetVc.swift in Sources */,
 				011E8C7C2986A14300F163D4 /* DTEmptyStateView.swift in Sources */,
+				011E8C80298A808300F163D4 /* CreditsAddDetailMainVc.swift in Sources */,
 				011E8C4829834D1F00F163D4 /* DTBodyLabel.swift in Sources */,
 				011E8C4629834CDD00F163D4 /* DTTitleLabel.swift in Sources */,
 				011E8C6429848B6200F163D4 /* DTTextField.swift in Sources */,
@@ -321,6 +361,10 @@
 				011E8C2A298346BE00F163D4 /* SceneDelegate.swift in Sources */,
 				011E8C702984A8C300F163D4 /* Int+Ext.swift in Sources */,
 				011E8C7329858BC600F163D4 /* DTAlertViewController.swift in Sources */,
+				011E8C87298A890300F163D4 /* CreditDetailsModel.swift in Sources */,
+				011E8C85298A885D00F163D4 /* UIHelper.swift in Sources */,
+				011E8C82298A84CA00F163D4 /* CreditsCollectionViewCell.swift in Sources */,
+				011E8C89298A911A00F163D4 /* CreditsPopupVc.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

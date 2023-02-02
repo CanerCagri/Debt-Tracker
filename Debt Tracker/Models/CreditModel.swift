@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct CreditModel {
+struct CreditModel: Codable, Hashable {
     var id: String
     var name: String
     var entryDebt: Int

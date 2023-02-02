@@ -120,8 +120,8 @@ class CreditsAddViewController: UIViewController {
                 
                 let newDate = calendar.date(byAdding: .day, value: 30 * i, to: entryDate)!
                 let newDateString = formatter.string(from: newDate)
-               
-                    dateLabels[i - 1].text = newDateString
+                
+                dateLabels[i - 1].text = newDateString
                 
             }
         }
@@ -218,12 +218,12 @@ class CreditsAddViewController: UIViewController {
         
         
         let calendar = Calendar.current
-
+        
         for i in 1...12 {
             
             let newDate = calendar.date(byAdding: .day, value: 30 * i, to: entryDate)!
             let newDateString = formatter.string(from: newDate)
-           
+            
             dateLabels[i - 1].text = newDateString
             
         }
