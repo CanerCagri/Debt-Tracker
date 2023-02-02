@@ -12,7 +12,6 @@
 		011E8C2C298346BE00F163D4 /* CreditsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 011E8C2B298346BE00F163D4 /* CreditsViewController.swift */; };
 		011E8C31298346BF00F163D4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 011E8C30298346BF00F163D4 /* Assets.xcassets */; };
 		011E8C34298346BF00F163D4 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 011E8C32298346BF00F163D4 /* LaunchScreen.storyboard */; };
-		011E8C3C298348DE00F163D4 /* CreditsAddViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 011E8C3B298348DE00F163D4 /* CreditsAddViewController.swift */; };
 		011E8C3E29834A1800F163D4 /* CreditsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 011E8C3D29834A1800F163D4 /* CreditsTableViewCell.swift */; };
 		011E8C4129834C4D00F163D4 /* CreditsDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 011E8C4029834C4D00F163D4 /* CreditsDetailViewController.swift */; };
 		011E8C4629834CDD00F163D4 /* DTTitleLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 011E8C4529834CDD00F163D4 /* DTTitleLabel.swift */; };
@@ -48,7 +47,6 @@
 		011E8C30298346BF00F163D4 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		011E8C33298346BF00F163D4 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		011E8C35298346BF00F163D4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		011E8C3B298348DE00F163D4 /* CreditsAddViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreditsAddViewController.swift; sourceTree = "<group>"; };
 		011E8C3D29834A1800F163D4 /* CreditsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreditsTableViewCell.swift; sourceTree = "<group>"; };
 		011E8C4029834C4D00F163D4 /* CreditsDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreditsDetailViewController.swift; sourceTree = "<group>"; };
 		011E8C4529834CDD00F163D4 /* DTTitleLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DTTitleLabel.swift; sourceTree = "<group>"; };
@@ -221,7 +219,6 @@
 			children = (
 				011E8C2B298346BE00F163D4 /* CreditsViewController.swift */,
 				011E8C7F298A808300F163D4 /* CreditsAddDetailMainVc.swift */,
-				011E8C3B298348DE00F163D4 /* CreditsAddViewController.swift */,
 				011E8C4029834C4D00F163D4 /* CreditsDetailViewController.swift */,
 				011E8C7D298A801200F163D4 /* MainTabBarViewController.swift */,
 			);
@@ -341,7 +338,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				011E8C7829858CD700F163D4 /* UIViewController+Ext.swift in Sources */,
-				011E8C3C298348DE00F163D4 /* CreditsAddViewController.swift in Sources */,
 				011E8C6E29849F5F00F163D4 /* DTDatePicker.swift in Sources */,
 				011E8C7E298A801200F163D4 /* MainTabBarViewController.swift in Sources */,
 				011E8C3E29834A1800F163D4 /* CreditsTableViewCell.swift in Sources */,

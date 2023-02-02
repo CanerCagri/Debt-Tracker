@@ -17,12 +17,12 @@ class CreditsDetailViewController: UIViewController {
     let dateFormatter = DateFormatter()
     let calendar = Calendar.current
     
-    var creditModel: CreditItems! {
+    var creditModel: CreditDetail! {
         didSet
         {
             title = creditModel.name
-            next12MonthsString = creditModel.payment_date
-            calculatedRowCount = (12 - Int(creditModel.paid_count))
+            next12MonthsString = creditModel.first_installment
+            calculatedRowCount = (Int(creditModel.installment_count) - Int(creditModel.paid_installment_count))
             
             formatter.numberStyle = .decimal
 
@@ -30,7 +30,9 @@ class CreditsDetailViewController: UIViewController {
             formatter.currencySymbol = ""
             formatter.positiveSuffix = " ₺"
             
-            let calculateRemaining = Double(creditModel.current_debt) - creditModel.paid_debt
+            detailLabel.text = creditModel.detail
+            
+            let calculateRemaining = Double(creditModel.total_payment) - creditModel.paid_debt
             let remainingTextFormatted = formatter.string(from: calculateRemaining as NSNumber)
             remainingDebtLabel.text = "Remaining Debt: \(remainingTextFormatted ?? "Error")"
             
@@ -38,13 +40,14 @@ class CreditsDetailViewController: UIViewController {
             totalPaidDebtLabel.text = "Total Paid Debt: \(totalPaidDebtFormatted ?? "Error")"
             
             
-            totalPaidMonthLabel.text = "Total Number Of Paid Months: \(String(creditModel.paid_count))"
+            totalPaidMonthLabel.text = "Total Number Of Paid Months: \(String(creditModel.paid_installment_count))"
         }
     }
     
-    var paymentTitleLabel = DTTitleLabel(textAlignment: .left, fontSize: 20)
-    var detailTableView = UITableView()
+    var detailLabel = DTTitleLabel(textAlignment: .left, fontSize: 22)
+    var paymentTitleLabel = DTTitleLabel(textAlignment: .left, fontSize: 18)
     var remainingDebtLabel = DTTitleLabel(textAlignment: .center, fontSize: 18)
+    var detailTableView = UITableView()
     var totalPaidDebtLabel = DTTitleLabel(textAlignment: .center, fontSize: 18)
     var totalPaidMonthLabel = DTTitleLabel(textAlignment: .center, fontSize: 18)
 
@@ -66,11 +69,8 @@ class CreditsDetailViewController: UIViewController {
         configureTableView()
         applyConstraints()
         
-        paymentTitleLabel.text = "Pay Installment"
+        paymentTitleLabel.text = "Remaining Installmens"
         dateFormatter.dateFormat = "dd.MM.yyyy"
-        print(creditModel.payment_date!)
-    
-   
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -91,12 +91,14 @@ class CreditsDetailViewController: UIViewController {
     }
     
     func applyConstraints() {
-        view.addSubviews(paymentTitleLabel, detailTableView, remainingDebtLabel, totalPaidDebtLabel, totalPaidMonthLabel)
+        view.addSubviews(detailLabel, paymentTitleLabel, detailTableView, remainingDebtLabel, totalPaidDebtLabel, totalPaidMonthLabel)
         detailTableView.translatesAutoresizingMaskIntoConstraints = false
         
-        paymentTitleLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 5).isActive = true
-        paymentTitleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10).isActive = true
+        detailLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 15).isActive = true
+        detailLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10).isActive = true
         
+        paymentTitleLabel.topAnchor.constraint(equalTo: detailLabel.bottomAnchor, constant: 30).isActive = true
+        paymentTitleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10).isActive = true
         
         detailTableView.topAnchor.constraint(equalTo: paymentTitleLabel.bottomAnchor, constant: 10).isActive = true
         detailTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
@@ -122,16 +124,16 @@ extension CreditsDetailViewController: UITableViewDelegate, UITableViewDataSourc
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: CreditsDetailTableViewCell.identifier) as! CreditsDetailTableViewCell
         
-        cell.nameLabel.text = "\(indexPath.row + Int(creditModel.paid_count) + 1). month:"
+        cell.nameLabel.text = "\(indexPath.row + Int(creditModel.paid_installment_count) + 1). month:"
         
-        let priceLabelTextFormatted = formatter.string(from: creditModel.montly_debt as NSNumber)
+        let priceLabelTextFormatted = formatter.string(from: creditModel.monthly_installment as NSNumber)
         cell.priceLabel.text = priceLabelTextFormatted
         
-        let next12Months = dateFormatter.date(from: creditModel.payment_date!)!
+        let next12Months = dateFormatter.date(from: creditModel.first_installment!)!
         if cell.dateLabel.text == nil || cell.dateLabel.text == "" {
             
             if indexPath.row == 0 {
-                cell.dateLabel.text = creditModel.payment_date!
+                cell.dateLabel.text = creditModel.first_installment!
             } else {
                 let newDate = calendar.date(byAdding: .day, value: 30 * indexPath.row, to: next12Months)!
                 let newDateString = dateFormatter.string(from: newDate)
@@ -154,12 +156,12 @@ extension CreditsDetailViewController: UITableViewDelegate, UITableViewDataSourc
         let selectedCell = tableView.cellForRow(at: indexPath) as! CreditsDetailTableViewCell
 
         self.selectedMonthDate = selectedCell.dateLabel.text
-        self.selectedMonthCount = (self.creditModel.paid_count) + 1
-        self.selectedPaidDebt = creditModel.montly_debt + creditModel.paid_debt
-        self.selectedRemainingDebt = creditModel.montly_debt - self.creditModel.remaining_debt
+        self.selectedMonthCount = (self.creditModel.paid_installment_count) + 1
+        self.selectedPaidDebt = creditModel.monthly_installment + creditModel.paid_debt
+        self.selectedRemainingDebt = creditModel.monthly_installment - self.creditModel.remaining_debt
         
 
-        let viewModel = CreditModel(id: (self.creditModel.id!), name: (self.creditModel.name!), entryDebt: Int((self.creditModel.entry_debt)), paidCount: Int((self.selectedMonthCount!)), monthlyDebt: (self.creditModel.montly_debt), paymentDate: (self.selectedMonthDate!), currentDebt: Int((self.creditModel.current_debt)), remainingDebt: (self.selectedRemainingDebt!), paidDebt: self.selectedPaidDebt!)
+        let viewModel = CreditDetailModel(id: (self.creditModel.id!), name: (self.creditModel.name!), detail: (self.creditModel.detail!), entryDebt: Int((self.creditModel.entry_debt)), installmentCount: Int((self.creditModel.installment_count)), paidCount: Int((self.selectedMonthCount!)), monthlyInstallment: (self.creditModel.monthly_installment), firstInstallmentDate: (self.selectedMonthDate!), totalDebt: (self.creditModel.total_payment), interestRate: (self.creditModel.interest_rate), remainingDebt: (self.selectedRemainingDebt!), paidDebt: self.selectedPaidDebt!)
 
         let yesAction = UIAlertAction(title: "Yes, I did pay selected Installment.", style: .default) { [weak self] (action) in
             

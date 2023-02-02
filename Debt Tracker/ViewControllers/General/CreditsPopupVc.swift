@@ -43,6 +43,7 @@ class CreditsPopupVc: UIViewController {
     
     var monthCount = 12
     var firstInstallmentDate = ""
+    var interestRate = 0.0
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -59,7 +60,7 @@ class CreditsPopupVc: UIViewController {
         totalPaymentLabel.text = "Total Payment:"
         monthlyInstallmentCountLabel.text = "Select Number Of Installments:"
         firstInstallmentLabel.text = "Select First Installment:"
-        rateResultLabel.text = "%0.0"
+        rateResultLabel.text = "%\(interestRate)"
         totalPaymentResultLabel.text = "0"
         
         firstInstallmentDatePicker.datePickerMode = .date
@@ -82,8 +83,35 @@ class CreditsPopupVc: UIViewController {
         
     }
     @objc func saveButtonTapped() {
-        print("save")
+        guard let amount = amountTextField.text, !amount.isEmpty else {
+            presentAlert(title: "Warning", message: "Please enter a Price", buttonTitle: "Ok")
+            return
+        }
+        guard let monthly = monthlyTextField.text, !monthly.isEmpty else {
+            presentAlert(title: "Warning", message: "Please enter a Monthly Installment Price", buttonTitle: "Ok")
+            return
+        }
+        
+        let viewModel = CreditDetailModel(id: UUID().uuidString, name: creditNameLabel.text!, detail: creditDetailLabel.text!, entryDebt: Int(amount)!, installmentCount: monthCount, paidCount: 0, monthlyInstallment: Double(monthly)!, firstInstallmentDate: firstInstallmentDate, totalDebt: Double(totalPaymentResultLabel.text!)!, interestRate: interestRate, remainingDebt: Double(totalPaymentResultLabel.text!)!, paidDebt: 0.0)
+        
+        PersistenceManager.shared.createWithModel(model: viewModel) { [weak self] result in
+            switch result {
+            case .success():
+                let alertController = UIAlertController(title: "Credit Succesfully Created", message: nil, preferredStyle: .alert)
+                
+                let deleteButton = UIAlertAction(title: "OK", style: .default) { _ in
+                    self?.dismissVC()
+                }
+                
+                alertController.addAction(deleteButton)
+                self?.present(alertController, animated: true)
+                
+            case .failure(let failure):
+                print(failure.localizedDescription)
+            }
+        }
     }
+        
     @objc func dismissVC() {
         animateOut()
     }
@@ -115,7 +143,7 @@ class CreditsPopupVc: UIViewController {
         totalPaymentResultLabel.text = String(calculatedPayment)
          
         let interestPrice = calculatedPayment - Double(amountTextField.text!)!
-        let interestRate = (interestPrice / Double(amountTextField.text!)!) * Double(monthCount)
+        interestRate = (interestPrice / Double(amountTextField.text!)!) * Double(monthCount)
         rateResultLabel.text = "%\(String(format: "%.2f", interestRate))"
     }
     

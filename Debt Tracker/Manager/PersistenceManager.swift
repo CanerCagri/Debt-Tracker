@@ -19,22 +19,24 @@ class PersistenceManager {
     
     static let shared = PersistenceManager()
     
-    func downloadWithModel(model: CreditModel, completion: @escaping (Result<Void, Error>) -> Void) {
+    func createWithModel(model: CreditDetailModel, completion: @escaping (Result<Void, Error>) -> Void) {
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
         
         let context = appDelegate.persistentContainer.viewContext
-        let item = CreditItems(context: context)
+        let item = CreditDetail(context: context)
         
         item.id = model.id
         item.name = model.name
-        item.current_debt = Int32(model.currentDebt)
+        item.detail = model.detail
         item.entry_debt = Int32(model.entryDebt)
-        item.payment_date = model.paymentDate
-        item.montly_debt = model.monthlyDebt
+        item.monthly_installment = model.monthlyInstallment
+        item.installment_count = Int32(model.installmentCount)
+        item.paid_installment_count = Int32(model.paidCount)
+        item.first_installment = model.firstInstallmentDate
+        item.interest_rate = model.interestRate
+        item.total_payment = model.totalDebt
         item.remaining_debt = model.remainingDebt
-        item.paid_count = Int32(model.paidCount)
         item.paid_debt = model.paidDebt
-        
         
         do {
             try context.save()
@@ -44,12 +46,12 @@ class PersistenceManager {
         }
     }
     
-    func fetchCredits(completion: @escaping(Result<[CreditItems], Error> )-> Void) {
+    func fetchCredits(completion: @escaping(Result<[CreditDetail], Error> )-> Void) {
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
         
         let context = appDelegate.persistentContainer.viewContext
-        let request: NSFetchRequest<CreditItems>
-        request = CreditItems.fetchRequest()
+        let request: NSFetchRequest<CreditDetail>
+        request = CreditDetail.fetchRequest()
         
         do {
             let credits = try context.fetch(request)
@@ -60,7 +62,7 @@ class PersistenceManager {
         }
     }
     
-    func deleteCreditWith(model: CreditItems, completion: @escaping (Result<Void, Error>) -> Void) {
+    func deleteCreditWith(model: CreditDetail, completion: @escaping (Result<Void, Error>) -> Void) {
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
         
         let context = appDelegate.persistentContainer.viewContext
@@ -74,23 +76,23 @@ class PersistenceManager {
         }
     }
     
-    func editCreditDetails(model: CreditModel) {
+    func editCreditDetails(model: CreditDetailModel) {
         
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
         
         let context = appDelegate.persistentContainer.viewContext
         
         let id = model.id
-        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CreditItems")
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CreditDetail")
         fetchRequest.predicate = NSPredicate(format: "id == %@", id)
 
         do {
             let result = try context.fetch(fetchRequest)
-            if let entity = result.first as? CreditItems {
+            if let entity = result.first as? CreditDetail {
                 // Update the properties of the entity
-                entity.payment_date = model.paymentDate
+                entity.first_installment = model.firstInstallmentDate
                 entity.remaining_debt = model.remainingDebt
-                entity.paid_count = Int32(model.paidCount)
+                entity.paid_installment_count = Int32(model.paidCount)
                 entity.paid_debt = model.paidDebt
                 // Save the managed object context
                 try context.save()

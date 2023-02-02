@@ -13,7 +13,7 @@ class CreditsViewController: UIViewController {
     let contentView = UIView()
     var emptyState: DTEmptyStateView?
 
-    private var credits: [CreditItems] = []
+    private var credits: [CreditDetail] = []
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -39,9 +39,6 @@ class CreditsViewController: UIViewController {
         contentView.heightAnchor.constraint(equalToConstant: 600).isActive = true
         contentView.addSubview(creditsTableView)
         contentView.backgroundColor = .systemGray5
-        
-        
-        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(rightBarButtonTapped))
         
         NotificationCenter.default.addObserver(forName: NSNotification.Name("saveTapped"), object: nil, queue: nil) { [weak self] _ in
             self?.fetchFromCoredata()
@@ -86,12 +83,6 @@ class CreditsViewController: UIViewController {
                 self.presentDefaultError()
             }
         }
-    }
-    
-    @objc func rightBarButtonTapped() {
-        let detailVc = CreditsAddViewController()
-        let navigationController = UINavigationController(rootViewController: detailVc)
-        present(navigationController, animated: true)
     }
 }
 
