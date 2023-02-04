@@ -110,6 +110,20 @@ class PersistenceManager {
         }
     }
     
+    func deleteBankWith(model: CreditDetails, completion: @escaping (Result<Void, Error>) -> Void) {
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
+        
+        let context = appDelegate.persistentContainer.viewContext
+        context.delete(model)
+        
+        do {
+            try context.save()
+            completion(.success(()))
+        } catch {
+            completion(.failure(DatabaseError.failedToDeleteData))
+        }
+    }
+    
     func deleteAllBanks() {
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
         

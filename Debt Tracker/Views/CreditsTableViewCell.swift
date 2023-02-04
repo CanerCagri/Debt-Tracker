@@ -70,7 +70,7 @@ class CreditsTableViewCell: UITableViewCell {
         formatter.currencySymbol = ""
         formatter.positiveSuffix = " ₺"
         
-        nameLabel.text = credit.name
+        nameLabel.text = "\(credit.name!) - \(credit.detail!) - %\(credit.interest_rate)"
         
         let entryDebtFormatted = formatter.string(from: credit.entry_debt as NSNumber)
         entryDebt.text = entryDebtFormatted ?? ""

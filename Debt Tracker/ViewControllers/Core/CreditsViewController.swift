@@ -43,6 +43,10 @@ class CreditsViewController: UIViewController {
         NotificationCenter.default.addObserver(forName: NSNotification.Name("saveTapped"), object: nil, queue: nil) { [weak self] _ in
             self?.fetchFromCoredata()
         }
+        
+        NotificationCenter.default.addObserver(forName: NSNotification.Name("paymentUpdated"), object: nil, queue: nil) { [weak self] _ in
+            self?.fetchFromCoredata()
+        }
     }
     
     private func configureTableView() {

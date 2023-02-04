@@ -51,6 +51,9 @@ class CreditsAddDetailMainViewController: UIViewController {
         creditsCollectionView.delegate = self
         creditsCollectionView.backgroundColor = .systemBackground
         creditsCollectionView.register(CreditsCollectionViewCell.self, forCellWithReuseIdentifier: CreditsCollectionViewCell.identifier)
+        
+        let longPressGesture = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPress))
+        creditsCollectionView.addGestureRecognizer(longPressGesture)
     }
     
     private func fetchFromCoredata() {
@@ -74,6 +77,38 @@ class CreditsAddDetailMainViewController: UIViewController {
             case .failure(_):
                 self?.presentDefaultError()
             }
+        }
+    }
+    
+    func removeItem(at indexPath: IndexPath) {
+        PersistenceManager.shared.deleteBankWith(model: banks[indexPath.item]) { [weak self] result in
+            guard let self = self else { return }
+            
+            switch result {
+            case .success(_):
+                var snapShot = self.dataSource.snapshot()
+                snapShot.deleteItems([snapShot.itemIdentifiers[indexPath.item]])
+                self.dataSource.apply(snapShot, animatingDifferences: true)
+            case .failure(_):
+                self.presentDefaultError()
+            }
+        }
+    }
+    
+    @objc func handleLongPress(_ gesture: UILongPressGestureRecognizer) {
+        switch gesture.state {
+        case .began:
+            guard let selectedIndexPath = creditsCollectionView.indexPathForItem(at: gesture.location(in: creditsCollectionView)) else { break }
+            let alertController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+            let deleteAction = UIAlertAction(title: "Delete", style: .destructive) { _ in
+                self.removeItem(at: selectedIndexPath)
+            }
+            let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+            alertController.addAction(deleteAction)
+            alertController.addAction(cancelAction)
+            present(alertController, animated: true)
+        default:
+            break
         }
     }
     
@@ -152,13 +187,13 @@ extension CreditsAddDetailMainViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, commit editingStyle: UITableViewCell.EditingStyle, forItemAt indexPath: IndexPath) {
         if editingStyle == .delete {
             // Remove the item from your data source
-      
+            
             
             // Delete the item from the collection view
             collectionView.deleteItems(at: [indexPath])
         }
     }
-
+    
 }
 
 

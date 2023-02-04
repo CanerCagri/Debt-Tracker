@@ -43,7 +43,10 @@ class CreditsPopupVc: UIViewController {
     
     var monthCount = 12
     var firstInstallmentDate = ""
-    var interestRate = 0.0
+    var interestRateCalculated = ""
+    var calculatedPayment = 0.0
+    
+    let formatter = NumberFormatter()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -60,8 +63,8 @@ class CreditsPopupVc: UIViewController {
         totalPaymentLabel.text = "Total Payment:"
         monthlyInstallmentCountLabel.text = "Select Number Of Installments:"
         firstInstallmentLabel.text = "Select First Installment:"
-        rateResultLabel.text = "%\(interestRate)"
-        totalPaymentResultLabel.text = "0"
+        rateResultLabel.text = "%0.0"
+        totalPaymentResultLabel.text = "0 ₺"
         
         firstInstallmentDatePicker.datePickerMode = .date
         firstInstallmentDatePicker.addTarget(self, action: #selector(datePickerValueChanged), for: .valueChanged)
@@ -92,15 +95,19 @@ class CreditsPopupVc: UIViewController {
             return
         }
         
-        let viewModel = CreditDetailModel(id: UUID().uuidString, name: creditNameLabel.text!, detail: creditDetailLabel.text!, entryDebt: Int(amount)!, installmentCount: monthCount, paidCount: 0, monthlyInstallment: Double(monthly)!, firstInstallmentDate: firstInstallmentDate, totalDebt: Double(totalPaymentResultLabel.text!)!, interestRate: interestRate, remainingDebt: Double(totalPaymentResultLabel.text!)!, paidDebt: 0.0)
+        let viewModel = CreditDetailModel(id: UUID().uuidString, name: creditNameLabel.text!, detail: creditDetailLabel.text!, entryDebt: Int(amount)!, installmentCount: monthCount, paidCount: 0, monthlyInstallment: Double(monthly)!, firstInstallmentDate: firstInstallmentDate, totalDebt: calculatedPayment, interestRate: Double(interestRateCalculated)!, remainingDebt: calculatedPayment, paidDebt: 0.0)
         
         PersistenceManager.shared.createWithModel(model: viewModel) { [weak self] result in
             switch result {
             case .success():
+                NotificationCenter.default.post(Notification(name: Notification.Name("saveTapped"), userInfo: nil))
                 let alertController = UIAlertController(title: "Credit Succesfully Created", message: nil, preferredStyle: .alert)
                 
                 let deleteButton = UIAlertAction(title: "OK", style: .default) { _ in
                     self?.dismissVC()
+                    if let tabBarController = self?.tabBarController {
+                        tabBarController.selectedIndex = 1
+                    }
                 }
                 
                 alertController.addAction(deleteButton)
@@ -139,12 +146,20 @@ class CreditsPopupVc: UIViewController {
         guard let amount = amountTextField.text, !amount.isEmpty else { return }
         guard let monthly = monthlyTextField.text, !monthly.isEmpty else { return }
         
-        let calculatedPayment =  Double(monthlyTextField.text!)! * Double(monthCount)
-        totalPaymentResultLabel.text = String(calculatedPayment)
+        formatter.numberStyle = .decimal
+        
+        formatter.locale = Locale(identifier: "tr_TR")
+        formatter.currencySymbol = ""
+        formatter.positiveSuffix = " ₺"
+        
+        calculatedPayment =  Double(monthlyTextField.text!)! * Double(monthCount)
+        let remainingTextFormatted = formatter.string(from: calculatedPayment as NSNumber)
+        totalPaymentResultLabel.text = "\(remainingTextFormatted ?? "Error")"
          
         let interestPrice = calculatedPayment - Double(amountTextField.text!)!
-        interestRate = (interestPrice / Double(amountTextField.text!)!) * Double(monthCount)
-        rateResultLabel.text = "%\(String(format: "%.2f", interestRate))"
+        let interestRate = (interestPrice / Double(amountTextField.text!)!) * Double(monthCount)
+        interestRateCalculated = "\(String(format: "%.2f", interestRate))"
+        rateResultLabel.text = "%\(interestRateCalculated)"
     }
     
     func animateOut() {
