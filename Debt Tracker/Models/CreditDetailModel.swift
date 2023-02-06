@@ -16,6 +16,7 @@ struct CreditDetailModel: Codable, Hashable {
     var paidCount: Int
     var monthlyInstallment: Double
     var firstInstallmentDate: String
+    var currentInstallmentDate: String
     var totalDebt: Double
     var interestRate: Double
     var remainingDebt: Double

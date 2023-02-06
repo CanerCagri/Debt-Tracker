@@ -102,6 +102,7 @@ class CreditsAddDetailMainViewController: UIViewController {
             let alertController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
             let deleteAction = UIAlertAction(title: "Delete", style: .destructive) { _ in
                 self.removeItem(at: selectedIndexPath)
+                self.banks.remove(at: selectedIndexPath.row)
             }
             let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
             alertController.addAction(deleteAction)

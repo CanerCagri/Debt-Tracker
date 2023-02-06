@@ -95,7 +95,7 @@ class CreditsPopupVc: UIViewController {
             return
         }
         
-        let viewModel = CreditDetailModel(id: UUID().uuidString, name: creditNameLabel.text!, detail: creditDetailLabel.text!, entryDebt: Int(amount)!, installmentCount: monthCount, paidCount: 0, monthlyInstallment: Double(monthly)!, firstInstallmentDate: firstInstallmentDate, totalDebt: calculatedPayment, interestRate: Double(interestRateCalculated)!, remainingDebt: calculatedPayment, paidDebt: 0.0)
+        let viewModel = CreditDetailModel(id: UUID().uuidString, name: creditNameLabel.text!, detail: creditDetailLabel.text!, entryDebt: Int(amount)!, installmentCount: monthCount, paidCount: 0, monthlyInstallment: Double(monthly)!, firstInstallmentDate: firstInstallmentDate, currentInstallmentDate: firstInstallmentDate, totalDebt: calculatedPayment, interestRate: Double(interestRateCalculated)!, remainingDebt: calculatedPayment, paidDebt: 0.0)
         
         PersistenceManager.shared.createWithModel(model: viewModel) { [weak self] result in
             switch result {
@@ -224,9 +224,11 @@ class CreditsPopupVc: UIViewController {
         
         creditNameLabel.topAnchor.constraint(equalTo: saveButton.bottomAnchor, constant: 20).isActive = true
         creditNameLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 20).isActive = true
+        creditNameLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -20).isActive = true
         
         creditDetailLabel.topAnchor.constraint(equalTo: creditNameLabel.bottomAnchor, constant: 10).isActive = true
         creditDetailLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 20).isActive = true
+        creditDetailLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -20).isActive = true
         
         amountTextField.centerXAnchor.constraint(equalTo: containerView.centerXAnchor).isActive = true
         amountTextField.topAnchor.constraint(equalTo: creditDetailLabel.bottomAnchor, constant: 15).isActive = true

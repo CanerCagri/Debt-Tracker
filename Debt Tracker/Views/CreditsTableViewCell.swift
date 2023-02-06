@@ -81,7 +81,7 @@ class CreditsTableViewCell: UITableViewCell {
         let monthlyFormatted = formatter.string(from: credit.monthly_installment as NSNumber)
         monthlyDepth.text = "Monthly Installment: \(monthlyFormatted ?? "")"
         
-        nextPayment.text = "Next Payment: \(credit.first_installment ?? "")"
+        nextPayment.text = "Next Payment: \(credit.current_installment ?? "")"
         
         let totalDebtFormatted = formatter.string(from: credit.total_payment as NSNumber)
         totalDebt.text = totalDebtFormatted ?? ""
@@ -96,6 +96,9 @@ class CreditsTableViewCell: UITableViewCell {
     
     
     func applyConstraints() {
+        
+        nameLabel.numberOfLines = 2
+        
         addSubviews(nameLabel, entryDebt, paidCount, remainingCount, progressBar, monthlyDepth, nextPayment, containerViewOne, containerViewTwo, containerViewThree)
         progressBar.translatesAutoresizingMaskIntoConstraints = false
         containerViewTwo.translatesAutoresizingMaskIntoConstraints = false
@@ -105,6 +108,7 @@ class CreditsTableViewCell: UITableViewCell {
         
         nameLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: 10).isActive = true
         nameLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 10).isActive = true
+        nameLabel.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -90).isActive = true
         
         entryDebt.topAnchor.constraint(equalTo: self.topAnchor, constant: 10).isActive = true
         entryDebt.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -10).isActive = true
@@ -112,10 +116,10 @@ class CreditsTableViewCell: UITableViewCell {
         paidCount.topAnchor.constraint(equalTo: nameLabel.bottomAnchor, constant: 10).isActive = true
         paidCount.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 10).isActive = true
         
-        remainingCount.topAnchor.constraint(equalTo: entryDebt.bottomAnchor, constant: 10).isActive = true
+        remainingCount.topAnchor.constraint(equalTo: paidCount.topAnchor).isActive = true
         remainingCount.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -10).isActive = true
         
-        progressBar.topAnchor.constraint(equalTo: remainingCount.bottomAnchor, constant: 5).isActive = true
+        progressBar.topAnchor.constraint(equalTo: paidCount.bottomAnchor, constant: 5).isActive = true
         progressBar.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 10).isActive = true
         progressBar.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -10).isActive = true
         progressBar.heightAnchor.constraint(equalToConstant: 10).isActive = true

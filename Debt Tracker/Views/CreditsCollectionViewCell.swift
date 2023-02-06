@@ -11,7 +11,7 @@ class CreditsCollectionViewCell: UICollectionViewCell {
     
     static let identifier = "CreditsCollectionViewCell"
     
-    var creditNameLabel = DTTitleLabel(textAlignment: .center, fontSize: 15)
+    var creditNameLabel = DTTitleLabel(textAlignment: .center, fontSize: 18)
     var creditDetailLabel = DTTitleLabel(textAlignment: .center, fontSize: 13)
     var creditButton = DTButton(title: "Apply", color: .systemRed)
     
@@ -32,18 +32,21 @@ class CreditsCollectionViewCell: UICollectionViewCell {
     
     private func configure() {
         creditNameLabel.textColor = .systemRed
-        creditDetailLabel.numberOfLines = 0
+        creditNameLabel.numberOfLines = 2
+        creditDetailLabel.numberOfLines = 2
         creditButton.isUserInteractionEnabled = false
         self.backgroundColor = .systemGray3
         self.layer.cornerRadius = 14
         
         addSubviews(creditNameLabel, creditDetailLabel, creditButton)
         
-        creditNameLabel.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
         creditNameLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: 10).isActive = true
-        
-        creditDetailLabel.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
+        creditNameLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 10).isActive = true
+        creditNameLabel.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -10).isActive = true
+       
         creditDetailLabel.topAnchor.constraint(equalTo: creditNameLabel.bottomAnchor, constant: 25).isActive = true
+        creditDetailLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 5).isActive = true
+        creditDetailLabel.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -5).isActive = true
         
         creditButton.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 5).isActive = true
         creditButton.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -5).isActive = true
