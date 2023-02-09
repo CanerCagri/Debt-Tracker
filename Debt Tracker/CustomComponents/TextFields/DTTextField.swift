@@ -19,9 +19,10 @@ class DTTextField: UITextField {
         fatalError("init(coder:) has not been implemented")
     }
     
-    init(placeholder: String, placeHolderSize: CGFloat) {
+    init(placeholder: String, placeHolderSize: CGFloat, cornerRadius: CGFloat? = 10) {
         super.init(frame: .zero)
         attributedPlaceholder = NSAttributedString(string: placeholder, attributes:[NSAttributedString.Key.foregroundColor: UIColor.lightGray, NSAttributedString.Key.font :UIFont(name: "Times New Roman", size: 12)!])
+        layer.cornerRadius = cornerRadius!
         configure(textSize: placeHolderSize)
     }
     
@@ -30,7 +31,6 @@ class DTTextField: UITextField {
         
         layer.borderWidth = 2
         layer.borderColor = UIColor.systemGray4.cgColor
-        layer.cornerRadius = 10
         textColor = .label
         tintColor = .label
         textAlignment = .center
@@ -38,7 +38,7 @@ class DTTextField: UITextField {
         adjustsFontSizeToFitWidth = true
         minimumFontSize = 12
         
-        backgroundColor = .tertiarySystemBackground
+        backgroundColor = .systemGray6
         autocorrectionType = .no
         returnKeyType = .go
         clearButtonMode = .whileEditing

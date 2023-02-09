@@ -26,7 +26,6 @@ class CreditsPopupVc: UIViewController {
     let creditDetailLabel = DTTitleLabel(textAlignment: .left, fontSize: 18)
     
     let amountTextField = DTTextField(placeholder: "Enter Amount", placeHolderSize: 15)
-    
     let monthlyTextField = DTTextField(placeholder: "Enter Monthly Installment", placeHolderSize: 15)
     
     let monthlyInstallmentCountLabel = DTTitleLabel(textAlignment: .left, fontSize: 15)

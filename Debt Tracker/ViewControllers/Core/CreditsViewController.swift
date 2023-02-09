@@ -88,7 +88,6 @@ class CreditsViewController: UIViewController {
 
 extension CreditsViewController: UITableViewDelegate, UITableViewDataSource {
     
-
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return credits.count
     }

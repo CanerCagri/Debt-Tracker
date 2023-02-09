@@ -47,7 +47,7 @@ class CreditsDetailViewController: UIViewController {
     }
     
     var detailLabel = DTTitleLabel(textAlignment: .left, fontSize: 22)
-    var paymentTitleLabel = DTTitleLabel(textAlignment: .left, fontSize: 18)
+    var paymentTitleLabel = DTTitleLabel(textAlignment: .left, fontSize: 18, text: "All Installments")
     var startAndEndTitleLabel = DTTitleLabel(textAlignment: .left, fontSize: 15)
     var detailTableView = UITableView()
     var totalDebtLabel = DTTitleLabel(textAlignment: .center, fontSize: 18)
@@ -69,7 +69,6 @@ class CreditsDetailViewController: UIViewController {
         configureTableView()
         applyConstraints()
         
-        paymentTitleLabel.text = "All Installments"
         dateFormatter.dateFormat = "dd.MM.yyyy"
         date = dateFormatter.date(from: creditModel.first_installment!)!
     }
@@ -78,12 +77,9 @@ class CreditsDetailViewController: UIViewController {
         super.viewWillAppear(animated)
         
         formatter.numberStyle = .decimal
-        
         formatter.locale = Locale(identifier: "tr_TR")
         formatter.currencySymbol = ""
         formatter.positiveSuffix = " ₺"
-        
-       
     }
     
     private func configureTableView() {
@@ -94,7 +90,6 @@ class CreditsDetailViewController: UIViewController {
     }
     
     func applyConstraints() {
-        
         detailLabel.numberOfLines = 2
         
         view.addSubviews(detailLabel, paymentTitleLabel, startAndEndTitleLabel, detailTableView, totalDebtLabel, remainingDebtLabel, totalPaidDebtLabel, totalPaidMonthLabel)
@@ -136,7 +131,6 @@ extension CreditsDetailViewController: UITableViewDelegate, UITableViewDataSourc
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: CreditsDetailTableViewCell.identifier) as! CreditsDetailTableViewCell
-        
         cell.nameLabel.text = "\(indexPath.row + 1). month:"
         
         let priceLabelTextFormatted = formatter.string(from: creditModel.monthly_installment as NSNumber)
@@ -163,7 +157,6 @@ extension CreditsDetailViewController: UITableViewDelegate, UITableViewDataSourc
             let monthString = String(format: "%02d", nextDateComponents.month!)
             let yearString = String(nextDateComponents.year!)
             cell.dateLabel.text = "\(dayString).\(monthString).\(yearString)"
-            
         }
        
         if indexPath.row == creditModel.installment_count - 3{
@@ -174,11 +167,8 @@ extension CreditsDetailViewController: UITableViewDelegate, UITableViewDataSourc
             let monthString = String(format: "%02d", nextDateComponents.month!)
             let yearString = String(nextDateComponents.year!)
             startAndEndTitleLabel.text = "\(creditModel.first_installment ?? "") - \(dayString).\(monthString).\(yearString)"
-            
         }
-        
-        
-        
+    
         return cell
     }
     
@@ -199,7 +189,6 @@ extension CreditsDetailViewController: UITableViewDelegate, UITableViewDataSourc
         self.selectedPaidDebt = creditModel.monthly_installment + creditModel.paid_debt
         self.selectedRemainingDebt = creditModel.monthly_installment - self.creditModel.remaining_debt
         
-        
         let viewModel = CreditDetailModel(id: (self.creditModel.id!), name: (self.creditModel.name!), detail: (self.creditModel.detail!), entryDebt: Int((self.creditModel.entry_debt)), installmentCount: Int((self.creditModel.installment_count)), paidCount: Int((self.selectedMonthCount!)), monthlyInstallment: (self.creditModel.monthly_installment), firstInstallmentDate: (self.creditModel.first_installment!), currentInstallmentDate: (self.selectedMonthDate!), totalDebt: (self.creditModel.total_payment), interestRate: (self.creditModel.interest_rate), remainingDebt: (self.selectedRemainingDebt!), paidDebt: self.selectedPaidDebt!)
         
         let yesAction = UIAlertAction(title: "Yes, I did pay selected Installment.", style: .default) { [weak self] (action) in
@@ -214,7 +203,6 @@ extension CreditsDetailViewController: UITableViewDelegate, UITableViewDataSourc
             
             alertController.addAction(deleteButton)
             self?.present(alertController, animated: true)
-            
         }
         
         let noAction = UIAlertAction(title: "No, I didnt pay yet.", style: .cancel) { (action) in

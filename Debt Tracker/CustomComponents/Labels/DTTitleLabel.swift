@@ -18,18 +18,20 @@ class DTTitleLabel: UILabel {
         fatalError("init(coder:) has not been implemented")
     }
     
-    init(textAlignment: NSTextAlignment, fontSize: CGFloat) {
+    init(textAlignment: NSTextAlignment, fontSize: CGFloat, text: String? = "") {
         super.init(frame: .zero)
         self.textAlignment = textAlignment
         self.font = UIFont(name: "GillSans-SemiBold", size: fontSize)
+        self.text = text
         self.textColor = .label
         configure()
     }
     
-    init(textAlignment: NSTextAlignment, fontSize: CGFloat, textColor: UIColor) {
+    init(textAlignment: NSTextAlignment, fontSize: CGFloat, textColor: UIColor, text: String? = "") {
         super.init(frame: .zero)
         self.textAlignment = textAlignment
         self.font = UIFont(name: "GillSans-SemiBold", size: fontSize)
+        self.text = text
         self.textColor = textColor
         configure()
     }

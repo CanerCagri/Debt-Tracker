@@ -21,11 +21,11 @@ class CreditsTableViewCell: UITableViewCell {
     var remainingCount = DTTitleLabel(textAlignment: .left, fontSize: 12, textColor: .label)
     var monthlyDepth = DTTitleLabel(textAlignment: .left, fontSize: 12, textColor: .systemGray2)
     var nextPayment = DTTitleLabel(textAlignment: .left, fontSize: 12, textColor: .systemGray2)
-    var totalDebtLabel = DTTitleLabel(textAlignment: .center, fontSize: 11, textColor: .systemGray2)
+    var totalDebtLabel = DTTitleLabel(textAlignment: .center, fontSize: 11, textColor: .systemGray2, text: "Total Debt")
     var totalDebt = DTTitleLabel(textAlignment: .center, fontSize: 14, textColor: .label)
-    var paidLabel = DTTitleLabel(textAlignment: .center, fontSize: 11, textColor: .systemGray2)
+    var paidLabel = DTTitleLabel(textAlignment: .center, fontSize: 11, textColor: .systemGray2, text: "Paid")
     var paid = DTTitleLabel(textAlignment: .center, fontSize: 14, textColor: .systemGreen)
-    var remainingLabel = DTTitleLabel(textAlignment: .center, fontSize: 11, textColor: .systemGray2)
+    var remainingLabel = DTTitleLabel(textAlignment: .center, fontSize: 11, textColor: .systemGray2, text: "Remaining")
     var remaining = DTTitleLabel(textAlignment: .center, fontSize: 14, textColor: .systemRed)
     
     var totalInstallmentCount = 0
@@ -50,10 +50,6 @@ class CreditsTableViewCell: UITableViewCell {
         containerViewTwo.backgroundColor = .systemGray5
         containerViewThree.backgroundColor = .systemGray5
         
-        totalDebtLabel.text = "Total Debt"
-        paidLabel.text = "Paid"
-        remainingLabel.text = "Remaining"
-        
         applyConstraints()
     }
     
@@ -65,7 +61,6 @@ class CreditsTableViewCell: UITableViewCell {
         
         let formatter = NumberFormatter()
         formatter.numberStyle = .decimal
-
         formatter.locale = Locale(identifier: "tr_TR")
         formatter.currencySymbol = ""
         formatter.positiveSuffix = " ₺"

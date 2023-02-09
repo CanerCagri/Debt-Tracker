@@ -26,7 +26,6 @@ class CreditsAddDetailMainViewController: UIViewController {
         configureCollectionView()
         configureDataSource()
         fetchFromCoredata()
-        
     }
     
     private func configureViewController() {
@@ -184,17 +183,6 @@ extension CreditsAddDetailMainViewController: UICollectionViewDelegate {
             
         }
     }
-    
-    func collectionView(_ collectionView: UICollectionView, commit editingStyle: UITableViewCell.EditingStyle, forItemAt indexPath: IndexPath) {
-        if editingStyle == .delete {
-            // Remove the item from your data source
-            
-            
-            // Delete the item from the collection view
-            collectionView.deleteItems(at: [indexPath])
-        }
-    }
-    
 }
 
 
