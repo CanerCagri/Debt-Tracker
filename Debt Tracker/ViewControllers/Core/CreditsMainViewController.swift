@@ -29,7 +29,7 @@ class CreditsMainViewController: UIViewController {
         configureViewController()
         configureCollectionView()
         configureDataSource()
-        fetchFromCoredata()
+        fetchFromFirestore()
     }
     
     private func configureViewController() {
@@ -57,7 +57,7 @@ class CreditsMainViewController: UIViewController {
         creditsCollectionView.addGestureRecognizer(longPressGesture)
     }
     
-    private func fetchFromCoredata() {
+    private func fetchFromFirestore() {
       
         db.collection("banks").order(by: "date", descending: true).addSnapshotListener { [weak self] querySnapShot, error in
             
@@ -69,22 +69,40 @@ class CreditsMainViewController: UIViewController {
                 if let querySnapShotDocuments = querySnapShot?.documents {
                     for doc in querySnapShotDocuments {
                         let data = doc.data()
-                        self?.documentIds.append(doc.documentID)
+                       
                         if let name = data["name"] as? String, let detail = data["detail"] as? String, let email = data["email"] as? String {
                             
-                            let bankModel = BankDetails(name: name, detail: detail, email: email)
-                            self?.banks.append(bankModel)
-                            
-                            DispatchQueue.main.async {
-                                self?.creditsCollectionView.reloadData()
+                            if email == Auth.auth().currentUser?.email {
+                                
+                                let bankModel = BankDetails(name: name, detail: detail, email: email)
+                                self?.banks.append(bankModel)
+                                self?.documentIds.append(doc.documentID)
                             }
-                            self?.updateData(banks: self!.banks)
                         }
-                        
-                        
                     }
                 }
             }
+            
+            if self!.banks.isEmpty {
+                self?.emptyState = DTEmptyStateView(message: "Currently don't have a Bank\nAdd from (+)")
+                self?.emptyState?.frame = (self?.view.bounds)!
+                self?.view.addSubview((self?.emptyState!)!)
+                
+                DispatchQueue.main.async {
+                    self?.creditsCollectionView.reloadData()
+                }
+                
+                self?.updateData(banks: self!.banks)
+            } else {
+                self?.emptyState?.removeFromSuperview()
+                
+                DispatchQueue.main.async {
+                    self?.creditsCollectionView.reloadData()
+                }
+                
+                self?.updateData(banks: self!.banks)
+            }
+            
         }
     }
     
@@ -95,7 +113,7 @@ class CreditsMainViewController: UIViewController {
             if let error = error {
                 print(error.localizedDescription)
             } else {
-                print("Document deleted successfully")
+               print("Succesfully removed")
             }
         }
     }
@@ -137,9 +155,6 @@ class CreditsMainViewController: UIViewController {
     }
     
     @objc func logoutButtonTapped() {
-        
-        
-        
         do {
             try Auth.auth().signOut()
             NotificationCenter.default.post(name: .didTapRightBarButton , object: nil)
