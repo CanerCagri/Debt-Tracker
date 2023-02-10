@@ -21,7 +21,7 @@ class CreditsPopupVc: UIViewController {
     }
     
     private let containerView = DTContainerView()
-    let titleLabel = DTTitleLabel(textAlignment: .center, fontSize: 18, textColor: .label)
+    let titleLabel = DTTitleLabel(textAlignment: .center, fontSize: 18, textColor: .label, text: "Add Credit")
     let cancelButton = DTButton(title: "Cancel", color: .systemPink, systemImageName: "xmark.circle.fill")
     let saveButton = DTButton(title: "Save", color: .systemPink, systemImageName: "square.and.arrow.down")
     
@@ -31,16 +31,16 @@ class CreditsPopupVc: UIViewController {
     let amountTextField = DTTextField(placeholder: "Enter Amount", placeHolderSize: 15)
     let monthlyTextField = DTTextField(placeholder: "Enter Monthly Installment", placeHolderSize: 15)
     
-    let monthlyInstallmentCountLabel = DTTitleLabel(textAlignment: .left, fontSize: 15)
+    let monthlyInstallmentCountLabel = DTTitleLabel(textAlignment: .left, fontSize: 15, text: "Select Number Of Installments:")
     var monthlyInstallmentCountButton = DTButton(title: "12", color: .systemRed)
     
-    let rateLabel = DTTitleLabel(textAlignment: .left, fontSize: 18, textColor: .lightGray)
-    let rateResultLabel = DTTitleLabel(textAlignment: .left, fontSize: 18, textColor: .lightGray)
+    let rateLabel = DTTitleLabel(textAlignment: .left, fontSize: 18, textColor: .systemGray, text: "Interest Rate: ")
+    let rateResultLabel = DTTitleLabel(textAlignment: .left, fontSize: 18, textColor: .systemGray, text: "%0.0")
     
-    let totalPaymentLabel = DTTitleLabel(textAlignment: .left, fontSize: 18, textColor: .lightGray)
-    let totalPaymentResultLabel = DTTitleLabel(textAlignment: .left, fontSize: 18, textColor: .lightGray)
+    let totalPaymentLabel = DTTitleLabel(textAlignment: .left, fontSize: 18, textColor: .systemGray, text: "Total Payment:")
+    let totalPaymentResultLabel = DTTitleLabel(textAlignment: .left, fontSize: 18, textColor: .systemGray, text: "0 ₺")
     
-    let firstInstallmentLabel = DTTitleLabel(textAlignment: .left, fontSize: 15)
+    let firstInstallmentLabel = DTTitleLabel(textAlignment: .left, fontSize: 15, text: "Select First Installment:")
     let firstInstallmentDatePicker = UIDatePicker()
     
     var monthCount = 12
@@ -60,13 +60,6 @@ class CreditsPopupVc: UIViewController {
     private func configureViewController() {
         view.backgroundColor = UIColor.systemGray.withAlphaComponent(0.5)
         view.frame = UIScreen.main.bounds
-        titleLabel.text = "Add Credit"
-        rateLabel.text = "Interest Rate: "
-        totalPaymentLabel.text = "Total Payment:"
-        monthlyInstallmentCountLabel.text = "Select Number Of Installments:"
-        firstInstallmentLabel.text = "Select First Installment:"
-        rateResultLabel.text = "%0.0"
-        totalPaymentResultLabel.text = "0 ₺"
         
         firstInstallmentDatePicker.datePickerMode = .date
         firstInstallmentDatePicker.addTarget(self, action: #selector(datePickerValueChanged), for: .valueChanged)
@@ -83,9 +76,7 @@ class CreditsPopupVc: UIViewController {
             self?.monthCount = (notification.userInfo?["selectedCount"] as? Int)!
             self?.monthlyInstallmentCountButton.setTitle(String(self!.monthCount), for: .normal)
             self?.calculateRateAndTotalPayment()
-            
         }
-        
     }
     @objc func saveButtonTapped() {
         guard let amount = amountTextField.text, !amount.isEmpty else {
@@ -97,32 +88,33 @@ class CreditsPopupVc: UIViewController {
             return
         }
         
-//        guard let userEmail = Auth.auth().currentUser?.email else {
-//            return
-//        }
+        guard let userEmail = Auth.auth().currentUser?.email else {
+            return
+        }
         
-        
-        
-        let viewModel = CreditDetailModel(id: UUID().uuidString, name: creditNameLabel.text!, detail: creditDetailLabel.text!, entryDebt: Int(amount)!, installmentCount: monthCount, paidCount: 0, monthlyInstallment: Double(monthly)!, firstInstallmentDate: firstInstallmentDate, currentInstallmentDate: firstInstallmentDate, totalDebt: calculatedPayment, interestRate: Double(interestRateCalculated)!, remainingDebt: calculatedPayment, paidDebt: 0.0)
-        
-        PersistenceManager.shared.createWithModel(model: viewModel) { [weak self] result in
-            switch result {
-            case .success():
+        db.collection("credits").addDocument(data: ["email": userEmail,
+                                                    "name": creditNameLabel.text!,
+                                                    "detail": creditDetailLabel.text!,
+                                                    "entryDebt": Int(amount)!,
+                                                    "installmentCount": monthCount,
+                                                    "paidCount": 0,
+                                                    "monthlyInstallment": Double(monthly)!,
+                                                    "firstInstallmentDate": firstInstallmentDate,
+                                                    "currentInstallmentDate": firstInstallmentDate,
+                                                    "totalDebt": calculatedPayment,
+                                                    "interestRate": Double(interestRateCalculated)!,
+                                                    "remainingDebt": calculatedPayment,
+                                                    "paidDebt": 0.0,
+                                                    "createDate": Date().timeIntervalSince1970 ]){ error in
+            if let error = error {
+                print(error.localizedDescription)
+            } else {
                 NotificationCenter.default.post(Notification(name: Notification.Name("saveTapped"), userInfo: nil))
-                let alertController = UIAlertController(title: "Credit Succesfully Created", message: nil, preferredStyle: .alert)
+                self.dismissVC()
                 
-                let deleteButton = UIAlertAction(title: "OK", style: .default) { _ in
-                    self?.dismissVC()
-                    if let tabBarController = self?.tabBarController {
-                        tabBarController.selectedIndex = 1
-                    }
+                if let tabBarController = self.tabBarController {
+                tabBarController.selectedIndex = 1
                 }
-                
-                alertController.addAction(deleteButton)
-                self?.present(alertController, animated: true)
-                
-            case .failure(let failure):
-                print(failure.localizedDescription)
             }
         }
     }

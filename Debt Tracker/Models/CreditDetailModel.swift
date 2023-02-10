@@ -8,7 +8,6 @@
 import Foundation
 
 struct CreditDetailModel: Codable, Hashable {
-    var id: String
     var name: String
     var detail: String
     var entryDebt: Int
@@ -21,4 +20,5 @@ struct CreditDetailModel: Codable, Hashable {
     var interestRate: Double
     var remainingDebt: Double
     var paidDebt: Double
+    var email: String
 }

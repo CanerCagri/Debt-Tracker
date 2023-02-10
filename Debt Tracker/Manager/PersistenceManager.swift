@@ -25,7 +25,7 @@ class PersistenceManager {
         let context = appDelegate.persistentContainer.viewContext
         let item = CreditDetail(context: context)
         
-        item.id = model.id
+//        item.id = model.id
         item.name = model.name
         item.detail = model.detail
         item.entry_debt = Int32(model.entryDebt)
@@ -125,30 +125,30 @@ class PersistenceManager {
 //        }
 //    }
     
-    func editCreditDetails(model: CreditDetailModel) {
-        
-        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
-        
-        let context = appDelegate.persistentContainer.viewContext
-        
-        let id = model.id
-        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CreditDetail")
-        fetchRequest.predicate = NSPredicate(format: "id == %@", id)
-
-        do {
-            let result = try context.fetch(fetchRequest)
-            if let entity = result.first as? CreditDetail {
-                // Update the properties of the entity
-                entity.first_installment = model.firstInstallmentDate
-                entity.remaining_debt = model.remainingDebt
-                entity.paid_installment_count = Int32(model.paidCount)
-                entity.paid_debt = model.paidDebt
-                entity.current_installment = model.currentInstallmentDate
-                // Save the managed object context
-                try context.save()
-            }
-        } catch {
-            print("Error fetching data: \(error)")
-        }
-    }
+//    func editCreditDetails(model: CreditDetailModel) {
+//
+//        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
+//
+//        let context = appDelegate.persistentContainer.viewContext
+//
+//        let id = model.id
+//        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CreditDetail")
+//        fetchRequest.predicate = NSPredicate(format: "id == %@", id)
+//
+//        do {
+//            let result = try context.fetch(fetchRequest)
+//            if let entity = result.first as? CreditDetail {
+//                // Update the properties of the entity
+//                entity.first_installment = model.firstInstallmentDate
+//                entity.remaining_debt = model.remainingDebt
+//                entity.paid_installment_count = Int32(model.paidCount)
+//                entity.paid_debt = model.paidDebt
+//                entity.current_installment = model.currentInstallmentDate
+//                // Save the managed object context
+//                try context.save()
+//            }
+//        } catch {
+//            print("Error fetching data: \(error)")
+//        }
+//    }
 }

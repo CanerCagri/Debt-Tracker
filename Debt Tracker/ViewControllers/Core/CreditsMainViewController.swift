@@ -102,7 +102,6 @@ class CreditsMainViewController: UIViewController {
                 
                 self?.updateData(banks: self!.banks)
             }
-            
         }
     }
     

@@ -57,7 +57,7 @@ class CreditsTableViewCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func set(credit: CreditDetail) {
+    func set(credit: CreditDetailModel) {
         
         let formatter = NumberFormatter()
         formatter.numberStyle = .decimal
@@ -65,26 +65,26 @@ class CreditsTableViewCell: UITableViewCell {
         formatter.currencySymbol = ""
         formatter.positiveSuffix = " ₺"
         
-        nameLabel.text = "\(credit.name!) - \(credit.detail!) - %\(credit.interest_rate)"
-        
-        let entryDebtFormatted = formatter.string(from: credit.entry_debt as NSNumber)
+        nameLabel.text = "\(credit.name) - \(credit.detail) - %\(credit.interestRate)"
+
+        let entryDebtFormatted = formatter.string(from: credit.entryDebt as NSNumber)
         entryDebt.text = entryDebtFormatted ?? ""
         
-        totalInstallmentCount = Int(credit.installment_count)
-        count = Int(credit.paid_installment_count)
+        totalInstallmentCount = Int(credit.installmentCount)
+        count = Int(credit.paidCount)
         
-        let monthlyFormatted = formatter.string(from: credit.monthly_installment as NSNumber)
+        let monthlyFormatted = formatter.string(from: credit.monthlyInstallment as NSNumber)
         monthlyDepth.text = "Monthly Installment: \(monthlyFormatted ?? "")"
         
-        nextPayment.text = "Next Payment: \(credit.current_installment ?? "")"
+        nextPayment.text = "Next Payment: \(credit.currentInstallmentDate)"
         
-        let totalDebtFormatted = formatter.string(from: credit.total_payment as NSNumber)
+        let totalDebtFormatted = formatter.string(from: credit.totalDebt as NSNumber)
         totalDebt.text = totalDebtFormatted ?? ""
         
-        let totalPaidDebtFormatted = formatter.string(from: credit.paid_debt as NSNumber)
+        let totalPaidDebtFormatted = formatter.string(from: credit.paidDebt as NSNumber)
         paid.text = totalPaidDebtFormatted ?? ""
         
-        let calculateRemaining = Double(credit.total_payment) - credit.paid_debt
+        let calculateRemaining = Double(credit.totalDebt) - credit.paidDebt
         let remainingTextFormatted = formatter.string(from: calculateRemaining as NSNumber)
         remaining.text = remainingTextFormatted ?? ""
     }
