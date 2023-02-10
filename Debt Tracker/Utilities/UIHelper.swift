@@ -27,3 +27,8 @@ enum UIHelper {
 enum Section {
     case main
 }
+
+
+extension Notification.Name {
+    static let didTapRightBarButton = Notification.Name("didTapRightBarButton")
+}

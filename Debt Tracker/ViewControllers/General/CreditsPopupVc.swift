@@ -6,11 +6,14 @@
 //
 
 import UIKit
+import Firebase
 
 class CreditsPopupVc: UIViewController {
     
+    let db = Firestore.firestore()
+    
     let moodSelectionVc = CreditsBottomSheetVc()
-    var selectedCredit: CreditDetails? {
+    var selectedCredit: BankDetails? {
         didSet {
             creditNameLabel.text = selectedCredit?.name
             creditDetailLabel.text = selectedCredit?.detail
@@ -93,6 +96,12 @@ class CreditsPopupVc: UIViewController {
             presentAlert(title: "Warning", message: "Please enter a Monthly Installment Price", buttonTitle: "Ok")
             return
         }
+        
+//        guard let userEmail = Auth.auth().currentUser?.email else {
+//            return
+//        }
+        
+        
         
         let viewModel = CreditDetailModel(id: UUID().uuidString, name: creditNameLabel.text!, detail: creditDetailLabel.text!, entryDebt: Int(amount)!, installmentCount: monthCount, paidCount: 0, monthlyInstallment: Double(monthly)!, firstInstallmentDate: firstInstallmentDate, currentInstallmentDate: firstInstallmentDate, totalDebt: calculatedPayment, interestRate: Double(interestRateCalculated)!, remainingDebt: calculatedPayment, paidDebt: 0.0)
         

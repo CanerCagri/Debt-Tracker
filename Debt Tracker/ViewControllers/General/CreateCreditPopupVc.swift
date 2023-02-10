@@ -6,8 +6,11 @@
 //
 
 import UIKit
+import Firebase
 
 class CreateCreditPopupVc: UIViewController {
+    
+    let db = Firestore.firestore()
     
     private let containerView = DTContainerView()
     
@@ -18,10 +21,10 @@ class CreateCreditPopupVc: UIViewController {
     let nameTextField = DTTextField(placeholder: "Enter Name", placeHolderSize: 15)
     
     let detailTextField = DTTextField(placeholder: "Enter Detail", placeHolderSize: 15)
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         configureViewController()
         applyConstraints()
     }
@@ -45,29 +48,22 @@ class CreateCreditPopupVc: UIViewController {
             return
         }
         
-        let viewModel = CreditDetailsModel(id: UUID().uuidString, name: name, detail: detail)
+        guard let userEmail = Auth.auth().currentUser?.email else { return }
         
-        PersistenceManager.shared.createBank(model: viewModel) { [weak self] result in
-            switch result {
-            case .success():
-                let alertController = UIAlertController(title: "Succesfully Created", message: nil, preferredStyle: .alert)
-                
-                let deleteButton = UIAlertAction(title: "OK", style: .default) { _ in
-                    NotificationCenter.default.post(Notification(name: Notification.Name("popupCreateCreditCreateTapped"), userInfo: nil))
-                    self?.dismissVC()
-                }
-                
-                alertController.addAction(deleteButton)
-                self?.present(alertController, animated: true)
-                
-            case .failure(let failure):
-                print(failure.localizedDescription)
+        db.collection("banks").addDocument(data: ["email": userEmail,
+                                                  "name": name,
+                                                  "detail": detail,
+                                                  "date": Date().timeIntervalSince1970 ]){ error in
+            if let error = error {
+                print(error.localizedDescription)
+            } else {
+                self.dismissVC()
             }
         }
     }
     
     @objc func dismissVC() {
-        NotificationCenter.default.post(Notification(name: Notification.Name("popupCreateCreditCancelTapped"), userInfo: nil))
+        NotificationCenter.default.post(Notification(name: Notification.Name("popupButtonTapped"), userInfo: nil))
         animateOut()
     }
     
@@ -127,5 +123,5 @@ class CreateCreditPopupVc: UIViewController {
         detailTextField.widthAnchor.constraint(equalToConstant: textFieldWidth).isActive = true
         detailTextField.heightAnchor.constraint(equalToConstant: 40).isActive = true
     }
-
+    
 }

@@ -53,7 +53,14 @@ class LoginViewController: UIViewController {
         let registerTapGesture = UITapGestureRecognizer(target: self, action: #selector(registerPagePresent))
         registerLabel.addGestureRecognizer(registerTapGesture)
         
+        NotificationCenter.default.addObserver(self, selector: #selector(didTapRightBarButton), name: .didTapRightBarButton, object: nil)
+        
     }
+    
+    @objc func didTapRightBarButton() {
+        self.navigationController?.popViewController(animated: true)
+    }
+
     
     @objc func loginButtonTapped() {
         if let email = emailTextField.text, let password = passwordTextField.text {
@@ -62,8 +69,8 @@ class LoginViewController: UIViewController {
                     print(error.localizedDescription)
                 } else {
                     let tabBarVC = MainTabBarViewController()
-                    tabBarVC.modalPresentationStyle = .fullScreen
-                    self?.present(tabBarVC, animated: true)
+                    tabBarVC.navigationItem.hidesBackButton = true
+                    self?.navigationController?.pushViewController(tabBarVC, animated: true)
                 }
                 
             }
@@ -92,6 +99,9 @@ class LoginViewController: UIViewController {
     private func applyConstraints() {
         view.addSubviews(detailLabel, emailTextField, passwordTextField, loginButton, forgetPasswordLabel, dontHaveAccLabel, registerLabel)
         containerView.addSubview(showPasswordButton)
+        
+        emailTextField.text = "1@gmail.com"
+        passwordTextField.text = "123456"
         
         detailLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         detailLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 50).isActive = true

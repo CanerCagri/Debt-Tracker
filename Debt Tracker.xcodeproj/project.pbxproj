@@ -29,10 +29,10 @@
 		011E8C7A2985C92300F163D4 /* CreditsDetailTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 011E8C792985C92300F163D4 /* CreditsDetailTableViewCell.swift */; };
 		011E8C7C2986A14300F163D4 /* DTEmptyStateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 011E8C7B2986A14300F163D4 /* DTEmptyStateView.swift */; };
 		011E8C7E298A801200F163D4 /* MainTabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 011E8C7D298A801200F163D4 /* MainTabBarViewController.swift */; };
-		011E8C80298A808300F163D4 /* CreditsAddDetailMainVc.swift in Sources */ = {isa = PBXBuildFile; fileRef = 011E8C7F298A808300F163D4 /* CreditsAddDetailMainVc.swift */; };
+		011E8C80298A808300F163D4 /* CreditsMainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 011E8C7F298A808300F163D4 /* CreditsMainViewController.swift */; };
 		011E8C82298A84CA00F163D4 /* CreditsCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 011E8C81298A84CA00F163D4 /* CreditsCollectionViewCell.swift */; };
 		011E8C85298A885D00F163D4 /* UIHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 011E8C84298A885D00F163D4 /* UIHelper.swift */; };
-		011E8C87298A890300F163D4 /* CreditDetailsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 011E8C86298A890300F163D4 /* CreditDetailsModel.swift */; };
+		011E8C87298A890300F163D4 /* BankDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 011E8C86298A890300F163D4 /* BankDetails.swift */; };
 		011E8C89298A911A00F163D4 /* CreditsPopupVc.swift in Sources */ = {isa = PBXBuildFile; fileRef = 011E8C88298A911A00F163D4 /* CreditsPopupVc.swift */; };
 		011E8C8F298B2D0700F163D4 /* CreditsBottomSheetVc.swift in Sources */ = {isa = PBXBuildFile; fileRef = 011E8C8E298B2D0700F163D4 /* CreditsBottomSheetVc.swift */; };
 		011E8C91298BF6AA00F163D4 /* CreditDetailModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 011E8C90298BF6AA00F163D4 /* CreditDetailModel.swift */; };
@@ -70,10 +70,10 @@
 		011E8C792985C92300F163D4 /* CreditsDetailTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreditsDetailTableViewCell.swift; sourceTree = "<group>"; };
 		011E8C7B2986A14300F163D4 /* DTEmptyStateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DTEmptyStateView.swift; sourceTree = "<group>"; };
 		011E8C7D298A801200F163D4 /* MainTabBarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabBarViewController.swift; sourceTree = "<group>"; };
-		011E8C7F298A808300F163D4 /* CreditsAddDetailMainVc.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreditsAddDetailMainVc.swift; sourceTree = "<group>"; };
+		011E8C7F298A808300F163D4 /* CreditsMainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreditsMainViewController.swift; sourceTree = "<group>"; };
 		011E8C81298A84CA00F163D4 /* CreditsCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreditsCollectionViewCell.swift; sourceTree = "<group>"; };
 		011E8C84298A885D00F163D4 /* UIHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIHelper.swift; sourceTree = "<group>"; };
-		011E8C86298A890300F163D4 /* CreditDetailsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreditDetailsModel.swift; sourceTree = "<group>"; };
+		011E8C86298A890300F163D4 /* BankDetails.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BankDetails.swift; sourceTree = "<group>"; };
 		011E8C88298A911A00F163D4 /* CreditsPopupVc.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreditsPopupVc.swift; sourceTree = "<group>"; };
 		011E8C8E298B2D0700F163D4 /* CreditsBottomSheetVc.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreditsBottomSheetVc.swift; sourceTree = "<group>"; };
 		011E8C90298BF6AA00F163D4 /* CreditDetailModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreditDetailModel.swift; sourceTree = "<group>"; };
@@ -187,7 +187,7 @@
 		011E8C4E2983534500F163D4 /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				011E8C86298A890300F163D4 /* CreditDetailsModel.swift */,
+				011E8C86298A890300F163D4 /* BankDetails.swift */,
 				011E8C90298BF6AA00F163D4 /* CreditDetailModel.swift */,
 			);
 			path = Models;
@@ -231,7 +231,7 @@
 			children = (
 				0129E074299558FC002FBAA0 /* LoginViewController.swift */,
 				01D8F51029953F3000369895 /* RegisterViewController.swift */,
-				011E8C7F298A808300F163D4 /* CreditsAddDetailMainVc.swift */,
+				011E8C7F298A808300F163D4 /* CreditsMainViewController.swift */,
 				011E8C2B298346BE00F163D4 /* CreditsViewController.swift */,
 				011E8C4029834C4D00F163D4 /* CreditsDetailViewController.swift */,
 				011E8C7D298A801200F163D4 /* MainTabBarViewController.swift */,
@@ -368,7 +368,7 @@
 				011E8C4D298352C700F163D4 /* UIView+Ext.swift in Sources */,
 				011E8C8F298B2D0700F163D4 /* CreditsBottomSheetVc.swift in Sources */,
 				011E8C7C2986A14300F163D4 /* DTEmptyStateView.swift in Sources */,
-				011E8C80298A808300F163D4 /* CreditsAddDetailMainVc.swift in Sources */,
+				011E8C80298A808300F163D4 /* CreditsMainViewController.swift in Sources */,
 				011E8C4829834D1F00F163D4 /* DTBodyLabel.swift in Sources */,
 				011E8C91298BF6AA00F163D4 /* CreditDetailModel.swift in Sources */,
 				011E8C4629834CDD00F163D4 /* DTTitleLabel.swift in Sources */,
@@ -386,7 +386,7 @@
 				011E8C2A298346BE00F163D4 /* SceneDelegate.swift in Sources */,
 				011E8C702984A8C300F163D4 /* Int+Ext.swift in Sources */,
 				011E8C7329858BC600F163D4 /* DTAlertViewController.swift in Sources */,
-				011E8C87298A890300F163D4 /* CreditDetailsModel.swift in Sources */,
+				011E8C87298A890300F163D4 /* BankDetails.swift in Sources */,
 				011E8C85298A885D00F163D4 /* UIHelper.swift in Sources */,
 				011E8C82298A84CA00F163D4 /* CreditsCollectionViewCell.swift in Sources */,
 				011E8C89298A911A00F163D4 /* CreditsPopupVc.swift in Sources */,

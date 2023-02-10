@@ -7,8 +7,8 @@
 
 import Foundation
 
-struct CreditDetailsModel: Codable, Hashable {
-    var id: String
+struct BankDetails: Codable, Hashable {
     var name: String
     var detail: String
+    var email: String
 }

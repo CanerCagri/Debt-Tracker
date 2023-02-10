@@ -14,7 +14,7 @@ class MainTabBarViewController: UITabBarController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let vc1 = UINavigationController(rootViewController: CreditsAddDetailMainViewController())
+        let vc1 = UINavigationController(rootViewController: CreditsMainViewController())
         let vc2 = UINavigationController(rootViewController: CreditsViewController())
         
         vc1.tabBarItem.image = UIImage(systemName: "plus.message")

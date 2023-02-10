@@ -24,7 +24,7 @@ class CreditsCollectionViewCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func set(banks: CreditDetails) {
+    func set(banks: BankDetails) {
        
         creditNameLabel.text = banks.name
         creditDetailLabel.text = banks.detail

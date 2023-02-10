@@ -47,23 +47,23 @@ class PersistenceManager {
         }
     }
     
-    func createBank(model: CreditDetailsModel, completion: @escaping (Result<Void, Error>) -> Void) {
-        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
-        
-        let context = appDelegate.persistentContainer.viewContext
-        let item = CreditDetails(context: context)
-        
-        item.id = model.id
-        item.name = model.name
-        item.detail = model.detail
-        
-        do {
-            try context.save()
-            completion(.success(()))
-        } catch {
-            completion(.failure(DatabaseError.failedToDataSave))
-        }
-    }
+//    func createBank(model: CreditDetailsModel, completion: @escaping (Result<Void, Error>) -> Void) {
+//        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
+//
+//        let context = appDelegate.persistentContainer.viewContext
+//        let item = CreditDetails(context: context)
+//
+//        item.id = model.id
+//        item.name = model.name
+//        item.detail = model.detail
+//
+//        do {
+//            try context.save()
+//            completion(.success(()))
+//        } catch {
+//            completion(.failure(DatabaseError.failedToDataSave))
+//        }
+//    }
     
     func fetchCredits(completion: @escaping(Result<[CreditDetail], Error> )-> Void) {
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
@@ -111,33 +111,19 @@ class PersistenceManager {
         }
     }
     
-    func deleteBankWith(model: CreditDetails, completion: @escaping (Result<Void, Error>) -> Void) {
-        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
-        
-        let context = appDelegate.persistentContainer.viewContext
-        context.delete(model)
-        
-        do {
-            try context.save()
-            completion(.success(()))
-        } catch {
-            completion(.failure(DatabaseError.failedToDeleteData))
-        }
-    }
-    
-    func deleteAllBanks() {
-        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
-        
-        let context = appDelegate.persistentContainer.viewContext
-        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "CreditDetails")
-        let batchDeleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest)
-        
-        do {
-            try context.execute(batchDeleteRequest)
-        } catch {
-            print(error.localizedDescription)
-        }
-    }
+//    func deleteBankWith(model: CreditDetails, completion: @escaping (Result<Void, Error>) -> Void) {
+//        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else { return }
+//        
+//        let context = appDelegate.persistentContainer.viewContext
+//        context.delete(model)
+//        
+//        do {
+//            try context.save()
+//            completion(.success(()))
+//        } catch {
+//            completion(.failure(DatabaseError.failedToDeleteData))
+//        }
+//    }
     
     func editCreditDetails(model: CreditDetailModel) {
         
@@ -164,11 +150,5 @@ class PersistenceManager {
         } catch {
             print("Error fetching data: \(error)")
         }
-
-
-
-
-
-
     }
 }

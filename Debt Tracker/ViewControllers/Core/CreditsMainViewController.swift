@@ -6,17 +6,21 @@
 //
 
 import UIKit
+import Firebase
 
-class CreditsAddDetailMainViewController: UIViewController {
+class CreditsMainViewController: UIViewController {
     enum Section {
         case main
     }
     
-    private var banks: [CreditDetails] = []
+    let db = Firestore.firestore()
+    var documentIds: [String] = []
+    
+    private var banks: [BankDetails] = []
     var emptyState: DTEmptyStateView?
     
     var creditsCollectionView: UICollectionView!
-    var dataSource: UICollectionViewDiffableDataSource <Section, CreditDetails>!
+    var dataSource: UICollectionViewDiffableDataSource <Section, BankDetails>!
     var isRightBarButtonTapped = false
     
     override func viewDidLoad() {
@@ -32,15 +36,13 @@ class CreditsAddDetailMainViewController: UIViewController {
         view.backgroundColor = .systemBackground
         title = "Create Credit"
         
-        navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .trash, target: self, action: #selector(leftBarButtonTapped))
-        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(rightBarButtonTapped))
+        navigationItem.rightBarButtonItems = [
+            UIBarButtonItem(image: UIImage(systemName: "power"), style: .done, target: self, action: #selector(logoutButtonTapped)),
+            UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(rightBarButtonTapped))
+        ]
         
-        NotificationCenter.default.addObserver(forName: NSNotification.Name("popupCreateCreditCancelTapped"), object: nil, queue: nil) { [weak self] (notification) in
+        NotificationCenter.default.addObserver(forName: NSNotification.Name("popupButtonTapped"), object: nil, queue: nil) { [weak self] (notification) in
             self?.isRightBarButtonTapped = false
-        }
-        NotificationCenter.default.addObserver(forName: NSNotification.Name("popupCreateCreditCreateTapped"), object: nil, queue: nil) { [weak self] (notification) in
-            self?.isRightBarButtonTapped = false
-            self?.fetchFromCoredata()
         }
     }
     
@@ -56,40 +58,44 @@ class CreditsAddDetailMainViewController: UIViewController {
     }
     
     private func fetchFromCoredata() {
-        PersistenceManager.shared.fetchBanks { [weak self] result in
-            switch result {
-            case .success(let success):
-                if success.isEmpty {
-                    self?.emptyState = DTEmptyStateView(message: "Currently don't have a Bank\nAdd from (+)")
-                    self?.emptyState?.frame = (self?.view.bounds)!
-                    self?.view.addSubview((self?.emptyState!)!)
-                    
-                } else {
-                    self?.emptyState?.removeFromSuperview()
-                    self?.banks = success
-                    
-                    DispatchQueue.main.async {
-                        self?.creditsCollectionView.reloadData()
+      
+        db.collection("banks").order(by: "date", descending: true).addSnapshotListener { [weak self] querySnapShot, error in
+            
+            self?.banks = []
+            
+            if let error = error {
+                print(error.localizedDescription)
+            } else {
+                if let querySnapShotDocuments = querySnapShot?.documents {
+                    for doc in querySnapShotDocuments {
+                        let data = doc.data()
+                        self?.documentIds.append(doc.documentID)
+                        if let name = data["name"] as? String, let detail = data["detail"] as? String, let email = data["email"] as? String {
+                            
+                            let bankModel = BankDetails(name: name, detail: detail, email: email)
+                            self?.banks.append(bankModel)
+                            
+                            DispatchQueue.main.async {
+                                self?.creditsCollectionView.reloadData()
+                            }
+                            self?.updateData(banks: self!.banks)
+                        }
+                        
+                        
                     }
                 }
-                self?.updateData(banks: self!.banks)
-            case .failure(_):
-                self?.presentDefaultError()
             }
         }
     }
     
-    func removeItem(at indexPath: IndexPath) {
-        PersistenceManager.shared.deleteBankWith(model: banks[indexPath.item]) { [weak self] result in
-            guard let self = self else { return }
-            
-            switch result {
-            case .success(_):
-                var snapShot = self.dataSource.snapshot()
-                snapShot.deleteItems([snapShot.itemIdentifiers[indexPath.item]])
-                self.dataSource.apply(snapShot, animatingDifferences: true)
-            case .failure(_):
-                self.presentDefaultError()
+    func deleteDocument(documentId: String) {
+        let documentRef = db.collection("banks").document(documentId)
+
+        documentRef.delete { error in
+            if let error = error {
+                print(error.localizedDescription)
+            } else {
+                print("Document deleted successfully")
             }
         }
     }
@@ -100,8 +106,9 @@ class CreditsAddDetailMainViewController: UIViewController {
             guard let selectedIndexPath = creditsCollectionView.indexPathForItem(at: gesture.location(in: creditsCollectionView)) else { break }
             let alertController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
             let deleteAction = UIAlertAction(title: "Delete", style: .destructive) { _ in
-                self.removeItem(at: selectedIndexPath)
+                self.deleteDocument(documentId: self.documentIds[selectedIndexPath.row])
                 self.banks.remove(at: selectedIndexPath.row)
+                self.documentIds.remove(at: selectedIndexPath.row)
             }
             let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
             alertController.addAction(deleteAction)
@@ -109,27 +116,6 @@ class CreditsAddDetailMainViewController: UIViewController {
             present(alertController, animated: true)
         default:
             break
-        }
-    }
-    
-    @objc func leftBarButtonTapped() {
-        if banks.isEmpty {
-            presentAlert(title: "Warning", message: "Don't have Bank to be removed.", buttonTitle: "Ok")
-            
-        } else {
-            let alertController = UIAlertController(title: "Deleting All Banks", message: nil, preferredStyle: .alert)
-            
-            let deleteButton = UIAlertAction(title: "OK", style: .default) { [weak self] _ in
-                PersistenceManager.shared.deleteAllBanks()
-                self?.banks.removeAll()
-                self?.fetchFromCoredata()
-            }
-            
-            let cancelButton = UIAlertAction(title: "Cancel", style: .cancel)
-            
-            alertController.addAction(deleteButton)
-            alertController.addAction(cancelButton)
-            present(alertController, animated: true)
         }
     }
     
@@ -150,16 +136,29 @@ class CreditsAddDetailMainViewController: UIViewController {
         
     }
     
+    @objc func logoutButtonTapped() {
+        
+        
+        
+        do {
+            try Auth.auth().signOut()
+            NotificationCenter.default.post(name: .didTapRightBarButton , object: nil)
+            
+        } catch let signOutError as NSError {
+            print("Error when signing out: %@", signOutError)
+        }
+    }
+    
     func configureDataSource() {
-        dataSource = UICollectionViewDiffableDataSource<Section, CreditDetails>(collectionView: creditsCollectionView, cellProvider: { collectionView, indexPath, banks in
+        dataSource = UICollectionViewDiffableDataSource<Section, BankDetails>(collectionView: creditsCollectionView, cellProvider: { collectionView, indexPath, banks in
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CreditsCollectionViewCell.identifier, for: indexPath) as! CreditsCollectionViewCell
             cell.set(banks: banks)
             return cell
         })
     }
     
-    func updateData(banks: [CreditDetails]) {
-        var snapShot = NSDiffableDataSourceSnapshot<Section, CreditDetails>()
+    func updateData(banks: [BankDetails]) {
+        var snapShot = NSDiffableDataSourceSnapshot<Section, BankDetails>()
         snapShot.appendSections([.main])
         snapShot.appendItems(banks)
         
@@ -167,7 +166,7 @@ class CreditsAddDetailMainViewController: UIViewController {
     }
 }
 
-extension CreditsAddDetailMainViewController: UICollectionViewDelegate {
+extension CreditsMainViewController: UICollectionViewDelegate {
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
