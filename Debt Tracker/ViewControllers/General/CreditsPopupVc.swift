@@ -22,7 +22,6 @@ class CreditsPopupVc: UIViewController {
     
     private let containerView = DTContainerView()
     let titleLabel = DTTitleLabel(textAlignment: .center, fontSize: 18, textColor: .label, text: "Add Credit")
-    let cancelButton = DTButton(title: "Cancel", color: .systemPink, systemImageName: "xmark.circle.fill")
     let saveButton = DTButton(title: "Save", color: .systemPink, systemImageName: "square.and.arrow.down")
     
     let creditNameLabel = DTTitleLabel(textAlignment: .left, fontSize: 25)
@@ -42,6 +41,16 @@ class CreditsPopupVc: UIViewController {
     
     let firstInstallmentLabel = DTTitleLabel(textAlignment: .left, fontSize: 15, text: "Select First Installment:")
     let firstInstallmentDatePicker = UIDatePicker()
+    
+    private var closeButton: UIButton = {
+        var button = UIButton()
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.setImage(UIImage(systemName: "xmark.circle.fill"), for: .normal)
+        button.imageView?.translatesAutoresizingMaskIntoConstraints = false
+        button.imageView?.heightAnchor.constraint(equalToConstant: 44).isActive = true
+        button.imageView?.widthAnchor.constraint(equalToConstant: 44).isActive = true
+        return button
+    }()
     
     var monthCount = 12
     var firstInstallmentDate = ""
@@ -66,7 +75,7 @@ class CreditsPopupVc: UIViewController {
         
         datePickerValueChanged(sender: firstInstallmentDatePicker)
         
-        cancelButton.addTarget(self, action: #selector(dismissVC), for: .touchUpInside)
+        closeButton.addTarget(self, action: #selector(dismissVC), for: .touchUpInside)
         saveButton.addTarget(self, action: #selector(saveButtonTapped), for: .touchUpInside)
         monthlyInstallmentCountButton.addTarget(self, action: #selector(openBottomSheet), for: .touchUpInside)
         amountTextField.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
@@ -201,7 +210,7 @@ class CreditsPopupVc: UIViewController {
         containerView.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.82).isActive = true
         containerView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.62).isActive = true
         
-        containerView.addSubviews(titleLabel, cancelButton, saveButton, creditNameLabel, creditDetailLabel, amountTextField, monthlyTextField, monthlyInstallmentCountLabel, monthlyInstallmentCountButton, firstInstallmentLabel, firstInstallmentDatePicker, rateLabel, rateResultLabel, totalPaymentLabel, totalPaymentResultLabel)
+        containerView.addSubviews(titleLabel, closeButton, saveButton, creditNameLabel, creditDetailLabel, amountTextField, monthlyTextField, monthlyInstallmentCountLabel, monthlyInstallmentCountButton, firstInstallmentLabel, firstInstallmentDatePicker, rateLabel, rateResultLabel, totalPaymentLabel, totalPaymentResultLabel)
         
         let totalWidth = view.frame.width
         let textFieldWidth = totalWidth / 2
@@ -209,8 +218,10 @@ class CreditsPopupVc: UIViewController {
         titleLabel.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 10).isActive = true
         titleLabel.centerXAnchor.constraint(equalTo: containerView.centerXAnchor).isActive = true
         
-        cancelButton.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 5).isActive = true
-        cancelButton.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 5).isActive = true
+        closeButton.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 2).isActive = true
+        closeButton.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 2).isActive = true
+        closeButton.heightAnchor.constraint(equalToConstant: 44).isActive = true
+        closeButton.widthAnchor.constraint(equalToConstant: 44).isActive = true
         
         saveButton.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 5).isActive = true
         saveButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -5).isActive = true

@@ -15,12 +15,20 @@ class CreateCreditPopupVc: UIViewController {
     private let containerView = DTContainerView()
     
     let titleLabel = DTTitleLabel(textAlignment: .center, fontSize: 18, textColor: .label)
-    let cancelButton = DTButton(title: "Cancel", color: .systemPink, systemImageName: "xmark.circle.fill")
     let saveButton = DTButton(title: "Save", color: .systemPink, systemImageName: "square.and.arrow.down")
     
     let nameTextField = DTTextField(placeholder: "Enter Name", placeHolderSize: 15)
-    
     let detailTextField = DTTextField(placeholder: "Enter Detail", placeHolderSize: 15)
+    
+    private var closeButton: UIButton = {
+        var button = UIButton()
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.setImage(UIImage(systemName: "xmark.circle.fill"), for: .normal)
+        button.imageView?.translatesAutoresizingMaskIntoConstraints = false
+        button.imageView?.heightAnchor.constraint(equalToConstant: 44).isActive = true
+        button.imageView?.widthAnchor.constraint(equalToConstant: 44).isActive = true
+        return button
+    }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -34,7 +42,7 @@ class CreateCreditPopupVc: UIViewController {
         view.backgroundColor = UIColor.systemGray.withAlphaComponent(0.5)
         view.frame = UIScreen.main.bounds
         
-        cancelButton.addTarget(self, action: #selector(dismissVC), for: .touchUpInside)
+        closeButton.addTarget(self, action: #selector(dismissVC), for: .touchUpInside)
         saveButton.addTarget(self, action: #selector(saveButtonTapped), for: .touchUpInside)
     }
     
@@ -92,7 +100,7 @@ class CreateCreditPopupVc: UIViewController {
         let totalWidth = view.frame.width
         let textFieldWidth = totalWidth / 1.5
         
-        containerView.addSubviews(titleLabel, cancelButton, saveButton, nameTextField, detailTextField)
+        containerView.addSubviews(titleLabel, closeButton, saveButton, nameTextField, detailTextField)
         
         containerView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         containerView.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
@@ -102,8 +110,10 @@ class CreateCreditPopupVc: UIViewController {
         titleLabel.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 10).isActive = true
         titleLabel.centerXAnchor.constraint(equalTo: containerView.centerXAnchor).isActive = true
         
-        cancelButton.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 5).isActive = true
-        cancelButton.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 5).isActive = true
+        closeButton.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 2).isActive = true
+        closeButton.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 2).isActive = true
+        closeButton.heightAnchor.constraint(equalToConstant: 44).isActive = true
+        closeButton.widthAnchor.constraint(equalToConstant: 44).isActive = true
         
         saveButton.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 5).isActive = true
         saveButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -5).isActive = true

@@ -49,7 +49,7 @@ class CreditsDetailViewController: UIViewController {
         }
     }
     
-    var detailLabel = DTTitleLabel(textAlignment: .left, fontSize: 22)
+    var detailLabel = DTTitleLabel(textAlignment: .left, fontSize: 18)
     var paymentTitleLabel = DTTitleLabel(textAlignment: .left, fontSize: 18, text: "All Installments")
     var startAndEndTitleLabel = DTTitleLabel(textAlignment: .left, fontSize: 15)
     var detailTableView = UITableView()
