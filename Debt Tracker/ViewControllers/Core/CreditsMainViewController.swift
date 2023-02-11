@@ -58,61 +58,29 @@ class CreditsMainViewController: UIViewController {
     }
     
     private func fetchFromFirestore() {
-      
-        db.collection("banks").order(by: "date", descending: true).addSnapshotListener { [weak self] querySnapShot, error in
-            
-            self?.banks = []
-            
-            if let error = error {
-                print(error.localizedDescription)
-            } else {
-                if let querySnapShotDocuments = querySnapShot?.documents {
-                    for doc in querySnapShotDocuments {
-                        let data = doc.data()
-                       
-                        if let name = data["name"] as? String, let detail = data["detail"] as? String, let email = data["email"] as? String {
-                            
-                            if email == Auth.auth().currentUser?.email {
-                                
-                                let bankModel = BankDetails(name: name, detail: detail, email: email)
-                                self?.banks.append(bankModel)
-                                self?.documentIds.append(doc.documentID)
-                            }
-                        }
-                    }
-                }
-            }
-            
-            if self!.banks.isEmpty {
-                self?.emptyState = DTEmptyStateView(message: "Currently don't have a Bank\nAdd from (+)")
-                self?.emptyState?.frame = (self?.view.bounds)!
-                self?.view.addSubview((self?.emptyState!)!)
+        
+        FirestoreManager.shared.fetchBanks { [weak self] result in
+            switch result {
+            case .success(let success):
+                self?.banks = success.bankDetails
+                self?.documentIds = success.stringArray
                 
+                if self!.banks.isEmpty {
+                    self?.emptyState = DTEmptyStateView(message: "Currently don't have a Bank\nAdd from (+)")
+                    self?.emptyState?.frame = (self?.view.bounds)!
+                    self?.view.addSubview((self?.emptyState!)!)
+                    
+                } else {
+                    self?.emptyState?.removeFromSuperview()
+                }
                 DispatchQueue.main.async {
                     self?.creditsCollectionView.reloadData()
                 }
                 
                 self?.updateData(banks: self!.banks)
-            } else {
-                self?.emptyState?.removeFromSuperview()
                 
-                DispatchQueue.main.async {
-                    self?.creditsCollectionView.reloadData()
-                }
-                
-                self?.updateData(banks: self!.banks)
-            }
-        }
-    }
-    
-    func deleteDocument(documentId: String) {
-        let documentRef = db.collection("banks").document(documentId)
-
-        documentRef.delete { error in
-            if let error = error {
-                print(error.localizedDescription)
-            } else {
-               print("Succesfully removed")
+            case .failure(let failure):
+                print(failure.localizedDescription)
             }
         }
     }
@@ -122,10 +90,10 @@ class CreditsMainViewController: UIViewController {
         case .began:
             guard let selectedIndexPath = creditsCollectionView.indexPathForItem(at: gesture.location(in: creditsCollectionView)) else { break }
             let alertController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
-            let deleteAction = UIAlertAction(title: "Delete", style: .destructive) { _ in
-                self.deleteDocument(documentId: self.documentIds[selectedIndexPath.row])
-                self.banks.remove(at: selectedIndexPath.row)
-                self.documentIds.remove(at: selectedIndexPath.row)
+            let deleteAction = UIAlertAction(title: "Delete", style: .destructive) { [weak self] _ in
+                FirestoreManager.shared.deleteBank(documentId: (self?.documentIds[selectedIndexPath.row])!)
+                self?.banks.remove(at: selectedIndexPath.row)
+                self?.documentIds.remove(at: selectedIndexPath.row)
             }
             let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
             alertController.addAction(deleteAction)

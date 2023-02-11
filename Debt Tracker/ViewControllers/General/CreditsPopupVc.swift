@@ -49,10 +49,10 @@ class CreditsPopupVc: UIViewController {
     var calculatedPayment = 0.0
     
     let formatter = NumberFormatter()
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         configureViewController()
         applyConstraints()
     }
@@ -92,33 +92,22 @@ class CreditsPopupVc: UIViewController {
             return
         }
         
-        db.collection("credits").addDocument(data: ["email": userEmail,
-                                                    "name": creditNameLabel.text!,
-                                                    "detail": creditDetailLabel.text!,
-                                                    "entryDebt": Int(amount)!,
-                                                    "installmentCount": monthCount,
-                                                    "paidCount": 0,
-                                                    "monthlyInstallment": Double(monthly)!,
-                                                    "firstInstallmentDate": firstInstallmentDate,
-                                                    "currentInstallmentDate": firstInstallmentDate,
-                                                    "totalDebt": calculatedPayment,
-                                                    "interestRate": Double(interestRateCalculated)!,
-                                                    "remainingDebt": calculatedPayment,
-                                                    "paidDebt": 0.0,
-                                                    "createDate": Date().timeIntervalSince1970 ]){ error in
-            if let error = error {
-                print(error.localizedDescription)
-            } else {
-                NotificationCenter.default.post(Notification(name: Notification.Name("saveTapped"), userInfo: nil))
-                self.dismissVC()
+        let creditModel = CreditDetailModel(name: creditNameLabel.text!, detail: creditDetailLabel.text!, entryDebt: Int(amount)!, installmentCount: monthCount, paidCount: 0, monthlyInstallment: Double(monthly)!, firstInstallmentDate: firstInstallmentDate, currentInstallmentDate: firstInstallmentDate, totalDebt: calculatedPayment, interestRate: Double(interestRateCalculated)!, remainingDebt: calculatedPayment, paidDebt: 0.0, email: userEmail)
+        
+        FirestoreManager.shared.createCredit(creditModel: creditModel) { [weak self] result in
+            switch result {
+            case .success(_):
+                self?.animateOut()
                 
-                if let tabBarController = self.tabBarController {
-                tabBarController.selectedIndex = 1
+                if let tabBarController = self?.tabBarController {
+                    tabBarController.selectedIndex = 1
                 }
+            case .failure(let failure):
+                print(failure.localizedDescription)
             }
         }
     }
-        
+    
     @objc func dismissVC() {
         animateOut()
     }
@@ -138,7 +127,7 @@ class CreditsPopupVc: UIViewController {
     }
     
     @objc func textFieldDidChange(_ textField: UITextField) {
-       
+        
         calculateRateAndTotalPayment()
     }
     
@@ -155,7 +144,7 @@ class CreditsPopupVc: UIViewController {
         calculatedPayment =  Double(monthlyTextField.text!)! * Double(monthCount)
         let remainingTextFormatted = formatter.string(from: calculatedPayment as NSNumber)
         totalPaymentResultLabel.text = "\(remainingTextFormatted ?? "Error")"
-         
+        
         let interestPrice = calculatedPayment - Double(amountTextField.text!)!
         let interestRate = (interestPrice / Double(amountTextField.text!)!) * Double(monthCount)
         interestRateCalculated = "\(String(format: "%.2f", interestRate))"
@@ -185,7 +174,7 @@ class CreditsPopupVc: UIViewController {
     }
     
     @objc func openBottomSheet() {
-     
+        
         if let sheet = moodSelectionVc.sheetPresentationController {
             sheet.detents = [.medium()]
             sheet.prefersGrabberVisible = true
@@ -195,6 +184,10 @@ class CreditsPopupVc: UIViewController {
         }
         
         present(moodSelectionVc, animated: true)
+    }
+    
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        textField.textAlignment = .center
     }
     
     private func applyConstraints() {

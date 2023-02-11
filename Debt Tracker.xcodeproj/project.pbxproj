@@ -17,8 +17,7 @@
 		011E8C4629834CDD00F163D4 /* DTTitleLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 011E8C4529834CDD00F163D4 /* DTTitleLabel.swift */; };
 		011E8C4829834D1F00F163D4 /* DTBodyLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 011E8C4729834D1F00F163D4 /* DTBodyLabel.swift */; };
 		011E8C4D298352C700F163D4 /* UIView+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 011E8C4C298352C700F163D4 /* UIView+Ext.swift */; };
-		011E8C5A2983FE4400F163D4 /* CreditModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 011E8C582983FE4400F163D4 /* CreditModel.xcdatamodeld */; };
-		011E8C5D2984014200F163D4 /* PersistenceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 011E8C5C2984014200F163D4 /* PersistenceManager.swift */; };
+		011E8C5D2984014200F163D4 /* FirestoreManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 011E8C5C2984014200F163D4 /* FirestoreManager.swift */; };
 		011E8C6429848B6200F163D4 /* DTTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 011E8C6329848B6200F163D4 /* DTTextField.swift */; };
 		011E8C67298497A900F163D4 /* DTButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 011E8C66298497A900F163D4 /* DTButton.swift */; };
 		011E8C6E29849F5F00F163D4 /* DTDatePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 011E8C6D29849F5F00F163D4 /* DTDatePicker.swift */; };
@@ -58,8 +57,7 @@
 		011E8C4529834CDD00F163D4 /* DTTitleLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DTTitleLabel.swift; sourceTree = "<group>"; };
 		011E8C4729834D1F00F163D4 /* DTBodyLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DTBodyLabel.swift; sourceTree = "<group>"; };
 		011E8C4C298352C700F163D4 /* UIView+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Ext.swift"; sourceTree = "<group>"; };
-		011E8C592983FE4400F163D4 /* CreditModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = CreditModel.xcdatamodel; sourceTree = "<group>"; };
-		011E8C5C2984014200F163D4 /* PersistenceManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistenceManager.swift; sourceTree = "<group>"; };
+		011E8C5C2984014200F163D4 /* FirestoreManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreManager.swift; sourceTree = "<group>"; };
 		011E8C6329848B6200F163D4 /* DTTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DTTextField.swift; sourceTree = "<group>"; };
 		011E8C66298497A900F163D4 /* DTButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DTButton.swift; sourceTree = "<group>"; };
 		011E8C6D29849F5F00F163D4 /* DTDatePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DTDatePicker.swift; sourceTree = "<group>"; };
@@ -126,7 +124,6 @@
 				011E8C4229834C6600F163D4 /* Views */,
 				011E8C35298346BF00F163D4 /* Info.plist */,
 				01D8F50729944D1C00369895 /* GoogleService-Info.plist */,
-				011E8C582983FE4400F163D4 /* CreditModel.xcdatamodeld */,
 			);
 			path = "Debt Tracker";
 			sourceTree = "<group>";
@@ -196,7 +193,7 @@
 		011E8C5B298400CC00F163D4 /* Manager */ = {
 			isa = PBXGroup;
 			children = (
-				011E8C5C2984014200F163D4 /* PersistenceManager.swift */,
+				011E8C5C2984014200F163D4 /* FirestoreManager.swift */,
 			);
 			path = Manager;
 			sourceTree = "<group>";
@@ -374,7 +371,7 @@
 				011E8C4629834CDD00F163D4 /* DTTitleLabel.swift in Sources */,
 				011E8C6429848B6200F163D4 /* DTTextField.swift in Sources */,
 				011E8C93298C6A6000F163D4 /* CreateCreditPopupVc.swift in Sources */,
-				011E8C5D2984014200F163D4 /* PersistenceManager.swift in Sources */,
+				011E8C5D2984014200F163D4 /* FirestoreManager.swift in Sources */,
 				011E8C67298497A900F163D4 /* DTButton.swift in Sources */,
 				011E8C7A2985C92300F163D4 /* CreditsDetailTableViewCell.swift in Sources */,
 				011E8C4129834C4D00F163D4 /* CreditsDetailViewController.swift in Sources */,
@@ -382,7 +379,6 @@
 				0129E075299558FC002FBAA0 /* LoginViewController.swift in Sources */,
 				011E8C2C298346BE00F163D4 /* CreditsViewController.swift in Sources */,
 				011E8C28298346BE00F163D4 /* AppDelegate.swift in Sources */,
-				011E8C5A2983FE4400F163D4 /* CreditModel.xcdatamodeld in Sources */,
 				011E8C2A298346BE00F163D4 /* SceneDelegate.swift in Sources */,
 				011E8C702984A8C300F163D4 /* Int+Ext.swift in Sources */,
 				011E8C7329858BC600F163D4 /* DTAlertViewController.swift in Sources */,
@@ -637,19 +633,6 @@
 			productName = FirebaseStorage;
 		};
 /* End XCSwiftPackageProductDependency section */
-
-/* Begin XCVersionGroup section */
-		011E8C582983FE4400F163D4 /* CreditModel.xcdatamodeld */ = {
-			isa = XCVersionGroup;
-			children = (
-				011E8C592983FE4400F163D4 /* CreditModel.xcdatamodel */,
-			);
-			currentVersion = 011E8C592983FE4400F163D4 /* CreditModel.xcdatamodel */;
-			path = CreditModel.xcdatamodeld;
-			sourceTree = "<group>";
-			versionGroupType = wrapper.xcdatamodel;
-		};
-/* End XCVersionGroup section */
 	};
 	rootObject = 011E8C1C298346BE00F163D4 /* Project object */;
 }

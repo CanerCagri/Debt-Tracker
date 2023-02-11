@@ -68,7 +68,6 @@ class CreditsDetailViewController: UIViewController {
         super.viewDidLoad()
         
         view.backgroundColor = .systemBackground
-        navigationController?.navigationBar.prefersLargeTitles = true
         
         configureTableView()
         applyConstraints()
@@ -90,6 +89,7 @@ class CreditsDetailViewController: UIViewController {
         detailTableView.delegate = self
         detailTableView.dataSource = self
         detailTableView.rowHeight = 40
+        detailTableView.layer.cornerRadius = 14
         detailTableView.register(CreditsDetailTableViewCell.self, forCellReuseIdentifier:CreditsDetailTableViewCell.identifier)
     }
     
@@ -110,8 +110,8 @@ class CreditsDetailViewController: UIViewController {
         startAndEndTitleLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -10).isActive = true
         
         detailTableView.topAnchor.constraint(equalTo: paymentTitleLabel.bottomAnchor, constant: 10).isActive = true
-        detailTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
-        detailTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
+        detailTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10).isActive = true
+        detailTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -10).isActive = true
         detailTableView.heightAnchor.constraint(equalToConstant: 400).isActive = true
         
         totalDebtLabel.topAnchor.constraint(equalTo: detailTableView.bottomAnchor, constant: 10).isActive = true
@@ -130,7 +130,7 @@ class CreditsDetailViewController: UIViewController {
 
 extension CreditsDetailViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 10
+        return creditModel.installmentCount
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -140,6 +140,7 @@ extension CreditsDetailViewController: UITableViewDelegate, UITableViewDataSourc
         let priceLabelTextFormatted = formatter.string(from: creditModel.monthlyInstallment as NSNumber)
         cell.priceLabel.text = priceLabelTextFormatted
 
+        cell.layer.cornerRadius = 8
         if indexPath.row < creditModel.paidCount {
             cell.backgroundColor = .systemGreen
             cell.isUserInteractionEnabled = false
@@ -199,32 +200,18 @@ extension CreditsDetailViewController: UITableViewDelegate, UITableViewDataSourc
         let viewModel = CreditDetailModel(name: (self.creditModel.name), detail: (self.creditModel.detail), entryDebt: Int((self.creditModel.entryDebt)), installmentCount: Int((self.creditModel.installmentCount)), paidCount: Int((self.selectedMonthCount!)), monthlyInstallment: (self.creditModel.monthlyInstallment), firstInstallmentDate: (self.creditModel.firstInstallmentDate), currentInstallmentDate: (self.selectedMonthDate!), totalDebt: (self.creditModel.totalDebt), interestRate: (self.creditModel.interestRate), remainingDebt: (self.selectedRemainingDebt!), paidDebt: self.selectedPaidDebt!, email: email)
 
         let yesAction = UIAlertAction(title: "Yes, I did pay selected Installment.", style: .default) { [weak self] (action) in
-
-            let documentRef = self?.db.collection("credits").document(self!.documentId)
             
-            documentRef?.setData(["email": viewModel.email,
-                                 "name": viewModel.name,
-                                 "detail": viewModel.detail,
-                                 "entryDebt": viewModel.entryDebt,
-                                 "installmentCount": viewModel.installmentCount,
-                                 "paidCount": viewModel.paidCount,
-                                 "monthlyInstallment": viewModel.monthlyInstallment,
-                                 "firstInstallmentDate": viewModel.firstInstallmentDate,
-                                 "currentInstallmentDate": viewModel.currentInstallmentDate,
-                                 "totalDebt": viewModel.totalDebt,
-                                 "interestRate": viewModel.interestRate,
-                                 "remainingDebt": viewModel.remainingDebt,
-                                 "paidDebt": viewModel.paidDebt ]) { error in
-                if let error = error {
-                    print(error.localizedDescription)
-                } else {
-                    print("Document updated successfully")
+            FirestoreManager.shared.editCredit(documentId: (self?.documentId)!, viewModel: viewModel) { result in
+                switch result {
+                case .success(_):
+                    print("succesfully paid")
+                case .failure(let failure):
+                    print(failure.localizedDescription)
                 }
             }
             let alertController = UIAlertController(title: "Payment Succesfull", message: nil, preferredStyle: .alert)
 
             let deleteButton = UIAlertAction(title: "OK", style: .default) { _ in
-                NotificationCenter.default.post(Notification(name: Notification.Name("paymentUpdated")))
                 self?.navigationController?.popToRootViewController(animated: true)
             }
 

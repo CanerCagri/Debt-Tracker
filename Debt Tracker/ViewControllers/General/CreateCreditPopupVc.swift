@@ -48,16 +48,12 @@ class CreateCreditPopupVc: UIViewController {
             return
         }
         
-        guard let userEmail = Auth.auth().currentUser?.email else { return }
-        
-        db.collection("banks").addDocument(data: ["email": userEmail,
-                                                  "name": name,
-                                                  "detail": detail,
-                                                  "date": Date().timeIntervalSince1970 ]){ error in
-            if let error = error {
-                print(error.localizedDescription)
-            } else {
-                self.dismissVC()
+        FirestoreManager.shared.createBank(name: name, detail: detail) { [weak self] result in
+            switch result {
+            case .success(_):
+                self?.dismissVC()
+            case .failure(let failure):
+                print(failure.localizedDescription)
             }
         }
     }
@@ -68,7 +64,7 @@ class CreateCreditPopupVc: UIViewController {
     }
     
     func animateOut() {
-        UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 1, options: .curveEaseIn) { [weak self] in
+        UIView.animate(withDuration: 0.2, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 1, options: .curveEaseIn) { [weak self] in
             self?.containerView.transform = CGAffineTransform(translationX: 0, y: -(self?.view.frame.height)!)
             self?.view.alpha = 0
         } completion: { complete in
@@ -86,7 +82,6 @@ class CreateCreditPopupVc: UIViewController {
             self.containerView.transform = .identity
             self.view.alpha = 1
         }
-        
     }
     
     private func applyConstraints() {
