@@ -14,8 +14,8 @@ class CreateCreditPopupVc: UIViewController {
     
     private let containerView = DTContainerView()
     
-    let titleLabel = DTTitleLabel(textAlignment: .center, fontSize: 18, textColor: .label)
-    let saveButton = DTButton(title: "Save", color: .systemPink, systemImageName: "square.and.arrow.down")
+    let titleLabel = DTTitleLabel(textAlignment: .center, fontSize: 18, textColor: .label, text: "Add Bank")
+    let saveButton = DTButton(title: "SAVE", color: .systemPink, systemImageName: "square.and.arrow.down")
     
     let nameTextField = DTTextField(placeholder: "Enter Name", placeHolderSize: 15)
     let detailTextField = DTTextField(placeholder: "Enter Detail", placeHolderSize: 15)
@@ -38,7 +38,6 @@ class CreateCreditPopupVc: UIViewController {
     }
     
     private func configureViewController() {
-        titleLabel.text = "Add Bank"
         view.backgroundColor = UIColor.systemGray.withAlphaComponent(0.5)
         view.frame = UIScreen.main.bounds
         
@@ -61,7 +60,7 @@ class CreateCreditPopupVc: UIViewController {
             case .success(_):
                 self?.dismissVC()
             case .failure(let failure):
-                print(failure.localizedDescription)
+                self?.presentAlert(title: "Warning", message: failure.localizedDescription, buttonTitle: "OK")
             }
         }
     }

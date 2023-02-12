@@ -75,7 +75,7 @@ class CreditsViewController: UIViewController {
                     self?.creditsTableView.reloadData()
                 }
             case .failure(let failure):
-                print(failure.localizedDescription)
+                self?.presentAlert(title: "Warning", message: failure.localizedDescription, buttonTitle: "OK")
             }
         }
     }

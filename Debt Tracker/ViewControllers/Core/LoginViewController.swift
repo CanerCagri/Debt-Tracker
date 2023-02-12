@@ -21,6 +21,7 @@ class LoginViewController: UIViewController {
     let registerLabel = DTTitleLabel(textAlignment: .center, fontSize: 18, textColor: .systemGray2, text: "REGISTER")
     
     var isLoginTapped = false
+    var isRightBarButtonTapped = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -32,6 +33,8 @@ class LoginViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
+        emailTextField.text = ""
+        passwordTextField.text = ""
         isLoginTapped = false
     }
     
@@ -62,6 +65,10 @@ class LoginViewController: UIViewController {
         
         NotificationCenter.default.addObserver(self, selector: #selector(didTapRightBarButton), name: .didTapRightBarButton, object: nil)
         
+        NotificationCenter.default.addObserver(forName: NSNotification.Name("resetCloseTapped"), object: nil, queue: nil) { [weak self] (notification) in
+            self?.isRightBarButtonTapped = false
+        }
+        
     }
     
     @objc func didTapRightBarButton() {
@@ -77,20 +84,31 @@ class LoginViewController: UIViewController {
                 AuthManager.shared.signInUser(email: email, password: password) { [weak self] result in
                     switch result {
                     case .success(_):
+                        self?.isLoginTapped = true
                         let tabBarVC = MainTabBarViewController()
                         tabBarVC.navigationItem.hidesBackButton = true
                         self?.navigationController?.pushViewController(tabBarVC, animated: true)
                     case .failure(let failure):
-                        print(failure.localizedDescription)
+                        self?.presentAlert(title: "Warning", message: failure.localizedDescription, buttonTitle: "OK")
                     }
                 }
-                isLoginTapped = true
+                
             }
         }
     }
     
     @objc func showForgetPasswordPopup() {
-           print("test")
+        if !isRightBarButtonTapped {
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.2 ) { [weak self] in
+                let popupVc = ForgotPasswordVc()
+                
+                self?.addChild(popupVc)
+                self?.view.addSubview(popupVc.view)
+                popupVc.didMove(toParent: self)
+            }
+            isRightBarButtonTapped = true
+        }
        }
     
     @objc func registerPagePresent() {
@@ -111,10 +129,7 @@ class LoginViewController: UIViewController {
     private func applyConstraints() {
         view.addSubviews(detailLabel, emailTextField, passwordTextField, loginButton, forgetPasswordLabel, dontHaveAccLabel, registerLabel)
         containerView.addSubview(showPasswordButton)
-        
-        emailTextField.text = "1@gmail.com"
-        passwordTextField.text = "123456"
-        
+    
         detailLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         detailLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 50).isActive = true
         

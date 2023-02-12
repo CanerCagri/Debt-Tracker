@@ -112,7 +112,7 @@ class CreditsPopupVc: UIViewController {
                     tabBarController.selectedIndex = 1
                 }
             case .failure(let failure):
-                print(failure.localizedDescription)
+                self?.presentAlert(title: "Warning", message: failure.localizedDescription, buttonTitle: "OK")
             }
         }
     }
@@ -213,7 +213,7 @@ class CreditsPopupVc: UIViewController {
         containerView.addSubviews(titleLabel, closeButton, saveButton, creditNameLabel, creditDetailLabel, amountTextField, monthlyTextField, monthlyInstallmentCountLabel, monthlyInstallmentCountButton, firstInstallmentLabel, firstInstallmentDatePicker, rateLabel, rateResultLabel, totalPaymentLabel, totalPaymentResultLabel)
         
         let totalWidth = view.frame.width
-        let textFieldWidth = totalWidth / 2
+        let textFieldWidth = totalWidth / 1.5
         
         titleLabel.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 10).isActive = true
         titleLabel.centerXAnchor.constraint(equalTo: containerView.centerXAnchor).isActive = true
@@ -249,7 +249,7 @@ class CreditsPopupVc: UIViewController {
         
         monthlyInstallmentCountButton.topAnchor.constraint(equalTo: monthlyTextField.bottomAnchor, constant: 15).isActive = true
         monthlyInstallmentCountButton.leadingAnchor.constraint(equalTo: monthlyInstallmentCountLabel.trailingAnchor, constant: 15).isActive = true
-        monthlyInstallmentCountButton.widthAnchor.constraint(equalToConstant: 50).isActive = true
+        monthlyInstallmentCountButton.trailingAnchor.constraint(equalTo: saveButton.trailingAnchor).isActive = true
         monthlyInstallmentCountButton.heightAnchor.constraint(equalToConstant: 50).isActive = true
         
         firstInstallmentLabel.topAnchor.constraint(equalTo: monthlyInstallmentCountButton.bottomAnchor, constant: 17).isActive = true
@@ -257,6 +257,7 @@ class CreditsPopupVc: UIViewController {
         
         firstInstallmentDatePicker.topAnchor.constraint(equalTo: monthlyInstallmentCountButton.bottomAnchor, constant: 10).isActive = true
         firstInstallmentDatePicker.leadingAnchor.constraint(equalTo: firstInstallmentLabel.trailingAnchor, constant: 10).isActive = true
+        firstInstallmentDatePicker.trailingAnchor.constraint(equalTo: monthlyInstallmentCountButton.trailingAnchor).isActive = true
         
         rateLabel.topAnchor.constraint(equalTo: firstInstallmentDatePicker.bottomAnchor, constant: 40).isActive = true
         rateLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 20).isActive = true

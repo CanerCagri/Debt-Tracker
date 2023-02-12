@@ -206,7 +206,7 @@ extension CreditsDetailViewController: UITableViewDelegate, UITableViewDataSourc
                 case .success(_):
                     print("succesfully paid")
                 case .failure(let failure):
-                    print(failure.localizedDescription)
+                    self?.presentAlert(title: "Warning", message: failure.localizedDescription, buttonTitle: "OK")
                 }
             }
             let alertController = UIAlertController(title: "Payment Succesfull", message: nil, preferredStyle: .alert)

@@ -38,6 +38,7 @@
 		011E8C93298C6A6000F163D4 /* CreateCreditPopupVc.swift in Sources */ = {isa = PBXBuildFile; fileRef = 011E8C92298C6A6000F163D4 /* CreateCreditPopupVc.swift */; };
 		0129E075299558FC002FBAA0 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0129E074299558FC002FBAA0 /* LoginViewController.swift */; };
 		0129E07729995E2B002FBAA0 /* AuthManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0129E07629995E2B002FBAA0 /* AuthManager.swift */; };
+		0129E079299985F8002FBAA0 /* ForgotPasswordVc.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0129E078299985F8002FBAA0 /* ForgotPasswordVc.swift */; };
 		01D8F50829944D1C00369895 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 01D8F50729944D1C00369895 /* GoogleService-Info.plist */; };
 		01D8F50B29944D9A00369895 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 01D8F50A29944D9A00369895 /* FirebaseAuth */; };
 		01D8F50D29944D9A00369895 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 01D8F50C29944D9A00369895 /* FirebaseFirestore */; };
@@ -79,6 +80,7 @@
 		011E8C92298C6A6000F163D4 /* CreateCreditPopupVc.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateCreditPopupVc.swift; sourceTree = "<group>"; };
 		0129E074299558FC002FBAA0 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		0129E07629995E2B002FBAA0 /* AuthManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthManager.swift; sourceTree = "<group>"; };
+		0129E078299985F8002FBAA0 /* ForgotPasswordVc.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForgotPasswordVc.swift; sourceTree = "<group>"; };
 		01D8F50729944D1C00369895 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		01D8F51029953F3000369895 /* RegisterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -275,6 +277,7 @@
 			isa = PBXGroup;
 			children = (
 				01D8F51029953F3000369895 /* RegisterViewController.swift */,
+				0129E078299985F8002FBAA0 /* ForgotPasswordVc.swift */,
 				011E8C92298C6A6000F163D4 /* CreateCreditPopupVc.swift */,
 				011E8C88298A911A00F163D4 /* CreditsPopupVc.swift */,
 				011E8C8E298B2D0700F163D4 /* CreditsBottomSheetVc.swift */,
@@ -384,6 +387,7 @@
 				011E8C2C298346BE00F163D4 /* CreditsViewController.swift in Sources */,
 				011E8C28298346BE00F163D4 /* AppDelegate.swift in Sources */,
 				011E8C2A298346BE00F163D4 /* SceneDelegate.swift in Sources */,
+				0129E079299985F8002FBAA0 /* ForgotPasswordVc.swift in Sources */,
 				011E8C702984A8C300F163D4 /* Int+Ext.swift in Sources */,
 				011E8C7329858BC600F163D4 /* DTAlertViewController.swift in Sources */,
 				011E8C87298A890300F163D4 /* BankDetails.swift in Sources */,

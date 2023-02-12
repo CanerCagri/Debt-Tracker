@@ -10,7 +10,7 @@ import UIKit
 class CreditsBottomSheetVc: UIViewController {
     
     var pickerView = UIPickerView()
-    let numbers = [3, 6, 9, 12, 18, 24, 30, 36]
+    let numbers = [3, 6, 9, 12, 18, 24, 30, 36, 42, 48, 54, 60, 66, 72, 78, 84, 90, 96, 102, 108, 114, 120, 126, 132, 138, 144, 150, 156, 162, 168, 174, 180, 186, 192, 198, 204, 210, 216, 222, 228, 234, 240]
     
     private let nextButton = DTButton(title: "Next", color: .systemPink, systemImageName: "checkmark.circle")
     private let cancelButton = DTButton(title: "Cancel", color: .systemPink, systemImageName: "xmark.circle.fill")

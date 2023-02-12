@@ -80,7 +80,7 @@ class CreditsMainViewController: UIViewController {
                 self?.updateData(banks: self!.banks)
                 
             case .failure(let failure):
-                print(failure.localizedDescription)
+                self?.presentAlert(title: "Warning", message: failure.localizedDescription, buttonTitle: "OK")
             }
         }
     }
