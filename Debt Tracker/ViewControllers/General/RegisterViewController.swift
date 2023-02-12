@@ -45,11 +45,13 @@ class RegisterViewController: UIViewController {
     
     @objc func registerButtonTapped() {
         if let email = emailTextField.text, let password = passwordTextField.text {
-            Auth.auth().createUser(withEmail: email, password: password) { [weak self] authResult, error in
-                if let error = error {
-                    print(error.localizedDescription)
-                } else {
+            
+            AuthManager.shared.createUser(email: email, password: password) { [weak self] result in
+                switch result {
+                case .success(_):
                     self?.navigationController?.popToRootViewController(animated: true)
+                case .failure(let failure):
+                    print(failure.localizedDescription)
                 }
             }
         }

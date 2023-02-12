@@ -105,7 +105,7 @@ class CreateCreditPopupVc: UIViewController {
         containerView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         containerView.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
         containerView.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.82).isActive = true
-        containerView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.32).isActive = true
+        containerView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.30).isActive = true
         
         titleLabel.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 10).isActive = true
         titleLabel.centerXAnchor.constraint(equalTo: containerView.centerXAnchor).isActive = true
@@ -115,11 +115,8 @@ class CreateCreditPopupVc: UIViewController {
         closeButton.heightAnchor.constraint(equalToConstant: 44).isActive = true
         closeButton.widthAnchor.constraint(equalToConstant: 44).isActive = true
         
-        saveButton.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 5).isActive = true
-        saveButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -5).isActive = true
-        
         nameTextField.centerXAnchor.constraint(equalTo: containerView.centerXAnchor).isActive = true
-        nameTextField.centerYAnchor.constraint(equalTo: containerView.centerYAnchor).isActive = true
+        nameTextField.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 20).isActive = true
         nameTextField.widthAnchor.constraint(equalToConstant: textFieldWidth ).isActive = true
         nameTextField.heightAnchor.constraint(equalToConstant: 40).isActive = true
         
@@ -127,6 +124,11 @@ class CreateCreditPopupVc: UIViewController {
         detailTextField.topAnchor.constraint(equalTo: nameTextField.bottomAnchor, constant: 10).isActive = true
         detailTextField.widthAnchor.constraint(equalToConstant: textFieldWidth).isActive = true
         detailTextField.heightAnchor.constraint(equalToConstant: 40).isActive = true
+        
+        saveButton.centerXAnchor.constraint(equalTo: containerView.centerXAnchor).isActive = true
+        saveButton.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -10).isActive = true
+        saveButton.widthAnchor.constraint(equalToConstant: textFieldWidth).isActive = true
+        saveButton.heightAnchor.constraint(equalToConstant: 40).isActive = true
     }
     
 }

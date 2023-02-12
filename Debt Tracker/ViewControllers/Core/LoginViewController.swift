@@ -20,12 +20,19 @@ class LoginViewController: UIViewController {
     let dontHaveAccLabel = DTTitleLabel(textAlignment: .center, fontSize: 16, textColor: .label, text: "Don't have an account?")
     let registerLabel = DTTitleLabel(textAlignment: .center, fontSize: 18, textColor: .systemGray2, text: "REGISTER")
     
+    var isLoginTapped = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         configureViewController()
         applyConstraints()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        isLoginTapped = false
     }
     
     private func configureViewController() {
@@ -64,15 +71,20 @@ class LoginViewController: UIViewController {
     
     @objc func loginButtonTapped() {
         if let email = emailTextField.text, let password = passwordTextField.text {
-            Auth.auth().signIn(withEmail: email, password: password) { [weak self] authResult, error in
-                if let error = error {
-                    print(error.localizedDescription)
-                } else {
-                    let tabBarVC = MainTabBarViewController()
-                    tabBarVC.navigationItem.hidesBackButton = true
-                    self?.navigationController?.pushViewController(tabBarVC, animated: true)
-                }
+            
+            if isLoginTapped != true {
                 
+                AuthManager.shared.signInUser(email: email, password: password) { [weak self] result in
+                    switch result {
+                    case .success(_):
+                        let tabBarVC = MainTabBarViewController()
+                        tabBarVC.navigationItem.hidesBackButton = true
+                        self?.navigationController?.pushViewController(tabBarVC, animated: true)
+                    case .failure(let failure):
+                        print(failure.localizedDescription)
+                    }
+                }
+                isLoginTapped = true
             }
         }
     }
