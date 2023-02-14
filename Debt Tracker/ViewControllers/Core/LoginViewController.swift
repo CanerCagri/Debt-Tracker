@@ -36,6 +36,9 @@ class LoginViewController: UIViewController {
         emailTextField.text = ""
         passwordTextField.text = ""
         isLoginTapped = false
+        
+        emailTextField.text = "1@gmail.com"
+        passwordTextField.text = "123456"
     }
     
     private func configureViewController() {
@@ -92,7 +95,6 @@ class LoginViewController: UIViewController {
                         self?.presentAlert(title: "Warning", message: failure.localizedDescription, buttonTitle: "OK")
                     }
                 }
-                
             }
         }
     }

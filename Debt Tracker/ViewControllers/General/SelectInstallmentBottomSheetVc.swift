@@ -7,20 +7,18 @@
 
 import UIKit
 
-class CreditsBottomSheetVc: UIViewController {
+class SelectInstallmentBottomSheetVc: UIViewController {
     
     var pickerView = UIPickerView()
     let numbers = [3, 6, 9, 12, 18, 24, 30, 36, 42, 48, 54, 60, 66, 72, 78, 84, 90, 96, 102, 108, 114, 120, 126, 132, 138, 144, 150, 156, 162, 168, 174, 180, 186, 192, 198, 204, 210, 216, 222, 228, 234, 240]
     
     private let nextButton = DTButton(title: "Next", color: .systemPink, systemImageName: "checkmark.circle")
-    private let cancelButton = DTButton(title: "Cancel", color: .systemPink, systemImageName: "xmark.circle.fill")
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
         view.backgroundColor = .systemBackground
         nextButton.addTarget(self, action: #selector(nextButtonTapped), for: .touchUpInside)
-        cancelButton.addTarget(self, action: #selector(cancelButtonTapped), for: .touchUpInside)
         
         configurePickerView()
         addConstraints()
@@ -41,7 +39,7 @@ class CreditsBottomSheetVc: UIViewController {
         let selectedValue = numbers[selectedRow]
         
         let userInfo = ["selectedCount": selectedValue]
-        NotificationCenter.default.post(Notification(name: Notification.Name("nextTapped"), userInfo: userInfo))
+        NotificationCenter.default.post(Notification(name: Notification.Name("selectedCount"), userInfo: userInfo))
         dismiss(animated: true)
     }
     
@@ -50,13 +48,8 @@ class CreditsBottomSheetVc: UIViewController {
     }
     
     private func addConstraints() {
-        view.addSubviews(cancelButton, nextButton)
-        
-        cancelButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 5).isActive = true
-        cancelButton.topAnchor.constraint(equalTo: view.topAnchor, constant: 5).isActive = true
-        cancelButton.heightAnchor.constraint(equalToConstant: 40).isActive = true
-        cancelButton.widthAnchor.constraint(equalToConstant: 120).isActive = true
-        
+        view.addSubviews(nextButton)
+
         nextButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -5).isActive = true
         nextButton.topAnchor.constraint(equalTo: view.topAnchor, constant: 5).isActive = true
         nextButton.heightAnchor.constraint(equalToConstant: 40).isActive = true
@@ -64,7 +57,7 @@ class CreditsBottomSheetVc: UIViewController {
     }
 }
 
-extension CreditsBottomSheetVc: UIPickerViewDataSource, UIPickerViewDelegate {
+extension SelectInstallmentBottomSheetVc: UIPickerViewDataSource, UIPickerViewDelegate {
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
           return 1
       }

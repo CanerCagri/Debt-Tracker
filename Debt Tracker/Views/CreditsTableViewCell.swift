@@ -61,9 +61,8 @@ class CreditsTableViewCell: UITableViewCell {
         
         let formatter = NumberFormatter()
         formatter.numberStyle = .decimal
-        formatter.locale = Locale(identifier: "tr_TR")
-        formatter.currencySymbol = ""
-        formatter.positiveSuffix = " ₺"
+        formatter.groupingSeparator = "."
+        formatter.positiveSuffix = credit.currency
         
         nameLabel.text = "\(credit.name) - \(credit.detail) - %\(credit.interestRate)"
 

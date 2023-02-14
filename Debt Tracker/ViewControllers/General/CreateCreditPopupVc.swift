@@ -16,19 +16,10 @@ class CreateCreditPopupVc: UIViewController {
     
     let titleLabel = DTTitleLabel(textAlignment: .center, fontSize: 18, textColor: .label, text: "Add Bank")
     let saveButton = DTButton(title: "SAVE", color: .systemPink, systemImageName: "square.and.arrow.down")
-    
     let nameTextField = DTTextField(placeholder: "Enter Name", placeHolderSize: 15)
     let detailTextField = DTTextField(placeholder: "Enter Detail", placeHolderSize: 15)
+    private var closeButton = DTCloseButton()
     
-    private var closeButton: UIButton = {
-        var button = UIButton()
-        button.translatesAutoresizingMaskIntoConstraints = false
-        button.setImage(UIImage(systemName: "xmark.circle.fill"), for: .normal)
-        button.imageView?.translatesAutoresizingMaskIntoConstraints = false
-        button.imageView?.heightAnchor.constraint(equalToConstant: 44).isActive = true
-        button.imageView?.widthAnchor.constraint(equalToConstant: 44).isActive = true
-        return button
-    }()
     
     override func viewDidLoad() {
         super.viewDidLoad()

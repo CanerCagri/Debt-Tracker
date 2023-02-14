@@ -30,9 +30,7 @@ class DTButton: UIButton {
         configuration?.baseBackgroundColor = color
         configuration?.baseForegroundColor = .white
         
-        var container = AttributeContainer()
-        container.font = UIFont(name: "GillSans-SemiBold", size: 12)
-        configuration?.attributedTitle = AttributedString(title, attributes: container)
+        setTitle(title, for: .normal)
     }
     
     private func configure() {

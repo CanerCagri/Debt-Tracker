@@ -25,10 +25,8 @@ class CreditsDetailViewController: UIViewController {
         didSet
         {
             formatter.numberStyle = .decimal
-            
-            formatter.locale = Locale(identifier: "tr_TR")
-            formatter.currencySymbol = ""
-            formatter.positiveSuffix = " ₺"
+            formatter.groupingSeparator = "."
+            formatter.positiveSuffix = creditModel.currency
             
             title = creditModel.name
             next12MonthsString = creditModel.firstInstallmentDate
@@ -76,14 +74,14 @@ class CreditsDetailViewController: UIViewController {
         date = dateFormatter.date(from: creditModel.firstInstallmentDate)!
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        
-        formatter.numberStyle = .decimal
-        formatter.locale = Locale(identifier: "tr_TR")
-        formatter.currencySymbol = ""
-        formatter.positiveSuffix = " ₺"
-    }
+//    override func viewWillAppear(_ animated: Bool) {
+//        super.viewWillAppear(animated)
+//        
+//        formatter.numberStyle = .decimal
+//        formatter.locale = Locale(identifier: "tr_TR")
+//        formatter.currencySymbol = ""
+//        formatter.positiveSuffix = " ₺"
+//    }
     
     private func configureTableView() {
         detailTableView.delegate = self
@@ -135,7 +133,7 @@ extension CreditsDetailViewController: UITableViewDelegate, UITableViewDataSourc
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: CreditsDetailTableViewCell.identifier) as! CreditsDetailTableViewCell
-        cell.nameLabel.text = "\(indexPath.row + 1). month:"
+        cell.nameLabel.text = "Installment \(indexPath.row + 1)."
 
         let priceLabelTextFormatted = formatter.string(from: creditModel.monthlyInstallment as NSNumber)
         cell.priceLabel.text = priceLabelTextFormatted
@@ -197,7 +195,7 @@ extension CreditsDetailViewController: UITableViewDelegate, UITableViewDataSourc
         self.selectedPaidDebt = creditModel.monthlyInstallment + creditModel.paidDebt
         self.selectedRemainingDebt = creditModel.monthlyInstallment - self.creditModel.remainingDebt
 
-        let viewModel = CreditDetailModel(name: (self.creditModel.name), detail: (self.creditModel.detail), entryDebt: Int((self.creditModel.entryDebt)), installmentCount: Int((self.creditModel.installmentCount)), paidCount: Int((self.selectedMonthCount!)), monthlyInstallment: (self.creditModel.monthlyInstallment), firstInstallmentDate: (self.creditModel.firstInstallmentDate), currentInstallmentDate: (self.selectedMonthDate!), totalDebt: (self.creditModel.totalDebt), interestRate: (self.creditModel.interestRate), remainingDebt: (self.selectedRemainingDebt!), paidDebt: self.selectedPaidDebt!, email: email)
+        let viewModel = CreditDetailModel(name: (self.creditModel.name), detail: (self.creditModel.detail), entryDebt: Int((self.creditModel.entryDebt)), installmentCount: Int((self.creditModel.installmentCount)), paidCount: Int((self.selectedMonthCount!)), monthlyInstallment: (self.creditModel.monthlyInstallment), firstInstallmentDate: (self.creditModel.firstInstallmentDate), currentInstallmentDate: (self.selectedMonthDate!), totalDebt: (self.creditModel.totalDebt), interestRate: (self.creditModel.interestRate), remainingDebt: (self.selectedRemainingDebt!), paidDebt: self.selectedPaidDebt!, email: email, currency: self.creditModel.currency)
 
         let yesAction = UIAlertAction(title: "Yes, I did pay selected Installment.", style: .default) { [weak self] (action) in
             

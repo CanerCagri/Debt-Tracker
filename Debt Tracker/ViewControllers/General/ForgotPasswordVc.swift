@@ -108,5 +108,4 @@ class ForgotPasswordVc: UIViewController {
         closeButton.heightAnchor.constraint(equalToConstant: 40).isActive = true
         
     }
- 
 }

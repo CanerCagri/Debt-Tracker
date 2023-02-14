@@ -21,4 +21,5 @@ struct CreditDetailModel: Codable, Hashable {
     var remainingDebt: Double
     var paidDebt: Double
     var email: String
+    var currency: String
 }

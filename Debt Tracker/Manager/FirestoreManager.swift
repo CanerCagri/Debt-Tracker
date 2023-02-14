@@ -116,9 +116,10 @@ class FirestoreManager {
                                    let totalDebt = data["totalDebt"] as? Double,
                                    let interestRate = data["interestRate"] as? Double,
                                    let remainingDebt = data["remainingDebt"] as? Double,
-                                   let paidDebt = data["paidDebt"] as? Double {
+                                   let paidDebt = data["paidDebt"] as? Double,
+                                   let currency = data["currency"] as? String {
                                     
-                                    let creditModel = CreditDetailModel(name: name, detail: detail, entryDebt: entryDebt, installmentCount: installmentCount, paidCount: paidCount, monthlyInstallment: monthlyInstallment, firstInstallmentDate: firstInstallmentDate, currentInstallmentDate: currentInstallmentDate, totalDebt: totalDebt, interestRate: interestRate, remainingDebt: remainingDebt, paidDebt: paidDebt, email: email)
+                                    let creditModel = CreditDetailModel(name: name, detail: detail, entryDebt: entryDebt, installmentCount: installmentCount, paidCount: paidCount, monthlyInstallment: monthlyInstallment, firstInstallmentDate: firstInstallmentDate, currentInstallmentDate: currentInstallmentDate, totalDebt: totalDebt, interestRate: interestRate, remainingDebt: remainingDebt, paidDebt: paidDebt, email: email, currency: currency)
                                     banks.append(creditModel)
                                     documentIds.append(doc.documentID)
                                 }
@@ -148,7 +149,8 @@ class FirestoreManager {
                                                     "interestRate": creditModel.interestRate,
                                                     "remainingDebt": creditModel.remainingDebt,
                                                     "paidDebt": creditModel.paidDebt,
-                                                    "createDate": Date().timeIntervalSince1970 ]) { error in
+                                                    "createDate": Date().timeIntervalSince1970,
+                                                    "currency": creditModel.currency ]){ error in
             if let error = error {
                 completion(.failure(error))
             } else {
@@ -172,7 +174,8 @@ class FirestoreManager {
                              "totalDebt": viewModel.totalDebt,
                              "interestRate": viewModel.interestRate,
                              "remainingDebt": viewModel.remainingDebt,
-                             "paidDebt": viewModel.paidDebt ]) { error in
+                             "paidDebt": viewModel.paidDebt,
+                             "currency": viewModel.currency ]) { error in
             if let error = error {
                 completion(.failure(error))
             } else {
