@@ -7,6 +7,8 @@
 
 import UIKit
 import Firebase
+import FirebaseAuth
+import GoogleSignIn
 
 class LoginViewController: UIViewController {
     
@@ -19,6 +21,7 @@ class LoginViewController: UIViewController {
     var forgetPasswordLabel = DTTitleLabel(textAlignment: .center, fontSize: 18, textColor: .systemGray2, text: "Forgot Password?")
     let dontHaveAccLabel = DTTitleLabel(textAlignment: .center, fontSize: 16, textColor: .label, text: "Don't have an account?")
     let registerLabel = DTTitleLabel(textAlignment: .center, fontSize: 18, textColor: .systemGray2, text: "REGISTER")
+    let googleSignInButton = GIDSignInButton()
     
     var isLoginTapped = false
     var isRightBarButtonTapped = false
@@ -44,7 +47,7 @@ class LoginViewController: UIViewController {
     private func configureViewController() {
         view.backgroundColor = .systemBackground
         passwordTextField.isSecureTextEntry = true
-    
+        
         let leftPaddingView = UIView(frame: CGRect(x: 0, y: 0, width: 40, height: 30))
         passwordTextField.leftView = leftPaddingView
         passwordTextField.leftViewMode = .always
@@ -52,7 +55,7 @@ class LoginViewController: UIViewController {
         showPasswordButton.setImage(UIImage(systemName: "eye.slash"), for: .normal)
         showPasswordButton.frame = CGRect(x: -5, y: 0, width: 30, height: 30)
         showPasswordButton.addTarget(self, action: #selector(togglePasswordVisibility), for: .touchUpInside)
-
+        
         passwordTextField.rightView = containerView
         passwordTextField.rightViewMode = .always
         
@@ -72,12 +75,43 @@ class LoginViewController: UIViewController {
             self?.isRightBarButtonTapped = false
         }
         
+        googleSignInButton.addTarget(self, action: #selector(signInWithGooglePressed), for: .touchUpInside)
+        
+    }
+    
+    
+    @objc func signInWithGooglePressed() {
+        // Start the sign in flow!
+        GIDSignIn.sharedInstance.signIn(withPresenting: self) { [weak self] signInResult, err in
+            
+            if let error = err {
+                print(error.localizedDescription)
+                return
+            }
+            
+            guard let authentication = signInResult?.user, let idToken = authentication.idToken?.tokenString else { return }
+            
+            let credential = GoogleAuthProvider.credential(withIDToken: idToken,
+                                                           accessToken: authentication.accessToken.tokenString)
+            
+            AuthManager.shared.signInUserWithGoogle(credential: credential) { [weak self] result in
+                switch result {
+                case .success(_):
+                    self?.isLoginTapped = true
+                    let tabBarVC = MainTabBarViewController()
+                    tabBarVC.navigationItem.hidesBackButton = true
+                    self?.navigationController?.pushViewController(tabBarVC, animated: true)
+                case .failure(let failure):
+                    self?.presentAlert(title: "Warning", message: failure.localizedDescription, buttonTitle: "OK")
+                }
+            }
+        }
     }
     
     @objc func didTapRightBarButton() {
         self.navigationController?.popViewController(animated: true)
     }
-
+    
     
     @objc func loginButtonTapped() {
         if let email = emailTextField.text, let password = passwordTextField.text {
@@ -111,7 +145,7 @@ class LoginViewController: UIViewController {
             }
             isRightBarButtonTapped = true
         }
-       }
+    }
     
     @objc func registerPagePresent() {
         let registerVC = RegisterViewController()
@@ -119,19 +153,22 @@ class LoginViewController: UIViewController {
     }
     
     @objc func togglePasswordVisibility() {
-         passwordTextField.isSecureTextEntry.toggle()
-
-         if passwordTextField.isSecureTextEntry {
-             showPasswordButton.setImage(UIImage(systemName: "eye.slash"), for: .normal)
-         } else {
-             showPasswordButton.setImage(UIImage(systemName: "eye"), for: .normal)
-         }
-     }
+        passwordTextField.isSecureTextEntry.toggle()
+        
+        if passwordTextField.isSecureTextEntry {
+            showPasswordButton.setImage(UIImage(systemName: "eye.slash"), for: .normal)
+        } else {
+            showPasswordButton.setImage(UIImage(systemName: "eye"), for: .normal)
+        }
+    }
     
     private func applyConstraints() {
-        view.addSubviews(detailLabel, emailTextField, passwordTextField, loginButton, forgetPasswordLabel, dontHaveAccLabel, registerLabel)
+        view.addSubviews(detailLabel, emailTextField, passwordTextField, loginButton, forgetPasswordLabel, googleSignInButton, dontHaveAccLabel, registerLabel)
         containerView.addSubview(showPasswordButton)
-    
+        googleSignInButton.translatesAutoresizingMaskIntoConstraints = false
+        googleSignInButton.style = .wide
+        googleSignInButton.colorScheme = .light
+        
         detailLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         detailLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 50).isActive = true
         
@@ -152,6 +189,11 @@ class LoginViewController: UIViewController {
         
         forgetPasswordLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         forgetPasswordLabel.topAnchor.constraint(equalTo: loginButton.bottomAnchor, constant: 5).isActive = true
+        
+        googleSignInButton.topAnchor.constraint(equalTo: forgetPasswordLabel.bottomAnchor, constant: 20).isActive = true
+        googleSignInButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20).isActive = true
+        googleSignInButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20).isActive = true
+        googleSignInButton.heightAnchor.constraint(equalToConstant: 40).isActive = true
         
         registerLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         registerLabel.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -100).isActive = true

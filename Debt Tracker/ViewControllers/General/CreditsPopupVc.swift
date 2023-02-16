@@ -143,6 +143,9 @@ class CreditsPopupVc: UIViewController {
     }
     
     func calculateRateAndTotalPayment() {
+        
+        totalPaymentResultLabel.text = "0 \(currencyISO)"
+        
         guard let amount = amountTextField.text, !amount.isEmpty else { return }
         guard let monthly = monthlyTextField.text, !monthly.isEmpty else { return }
         

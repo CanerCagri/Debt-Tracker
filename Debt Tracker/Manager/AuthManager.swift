@@ -32,6 +32,16 @@ class AuthManager {
         }
     }
     
+    func signInUserWithGoogle(credential: AuthCredential, completion: @escaping (Result<Void, Error>) -> Void) {
+        Auth.auth().signIn(with: credential) { authResult, error in
+            if let error = error {
+                completion(.failure(error))
+            } else {
+                completion(.success(()))
+            }
+        }
+    }
+    
     func resetPassword(email: String, completion: @escaping (Result<Void, Error>) -> Void) {
         Auth.auth().sendPasswordReset(withEmail: email) { error in
             if let error = error {
