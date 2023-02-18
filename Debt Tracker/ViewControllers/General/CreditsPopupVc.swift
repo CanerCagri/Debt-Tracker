@@ -47,6 +47,7 @@ class CreditsPopupVc: UIViewController {
     var calculatedPayment = 0.0
     
     let formatter = NumberFormatter()
+    let numberFormatter = NumberFormatter()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -83,6 +84,12 @@ class CreditsPopupVc: UIViewController {
             self?.currencyButton.setTitle(String(self!.currency), for: .normal)
             self?.calculateRateAndTotalPayment()
         }
+        
+        numberFormatter.numberStyle = .currency
+        numberFormatter.groupingSeparator = "."
+        numberFormatter.decimalSeparator = ","
+        
+        
     }
     
     @objc func saveButtonTapped() {
@@ -213,6 +220,8 @@ class CreditsPopupVc: UIViewController {
         view.addSubview(containerView)
         containerView.backgroundColor = .systemGray5
         firstInstallmentDatePicker.translatesAutoresizingMaskIntoConstraints = false
+        amountTextField.delegate = self
+        monthlyTextField.delegate = self
         
         containerView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         containerView.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
@@ -288,4 +297,7 @@ class CreditsPopupVc: UIViewController {
         saveButton.heightAnchor.constraint(equalToConstant: 40).isActive = true
         
     }
+}
+
+extension CreditsPopupVc: UITextFieldDelegate {
 }
