@@ -18,33 +18,36 @@ class DTButton: UIButton {
         fatalError("init(coder:) has not been implemented")
     }
     
-    init(title: String, color: UIColor, systemImageName: String) {
+    init(title: String, color: UIColor, systemImageName: String, size: CGFloat) {
         super.init(frame: .zero)
         configure()
-        set(color: color, title: title, systemImageName: systemImageName)
+        set(color: color, title: title, systemImageName: systemImageName, size: size)
     }
     
-    init(title: String, color: UIColor) {
+    init(title: String, color: UIColor, size: CGFloat? = 15) {
         super.init(frame: .zero)
         configure()
         configuration?.baseBackgroundColor = color
         configuration?.baseForegroundColor = .white
+    
+        var container = AttributeContainer()
+        container.font = UIFont(name: "GillSans-SemiBold", size: size!)
+        configuration?.attributedTitle = AttributedString(title, attributes: container)
         
-        setTitle(title, for: .normal)
     }
     
     private func configure() {
         configuration = .filled()
-        configuration?.cornerStyle = .medium
+        configuration?.cornerStyle = .capsule
         translatesAutoresizingMaskIntoConstraints = false
     }
     
-    func set(color: UIColor, title: String, systemImageName: String) {
+    func set(color: UIColor, title: String, systemImageName: String, size: CGFloat) {
         configuration?.baseBackgroundColor = color
         configuration?.baseForegroundColor = .white
         
         var container = AttributeContainer()
-        container.font = UIFont(name: "GillSans-SemiBold", size: 15)
+        container.font = UIFont(name: "GillSans-SemiBold", size: size)
         configuration?.attributedTitle = AttributedString(title, attributes: container)
         
         configuration?.image = UIImage(systemName: systemImageName)

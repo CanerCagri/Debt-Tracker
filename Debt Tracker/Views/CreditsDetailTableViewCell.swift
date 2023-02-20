@@ -8,9 +8,6 @@
 import UIKit
 
 class CreditsDetailTableViewCell: UITableViewCell {
-
-    static let identifier = "CreditsDetailTableViewCell"
-    
     
     var nameLabel = DTTitleLabel(textAlignment: .left, fontSize: 14)
     var priceLabel = DTTitleLabel(textAlignment: .center, fontSize: 14)
@@ -26,7 +23,6 @@ class CreditsDetailTableViewCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-
     func applyConstraints() {
         addSubviews(nameLabel, priceLabel, dateLabel)
         

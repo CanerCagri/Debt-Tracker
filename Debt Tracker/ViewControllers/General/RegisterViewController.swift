@@ -15,7 +15,7 @@ class RegisterViewController: UIViewController {
     let passwordTextField = DTTextField(placeholder: "Password", placeHolderSize: 15, cornerRadius: 14)
     let containerView = UIView(frame: CGRect(x: 0, y: 0, width: 40, height: 30))
     let showPasswordButton = UIButton(type: .system)
-    let registerButton = DTButton(title: "REGISTER", color: .systemPink, systemImageName: "checkmark.circle")
+    let registerButton = DTButton(title: "REGISTER", color: .systemPink, systemImageName: "checkmark.circle", size: 20)
     
     
     override func viewDidLoad() {

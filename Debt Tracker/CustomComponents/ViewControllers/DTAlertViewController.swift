@@ -12,7 +12,7 @@ class DTAlertViewController: UIViewController {
     let containerView = DTContainerView()
     let titleLabel = DTTitleLabel(textAlignment: .center, fontSize: 20)
     let bodyLabel = DTBodyLabel(textAlignment: .center, fontSize: 15)
-    let actionButton = DTButton(title: "Ok", color: .systemPink, systemImageName: "checkmark.circle")
+    let actionButton = DTButton(title: "Ok", color: .systemPink, systemImageName: "checkmark.circle", size: 20)
     
     var alertTitle: String?
     var message: String?

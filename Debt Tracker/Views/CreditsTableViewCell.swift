@@ -8,9 +8,7 @@
 import UIKit
 
 class CreditsTableViewCell: UITableViewCell {
-    
-    static let identifier = "CreditsTableViewCell"
-    
+
     var containerViewOne = UIView()
     var containerViewTwo = UIView()
     var containerViewThree = UIView()

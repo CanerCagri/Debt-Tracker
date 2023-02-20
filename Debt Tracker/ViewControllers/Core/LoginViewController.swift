@@ -19,7 +19,7 @@ class LoginViewController: UIViewController, LoginButtonDelegate {
     let passwordTextField = DTTextField(placeholder: "Password", placeHolderSize: 15, cornerRadius: 14)
     let containerView = UIView(frame: CGRect(x: 0, y: 0, width: 40, height: 30))
     let showPasswordButton = UIButton(type: .system)
-    let loginButton = DTButton(title: "LOGIN", color: .systemPink, systemImageName: "checkmark.circle")
+    let loginButton = DTButton(title: "LOGIN", color: .systemPink, systemImageName: "checkmark.circle", size: 20)
     var forgetPasswordLabel = DTTitleLabel(textAlignment: .center, fontSize: 18, textColor: .systemGray2, text: "Forgot Password?")
     let dontHaveAccLabel = DTTitleLabel(textAlignment: .center, fontSize: 16, textColor: .label, text: "Don't have an account?")
     let registerLabel = DTTitleLabel(textAlignment: .center, fontSize: 18, textColor: .systemGray2, text: "REGISTER")
@@ -102,7 +102,7 @@ class LoginViewController: UIViewController, LoginButtonDelegate {
             let credential = GoogleAuthProvider.credential(withIDToken: idToken,
                                                            accessToken: authentication.accessToken.tokenString)
             
-            AuthManager.shared.signInUserWithGoogle(credential: credential) { [weak self] result in
+            AuthManager.shared.signInUserWith(with: credential) { [weak self] result in
                 switch result {
                 case .success(_):
                     self?.isLoginTapped = true
@@ -182,7 +182,7 @@ class LoginViewController: UIViewController, LoginButtonDelegate {
 
         let credential = FacebookAuthProvider.credential(withAccessToken: AccessToken.current!.tokenString)
 
-        AuthManager.shared.signInUserWithGoogle(credential: credential) { [weak self] result in
+        AuthManager.shared.signInUserWith(with: credential) { [weak self] result in
             switch result {
             case .success(_):
                 self?.isLoginTapped = true

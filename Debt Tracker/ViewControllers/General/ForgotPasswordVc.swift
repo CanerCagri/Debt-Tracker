@@ -14,8 +14,8 @@ class ForgotPasswordVc: UIViewController {
     
     let titleLabel = DTTitleLabel(textAlignment: .center, fontSize: 18, textColor: .label, text: "Reset Password")
     let emailTextField = DTTextField(placeholder: "Enter Email", placeHolderSize: 15)
-    let resetButton = DTButton(title: "RESET PASSWORD", color: .systemPink, systemImageName: "arrow.clockwise")
-    let closeButton = DTButton(title: "CLOSE", color: UIColor.systemGray.withAlphaComponent(0.5), systemImageName: "xmark")
+    let resetButton = DTButton(title: "RESET PASSWORD", color: .systemPink, systemImageName: "arrow.clockwise", size: 20)
+    let closeButton = DTButton(title: "CLOSE", color: UIColor.systemGray.withAlphaComponent(0.5), systemImageName: "xmark", size: 20)
     
 
     override func viewDidLoad() {
