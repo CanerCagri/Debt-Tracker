@@ -32,6 +32,16 @@ class CreditsTableViewCell: UITableViewCell {
             paidCount.text = "\(count) paid"
             remainingCount.text = "\(totalInstallmentCount - count) remaining"
             progressBar.setProgress(Float(count)/Float(Int(totalInstallmentCount)), animated: true)
+            
+            if count == totalInstallmentCount{
+                backgroundColor = .systemGreen
+                monthlyDepth.textColor = .label
+                nextPayment.textColor = .label
+            } else {
+                backgroundColor = .systemBackground
+                monthlyDepth.textColor = .systemGray2
+                nextPayment.t = .systemGray2
+            }
         }
     }
     
@@ -56,36 +66,83 @@ class CreditsTableViewCell: UITableViewCell {
     }
     
     func set(credit: CreditDetailModel) {
-        
         let formatter = NumberFormatter()
         formatter.numberStyle = .decimal
         formatter.groupingSeparator = "."
         formatter.positiveSuffix = credit.currency
         
         nameLabel.text = "\(credit.name) - \(credit.detail) - %\(credit.interestRate)"
-
-        let entryDebtFormatted = formatter.string(from: credit.entryDebt as NSNumber)
-        entryDebt.text = entryDebtFormatted ?? ""
+        entryDebt.text = credit.entryDebt
         
         totalInstallmentCount = Int(credit.installmentCount)
         count = Int(credit.paidCount)
-        
-        let monthlyFormatted = formatter.string(from: credit.monthlyInstallment as NSNumber)
-        monthlyDepth.text = "Monthly Installment: \(monthlyFormatted ?? "")"
-        
+    
+        monthlyDepth.text = "Monthly Installment: \(credit.monthlyInstallment)"
         nextPayment.text = "Next Payment: \(credit.currentInstallmentDate)"
-        
-        let totalDebtFormatted = formatter.string(from: credit.totalDebt as NSNumber)
-        totalDebt.text = totalDebtFormatted ?? ""
-        
-        let totalPaidDebtFormatted = formatter.string(from: credit.paidDebt as NSNumber)
-        paid.text = totalPaidDebtFormatted ?? ""
-        
-        let calculateRemaining = Double(credit.totalDebt) - credit.paidDebt
-        let remainingTextFormatted = formatter.string(from: calculateRemaining as NSNumber)
-        remaining.text = remainingTextFormatted ?? ""
+        totalDebt.text = credit.totalDebt
+        paid.text = credit.paidDebt
+//        remaining.text = currencyInputFormatting(for: "\(credit.currency)\(credit.remainingDebt)")
+        let str = convertToDouble(inputString: credit.totalDebt)
+        let formatter1 = NumberFormatter()
+        formatter1.numberStyle = .decimal
+        if let number = formatter1.number(from: String(str))?.doubleValue {
+            let calculateRemaining = number - convertToDouble(inputString: credit.paidDebt)
+            let remainingTextFormatted = formatter1.string(from: calculateRemaining as NSNumber)
+            remaining.text = "\(credit.currency)\(remainingTextFormatted ?? "Error")"
+            
+        } else {
+            print("Invalid format")
+           
+        }
     }
     
+    func convertToDouble(inputString: String) -> Double {
+        let pattern = "[\\d,.]+"
+        let regex = try! NSRegularExpression(pattern: pattern, options: [])
+        
+        let matches = regex.matches(in: inputString, options: [], range: NSRange(location: 0, length: inputString.utf16.count))
+        let numbersAndCommas = matches.map { match in
+            String(inputString[Range(match.range, in: inputString)!])
+        }
+        let result = numbersAndCommas.joined()
+        
+        let str = result
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .decimal
+        if let number = formatter.number(from: str)?.doubleValue {
+            return number
+        } else {
+            print("Invalid format")
+            return 0.0
+        }
+    }
+    
+    func currencyInputFormatting(for amount: String) -> String {
+        let numberFormatter = NumberFormatter()
+        numberFormatter.numberStyle = .currency
+        
+        let numberOfDecimalPlaces = numberFormatter.maximumFractionDigits
+        
+        //Clean the inputed string
+        var cleanedAmount = ""
+        
+        for character in amount {
+            if character.isNumber {
+                cleanedAmount.append(character)
+            }
+        }
+        
+        //Format the number based on number of decimal digits
+        if numberOfDecimalPlaces > 0 {
+            //ie. USD
+            let amountAsDouble = Double(cleanedAmount) ?? 0.0
+            return numberFormatter.string(from: amountAsDouble / 100.0 as NSNumber) ?? ""
+        } else {
+            //ie. JPY
+            let amountAsNumber = Double(cleanedAmount) as NSNumber?
+            return numberFormatter.string(from: amountAsNumber ?? 0) ?? ""
+        }
+    }
     
     func applyConstraints() {
         

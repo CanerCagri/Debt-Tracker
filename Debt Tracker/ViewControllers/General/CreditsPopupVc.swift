@@ -14,6 +14,29 @@ class CreditsPopupVc: UIViewController {
     
     let installmentBottomVc = SelectInstallmentBottomSheetVc()
     let currencyBottomVc = SelectCurrencyBottomVc()
+    private let containerView = DTContainerView()
+    let titleLabel = DTTitleLabel(textAlignment: .center, fontSize: 20, textColor: .label, text: "Add Credit")
+    let saveButton = DTButton(title: "Save", color: .systemPink, systemImageName: "square.and.arrow.down", size: 20)
+    let creditNameLabel = DTTitleLabel(textAlignment: .left, fontSize: 25)
+    let creditDetailLabel = DTTitleLabel(textAlignment: .left, fontSize: 18)
+    var currencyButton = DTButton(title: "Select Currency", color: .systemRed, size: 20)
+    var amountTextField = CurrencyTextField(size: 18)
+    var monthlyTextField = CurrencyTextField(size: 18)
+    let monthlyInstallmentCountLabel = DTTitleLabel(textAlignment: .left, fontSize: 15, text: "Select Number Of Installments:")
+    var monthlyInstallmentCountButton = DTButton(title: "12", color: .systemRed)
+    let rateLabel = DTTitleLabel(textAlignment: .left, fontSize: 18, textColor: .systemGray, text: "Interest Rate: ")
+    let rateResultLabel = DTTitleLabel(textAlignment: .left, fontSize: 18, textColor: .systemGray, text: "%0.0")
+    let totalPaymentLabel = DTTitleLabel(textAlignment: .left, fontSize: 18, textColor: .systemGray, text: "Total Payment:")
+    let totalPaymentResultLabel = DTTitleLabel(textAlignment: .left, fontSize: 18, textColor: .systemGray, text: "$0")
+    let firstInstallmentLabel = DTTitleLabel(textAlignment: .left, fontSize: 15, text: "Select First Installment:")
+    let firstInstallmentDatePicker = UIDatePicker()
+    private var closeButton = DTCloseButton()
+    
+    var monthCount = 12
+    var currencySymbol = "$"
+    var firstInstallmentDate = ""
+    var interestRateCalculated = ""
+    var locale = "en_EN"
     
     var selectedCredit: BankDetails? {
         didSet {
@@ -28,8 +51,9 @@ class CreditsPopupVc: UIViewController {
             var container = AttributeContainer()
             container.font = UIFont(name: "GillSans-SemiBold", size: 20)
             currencyButton.configuration?.attributedTitle = AttributedString(selectedCurrency!.retrieveDetailedInformation(), attributes: container)
-            currencySymbol = " \(selectedCurrency!.retriviedCurrencySymbol())"
-            totalPaymentResultLabel.text = "0 \(selectedCurrency!.retriviedCurrencySymbol())"
+            currencySymbol = "\(selectedCurrency!.retriviedCurrencySymbol())"
+            totalPaymentResultLabel.text = "\(selectedCurrency!.retriviedCurrencySymbol())0"
+            locale = selectedCurrency!.locale
             amountTextField.text?.removeAll()
             amountTextField.currency = selectedCurrency
             amountTextField.becomeFirstResponder()
@@ -39,31 +63,6 @@ class CreditsPopupVc: UIViewController {
         }
     }
     
-    private let containerView = DTContainerView()
-    let titleLabel = DTTitleLabel(textAlignment: .center, fontSize: 20, textColor: .label, text: "Add Credit")
-    let saveButton = DTButton(title: "Save", color: .systemPink, systemImageName: "square.and.arrow.down", size: 20)
-    let creditNameLabel = DTTitleLabel(textAlignment: .left, fontSize: 25)
-    let creditDetailLabel = DTTitleLabel(textAlignment: .left, fontSize: 18)
-    var currencyButton = DTButton(title: "Select Currency", color: .systemRed, size: 20)
-    var amountTextField = CurrencyTextField(size: 18)
-    var monthlyTextField = CurrencyTextField(size: 18)
-    let monthlyInstallmentCountLabel = DTTitleLabel(textAlignment: .left, fontSize: 15, text: "Select Number Of Installments:")
-    var monthlyInstallmentCountButton = DTButton(title: "12", color: .systemRed)
-    let rateLabel = DTTitleLabel(textAlignment: .left, fontSize: 18, textColor: .systemGray, text: "Interest Rate: ")
-    let rateResultLabel = DTTitleLabel(textAlignment: .left, fontSize: 18, textColor: .systemGray, text: "%0.0")
-    let totalPaymentLabel = DTTitleLabel(textAlignment: .left, fontSize: 18, textColor: .systemGray, text: "Total Payment:")
-    let totalPaymentResultLabel = DTTitleLabel(textAlignment: .left, fontSize: 18, textColor: .systemGray, text: "0 $")
-    let firstInstallmentLabel = DTTitleLabel(textAlignment: .left, fontSize: 15, text: "Select First Installment:")
-    let firstInstallmentDatePicker = UIDatePicker()
-    private var closeButton = DTCloseButton()
-    
-    var monthCount = 12
-    var currencySymbol = " $"
-    var firstInstallmentDate = ""
-    var interestRateCalculated = ""
-    var calculatedPayment = 0.0
-    
-    let formatter = NumberFormatter()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -108,11 +107,15 @@ class CreditsPopupVc: UIViewController {
             return
         }
         
+        guard let calculatedPayment = totalPaymentResultLabel.text, !calculatedPayment.isEmpty else {
+            return
+        }
+        
         guard let userEmail = Auth.auth().currentUser?.email else {
             return
         }
         
-        let creditModel = CreditDetailModel(name: creditNameLabel.text!, detail: creditDetailLabel.text!, entryDebt: Int(amount)!, installmentCount: monthCount, paidCount: 0, monthlyInstallment: Double(monthly)!, firstInstallmentDate: firstInstallmentDate, currentInstallmentDate: firstInstallmentDate, totalDebt: calculatedPayment, interestRate: Double(interestRateCalculated)!, remainingDebt: calculatedPayment, paidDebt: 0.0, email: userEmail, currency: currencySymbol)
+        let creditModel = CreditDetailModel(name: creditNameLabel.text!, detail: creditDetailLabel.text!, entryDebt: amount, installmentCount: monthCount, paidCount: 0, monthlyInstallment: monthly, firstInstallmentDate: firstInstallmentDate, currentInstallmentDate: firstInstallmentDate, totalDebt: calculatedPayment, interestRate: Double(interestRateCalculated)!, remainingDebt: calculatedPayment, paidDebt: "\(currencySymbol)0", email: userEmail, currency: currencySymbol)
         
         FirestoreManager.shared.createCredit(creditModel: creditModel) { [weak self] result in
             switch result {
@@ -155,20 +158,19 @@ class CreditsPopupVc: UIViewController {
         guard let amount = amountTextField.text, !amount.isEmpty else { return }
         guard let monthly = monthlyTextField.text, !monthly.isEmpty else { return }
         
-        let cleanedText = monthlyTextField.text!.replacingOccurrences(of: "[^0-9.]", with: "", options: .regularExpression).replacingOccurrences(of: ",", with: "")
+
+        let result = Currency.formatCurrencyStringAsDouble(with: locale, for: monthly) * Double(monthCount)
+        let calculated = String(format: "%.2f", result)
+        totalPaymentResultLabel.text = Currency.currencyInputFormatting(with: locale, for: calculated)
         
-        
-        let result = Double(cleanedText)! * Double(monthCount)
-        totalPaymentResultLabel.text = "\(result)\(currencySymbol)"
-        
-        let cleanedAmount = amountTextField.text!.replacingOccurrences(of: "[^0-9.]", with: "", options: .regularExpression).replacingOccurrences(of: ",", with: "")
-        
-        let interestPrice = result - Double(cleanedAmount)!
-        let interestRate = (interestPrice / Double(cleanedAmount)!) * Double(monthCount)
-        interestRateCalculated = "\(String(format: "%.2f", interestRate))"
+        let cleanedAmount = Currency.formatCurrencyStringAsDouble(with: locale, for: amount)
+
+        let interestPrice = result - cleanedAmount
+        let interestRate = (interestPrice / cleanedAmount) * Double(monthCount)
+        interestRateCalculated = String(format: "%.2f", interestRate)
         rateResultLabel.text = "%\(interestRateCalculated)"
     }
-    
+        
     func animateOut() {
         UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 1, options: .curveEaseIn) { [weak self] in
             self?.containerView.transform = CGAffineTransform(translationX: 0, y: -(self?.view.frame.height)!)
@@ -198,7 +200,6 @@ class CreditsPopupVc: UIViewController {
     }
     
     @objc func openInstallmentBottomSheet() {
-        
         if let sheet = installmentBottomVc.sheetPresentationController {
             sheet.detents = [.medium()]
             sheet.prefersGrabberVisible = true

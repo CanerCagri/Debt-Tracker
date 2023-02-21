@@ -40,6 +40,10 @@ struct Currency {
         return symbol ?? "N/A"
     }
     
+    func retriviedLocale() -> (String) {
+        return locale 
+    }
+    
 
     //MARK: Use when saving to a database which only requires numeric values
     static func formatCurrencyStringAsDouble(with localeString: String, for stringAmount: String) -> Double {

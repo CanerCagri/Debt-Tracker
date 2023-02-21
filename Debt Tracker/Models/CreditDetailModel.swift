@@ -10,16 +10,16 @@ import Foundation
 struct CreditDetailModel: Codable, Hashable {
     var name: String
     var detail: String
-    var entryDebt: Int
+    var entryDebt: String
     var installmentCount: Int
     var paidCount: Int
-    var monthlyInstallment: Double
+    var monthlyInstallment: String
     var firstInstallmentDate: String
     var currentInstallmentDate: String
-    var totalDebt: Double
+    var totalDebt: String
     var interestRate: Double
-    var remainingDebt: Double
-    var paidDebt: Double
+    var remainingDebt: String
+    var paidDebt: String
     var email: String
     var currency: String
 }

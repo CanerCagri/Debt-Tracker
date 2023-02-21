@@ -107,16 +107,16 @@ class FirestoreManager {
                             if email == Auth.auth().currentUser?.email {
                                 if let name = data["name"] as? String,
                                    let detail = data["detail"] as? String,
-                                   let entryDebt = data["entryDebt"] as? Int,
+                                   let entryDebt = data["entryDebt"] as? String,
                                    let installmentCount = data["installmentCount"] as? Int,
                                    let paidCount = data["paidCount"] as? Int,
-                                   let monthlyInstallment = data["monthlyInstallment"] as? Double,
+                                   let monthlyInstallment = data["monthlyInstallment"] as? String,
                                    let firstInstallmentDate = data["firstInstallmentDate"] as? String,
                                    let currentInstallmentDate = data["currentInstallmentDate"] as? String,
-                                   let totalDebt = data["totalDebt"] as? Double,
+                                   let totalDebt = data["totalDebt"] as? String,
                                    let interestRate = data["interestRate"] as? Double,
-                                   let remainingDebt = data["remainingDebt"] as? Double,
-                                   let paidDebt = data["paidDebt"] as? Double,
+                                   let remainingDebt = data["remainingDebt"] as? String,
+                                   let paidDebt = data["paidDebt"] as? String,
                                    let currency = data["currency"] as? String {
                                     
                                     let creditModel = CreditDetailModel(name: name, detail: detail, entryDebt: entryDebt, installmentCount: installmentCount, paidCount: paidCount, monthlyInstallment: monthlyInstallment, firstInstallmentDate: firstInstallmentDate, currentInstallmentDate: currentInstallmentDate, totalDebt: totalDebt, interestRate: interestRate, remainingDebt: remainingDebt, paidDebt: paidDebt, email: email, currency: currency)
