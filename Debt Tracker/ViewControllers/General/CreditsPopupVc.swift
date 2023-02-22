@@ -47,7 +47,6 @@ class CreditsPopupVc: UIViewController {
     
     var selectedCurrency: Currency? {
         didSet {
-            
             var container = AttributeContainer()
             container.font = UIFont(name: "GillSans-SemiBold", size: 20)
             currencyButton.configuration?.attributedTitle = AttributedString(selectedCurrency!.retrieveDetailedInformation(), attributes: container)
@@ -56,20 +55,23 @@ class CreditsPopupVc: UIViewController {
             locale = selectedCurrency!.locale
             amountTextField.text?.removeAll()
             amountTextField.currency = selectedCurrency
-            amountTextField.becomeFirstResponder()
             
             monthlyTextField.text?.removeAll()
             monthlyTextField.currency = selectedCurrency
         }
     }
     
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         
         configureViewController()
         setCurrencyOnStart()
         applyConstraints()
+    }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        view.endEditing(true)
     }
     
     private func configureViewController() {
@@ -87,6 +89,7 @@ class CreditsPopupVc: UIViewController {
         monthlyInstallmentCountButton.addTarget(self, action: #selector(openInstallmentBottomSheet), for: .touchUpInside)
         amountTextField.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
         monthlyTextField.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
+        
         
         NotificationCenter.default.addObserver(forName: NSNotification.Name("selectedCount"), object: nil, queue: nil) { [weak self] (notification) in
             self?.monthCount = (notification.userInfo?["selectedCount"] as? Int)!
@@ -147,6 +150,7 @@ class CreditsPopupVc: UIViewController {
         let calculatedMonth = String(format: "%02d", month)
         
         firstInstallmentDate = "\(calculatedDay).\(calculatedMonth).\(year)"
+        dismiss(animated: true)
     }
     
     @objc func textFieldDidChange() {

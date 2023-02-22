@@ -40,7 +40,7 @@ class CreditsTableViewCell: UITableViewCell {
             } else {
                 backgroundColor = .systemBackground
                 monthlyDepth.textColor = .systemGray2
-                nextPayment.t = .systemGray2
+                nextPayment.textColor = .systemGray2
             }
         }
     }
