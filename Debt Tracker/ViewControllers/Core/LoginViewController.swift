@@ -14,7 +14,7 @@ import FacebookCore
 
 
 class LoginViewController: UIViewController {
-
+    
     let detailLabel = DTTitleLabel(textAlignment: .left, fontSize: 24, text: "Login Account")
     let emailTextField = DTTextField(placeholder: "Your Email", placeHolderSize: 15, cornerRadius: 14)
     let passwordTextField = DTTextField(placeholder: "Password", placeHolderSize: 15, cornerRadius: 14)
@@ -25,40 +25,10 @@ class LoginViewController: UIViewController {
     let dontHaveAccLabel = DTTitleLabel(textAlignment: .center, fontSize: 16, textColor: .label, text: "Don't have an account?")
     let registerLabel = DTTitleLabel(textAlignment: .center, fontSize: 18, textColor: .systemGray2, text: "REGISTER")
     let googleSignInButton = GIDSignInButton()
-    var facebookLoginButton: UIButton = {
-        var button = UIButton(type: .system)
-        button.translatesAutoresizingMaskIntoConstraints = false
-        
-        button.configuration = .filled()
-
-        var container = AttributeContainer()
-        container.font = UIFont.boldSystemFont(ofSize: 14)
-        button.configuration?.attributedTitle = AttributedString("Sign in with Facebook", attributes: container)
-        
-        button.configuration?.baseBackgroundColor = K.Colors.facebookBackgroundColor
-        button.configuration?.baseForegroundColor = .white
-        
-        button.configuration?.image = UIImage(named: "FacebookButton")
-        button.configuration?.imagePadding = 5
-        button.configuration?.imagePlacement = .leading
-        
-        if let imageView = button.subviews.first(where: { $0 is UIImageView }) {
-            imageView.translatesAutoresizingMaskIntoConstraints = false
-            imageView.leadingAnchor.constraint(equalTo: button.leadingAnchor, constant: 10).isActive = true
-            imageView.centerYAnchor.constraint(equalTo: button.centerYAnchor).isActive = true
-        }
-        
-        if let label = button.subviews.first(where: { $0 is UILabel }) {
-            label.translatesAutoresizingMaskIntoConstraints = false
-            label.leadingAnchor.constraint(equalTo: button.leadingAnchor, constant: 50).isActive = true
-            label.centerYAnchor.constraint(equalTo: button.centerYAnchor).isActive = true
-        }
- 
-        return button
-    }()
+    var facebookLoginButton = DTFacebookSigninButton()
     
     var isLoginTapped = false
-    var isRightBarButtonTapped = false
+    var isForgetPasswordTapped = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -73,9 +43,6 @@ class LoginViewController: UIViewController {
         emailTextField.text = ""
         passwordTextField.text = ""
         isLoginTapped = false
-        
-        emailTextField.text = "1@gmail.com"
-        passwordTextField.text = "123456"
     }
     
     private func configureViewController() {
@@ -104,10 +71,10 @@ class LoginViewController: UIViewController {
         let registerTapGesture = UITapGestureRecognizer(target: self, action: #selector(registerPagePresent))
         registerLabel.addGestureRecognizer(registerTapGesture)
         
-        NotificationCenter.default.addObserver(self, selector: #selector(didTapRightBarButton), name: .didTapRightBarButton, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(signOutButton), name: .signOutButton, object: nil)
         
         NotificationCenter.default.addObserver(forName: NSNotification.Name("resetCloseTapped"), object: nil, queue: nil) { [weak self] (notification) in
-            self?.isRightBarButtonTapped = false
+            self?.isForgetPasswordTapped = false
         }
         
         googleSignInButton.addTarget(self, action: #selector(signInWithGooglePressed), for: .touchUpInside)
@@ -115,7 +82,6 @@ class LoginViewController: UIViewController {
     
     
     @objc func signInWithGooglePressed() {
-        // Start the sign in flow!
         GIDSignIn.sharedInstance.signIn(withPresenting: self) { [weak self] signInResult, err in
             
             if let error = err {
@@ -148,7 +114,7 @@ class LoginViewController: UIViewController {
             
             guard let resultTokenString = result?.token?.tokenString else { return }
             let credential = FacebookAuthProvider.credential(withAccessToken: resultTokenString)
-
+            
             AuthManager.shared.signInUserWith(with: credential) { [weak self] result in
                 switch result {
                 case .success(_):
@@ -160,7 +126,7 @@ class LoginViewController: UIViewController {
         }
     }
     
-    @objc func didTapRightBarButton() {
+    @objc func signOutButton() {
         self.navigationController?.popViewController(animated: true)
     }
     
@@ -172,7 +138,6 @@ class LoginViewController: UIViewController {
             isLoginTapped = true
         }
     }
-    
     
     @objc func loginButtonTapped() {
         if let email = emailTextField.text, let password = passwordTextField.text {
@@ -192,7 +157,7 @@ class LoginViewController: UIViewController {
     }
     
     @objc func showForgetPasswordPopup() {
-        if !isRightBarButtonTapped {
+        if !isForgetPasswordTapped {
             
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.2 ) { [weak self] in
                 let popupVc = ForgotPasswordVc()
@@ -201,7 +166,7 @@ class LoginViewController: UIViewController {
                 self?.view.addSubview(popupVc.view)
                 popupVc.didMove(toParent: self)
             }
-            isRightBarButtonTapped = true
+            isForgetPasswordTapped = true
         }
     }
     
@@ -219,7 +184,7 @@ class LoginViewController: UIViewController {
             showPasswordButton.setImage(UIImage(systemName: "eye"), for: .normal)
         }
     }
-
+    
     private func applyConstraints() {
         view.addSubviews(detailLabel, emailTextField, passwordTextField, loginButton, forgetPasswordLabel, googleSignInButton, facebookLoginButton, dontHaveAccLabel, registerLabel)
         containerView.addSubview(showPasswordButton)
@@ -263,6 +228,5 @@ class LoginViewController: UIViewController {
         
         dontHaveAccLabel.bottomAnchor.constraint(equalTo: registerLabel.topAnchor, constant: -5).isActive = true
         dontHaveAccLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        
     }
 }

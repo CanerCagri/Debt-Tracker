@@ -25,24 +25,21 @@ class CreditsDetailViewController: UIViewController {
             title = creditModel.name
             next12MonthsString = creditModel.firstInstallmentDate
             calculatedRowCount = (Int(creditModel.installmentCount) - Int(creditModel.paidCount))
-            
             detailLabel.text = creditModel.detail
-            
             totalDebtLabel.text = "Total Debt: \(creditModel.totalDebt)"
             
-            let str = CreditsDetailViewController.convertToDouble(inputString: creditModel.totalDebt)
+            let str = Currency.convertToDouble(inputString: creditModel.totalDebt)
             let formatter = NumberFormatter()
             formatter.numberStyle = .decimal
             if let number = formatter.number(from: String(str))?.doubleValue {
-                let calculateRemaining = number - CreditsDetailViewController.convertToDouble(inputString: creditModel.paidDebt)
+                let calculateRemaining = number - Currency.convertToDouble(inputString: creditModel.paidDebt)
                 let remainingTextFormatted = formatter.string(from: calculateRemaining as NSNumber)
                 remainingDebtLabel.text = "Remaining Debt: \(creditModel.currency)\(remainingTextFormatted ?? "Error")"
                 
             } else {
                 print("Invalid format")
-               
             }
-        
+            
             totalPaidDebtLabel.text = "Paid Debt: \(creditModel.paidDebt)"
             totalPaidMonthLabel.text = "\(String(creditModel.paidCount))/\(String(creditModel.installmentCount)) paid"
         }
@@ -67,12 +64,11 @@ class CreditsDetailViewController: UIViewController {
         super.viewDidLoad()
         
         view.backgroundColor = .systemBackground
+        dateFormatter.dateFormat = "dd.MM.yyyy"
+        date = dateFormatter.date(from: creditModel.firstInstallmentDate)!
         
         configureTableView()
         applyConstraints()
-        
-        dateFormatter.dateFormat = "dd.MM.yyyy"
-        date = dateFormatter.date(from: creditModel.firstInstallmentDate)!
     }
     
     private func configureTableView() {
@@ -81,41 +77,6 @@ class CreditsDetailViewController: UIViewController {
         detailTableView.rowHeight = 40
         detailTableView.layer.cornerRadius = 14
         detailTableView.register(CreditsDetailTableViewCell.self, forCellReuseIdentifier:CreditsDetailTableViewCell.identifier)
-    }
-    
-    static func convertToDouble(inputString: String) -> Double{
-        let numberFormatter = NumberFormatter()
-  
-        numberFormatter.numberStyle = .currency
-        
-        return numberFormatter.number(from: inputString) as! Double
-    }
-    
-    func currencyInputFormatting(for amount: String) -> String {
-        let numberFormatter = NumberFormatter()
-        numberFormatter.numberStyle = .currency
-        
-        let numberOfDecimalPlaces = numberFormatter.maximumFractionDigits
-        
-        //Clean the inputed string
-        var cleanedAmount = ""
-        
-        for character in amount {
-            if character.isNumber {
-                cleanedAmount.append(character)
-            }
-        }
-        
-        //Format the number based on number of decimal digits
-        if numberOfDecimalPlaces > 0 {
-            //ie. USD
-            let amountAsDouble = Double(cleanedAmount) ?? 0.0
-            return numberFormatter.string(from: amountAsDouble / 100.0 as NSNumber) ?? ""
-        } else {
-            //ie. JPY
-            let amountAsNumber = Double(cleanedAmount) as NSNumber?
-            return numberFormatter.string(from: amountAsNumber ?? 0) ?? ""
-        }
     }
     
     func applyConstraints() {
@@ -202,58 +163,46 @@ extension CreditsDetailViewController: UITableViewDelegate, UITableViewDataSourc
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        
         guard let email = Auth.auth().currentUser?.email else { return }
         
         let alert = UIAlertController(title: "Payment", message: nil, preferredStyle: .actionSheet)
         
-        if indexPath.row + 1 != creditModel.installmentCount {
-            let nextIndexPath = IndexPath(row: indexPath.row + 1, section: indexPath.section)
-            let nextCell = tableView.cellForRow(at: nextIndexPath) as! CreditsDetailTableViewCell
-            
-            date = dateFormatter.date(from: nextCell.dateLabel.text!)!
-            let nextDateComponents = Calendar.current.dateComponents([.day, .month, .year], from: date)
-            let dayString = String(format: "%02d", nextDateComponents.day!)
-            let monthString = String(format: "%02d", nextDateComponents.month!)
-            let yearString = String(nextDateComponents.year!)
-            
-            self.selectedMonthDate = "\(dayString).\(monthString).\(yearString)"
-        } else {
-            let currentIndexPath = IndexPath(row: indexPath.row, section: indexPath.section)
-            let currentCell = tableView.cellForRow(at: currentIndexPath) as! CreditsDetailTableViewCell
-            
-            date = dateFormatter.date(from: currentCell.dateLabel.text!)!
-            let currentDateComponents = Calendar.current.dateComponents([.day, .month, .year], from: date)
-            let dayString = String(format: "%02d", currentDateComponents.day!)
-            let monthString = String(format: "%02d", currentDateComponents.month!)
-            let yearString = String(currentDateComponents.year!)
-            
-            self.selectedMonthDate = "\(dayString).\(monthString).\(yearString)"
-        }
+        let isLastRow = indexPath.row + 1 == creditModel.installmentCount
         
-        self.selectedMonthCount = Int32((self.creditModel.paidCount)) + 1
+        let selectedIndexPath = isLastRow ? indexPath : IndexPath(row: indexPath.row + 1, section: indexPath.section)
+        let selectedCell = tableView.cellForRow(at: selectedIndexPath) as! CreditsDetailTableViewCell
         
-        let calculatedPaid = CreditsDetailViewController.convertToDouble(inputString: creditModel.monthlyInstallment) * Double(indexPath.row + 1)
+        date = dateFormatter.date(from: selectedCell.dateLabel.text!)!
+        let selectedDateComponents = Calendar.current.dateComponents([.day, .month, .year], from: date)
+        let dayString = String(format: "%02d", selectedDateComponents.day!)
+        let monthString = String(format: "%02d", selectedDateComponents.month!)
+        let yearString = String(selectedDateComponents.year!)
+        
+        selectedMonthDate = "\(dayString).\(monthString).\(yearString)"
+        
+        selectedMonthCount = Int32((creditModel.paidCount)) + 1
+        
+        let calculatedPaid = Currency.convertToDouble(inputString: creditModel.monthlyInstallment) * Double(indexPath.row + 1)
         let formattedPaid = String(format: "%.2f", calculatedPaid)
-        selectedPaidDebt = currencyInputFormatting(for: String(formattedPaid))
-
-        let calculatedRemainingDebt = CreditsDetailViewController.convertToDouble(inputString: creditModel.totalDebt) - CreditsDetailViewController.convertToDouble(inputString: creditModel.paidDebt)
+        selectedPaidDebt = Currency.currencyInputFormattingWithoutLocale(for: String(formattedPaid))
+        
+        let calculatedRemainingDebt = Currency.convertToDouble(inputString: creditModel.totalDebt) - Currency.convertToDouble(inputString: creditModel.paidDebt)
         let formattedRemaining = String(format: "%.2f", calculatedRemainingDebt)
-        selectedRemainingDebt = currencyInputFormatting(for: String(formattedRemaining))
-
-        let viewModel = CreditDetailModel(name: (self.creditModel.name), detail: (self.creditModel.detail), entryDebt: self.creditModel.entryDebt, installmentCount: Int((self.creditModel.installmentCount)), paidCount: Int((self.selectedMonthCount!)), monthlyInstallment: (self.creditModel.monthlyInstallment), firstInstallmentDate: (self.creditModel.firstInstallmentDate), currentInstallmentDate: (self.selectedMonthDate!), totalDebt: (self.creditModel.totalDebt), interestRate: (self.creditModel.interestRate), remainingDebt: selectedRemainingDebt, paidDebt: selectedPaidDebt, email: email, currency: self.creditModel.currency)
+        selectedRemainingDebt = Currency.currencyInputFormattingWithoutLocale(for: String(formattedRemaining))
+        
+        let viewModel = CreditDetailModel(name: creditModel.name, detail: creditModel.detail, entryDebt: creditModel.entryDebt, installmentCount: Int(creditModel.installmentCount), paidCount: Int(selectedMonthCount!), monthlyInstallment: creditModel.monthlyInstallment, firstInstallmentDate: creditModel.firstInstallmentDate, currentInstallmentDate: selectedMonthDate!, totalDebt: creditModel.totalDebt, interestRate: creditModel.interestRate, remainingDebt: selectedRemainingDebt, paidDebt: selectedPaidDebt, email: email, currency: creditModel.currency)
         
         let yesAction = UIAlertAction(title: "Yes, I did pay selected Installment.", style: .default) { [weak self] (action) in
             
-            FirestoreManager.shared.editCredit(documentId: (self?.documentId)!, viewModel: viewModel) { result in
+            FirestoreManager.shared.editCredit(documentId: self?.documentId ?? "", viewModel: viewModel) { result in
                 switch result {
                 case .success(_):
-                    print("succesfully paid")
+                    print("successfully paid")
                 case .failure(let failure):
                     self?.presentAlert(title: "Warning", message: failure.localizedDescription, buttonTitle: "OK")
                 }
             }
-            let alertController = UIAlertController(title: "Payment Succesfull", message: nil, preferredStyle: .alert)
+            let alertController = UIAlertController(title: "Payment Successful", message: nil, preferredStyle: .alert)
             
             let deleteButton = UIAlertAction(title: "OK", style: .default) { _ in
                 self?.navigationController?.popToRootViewController(animated: true)
@@ -263,13 +212,13 @@ extension CreditsDetailViewController: UITableViewDelegate, UITableViewDataSourc
             self?.present(alertController, animated: true)
         }
         
-        let noAction = UIAlertAction(title: "No, I didnt pay yet.", style: .cancel) { (action) in
+        let noAction = UIAlertAction(title: "No, I didn't pay yet.", style: .cancel) { (action) in
             tableView.deselectRow(at: indexPath, animated: true)
         }
         
         alert.addAction(yesAction)
         alert.addAction(noAction)
         
-        self.present(alert, animated: true, completion: nil)
+        present(alert, animated: true)
     }
 }

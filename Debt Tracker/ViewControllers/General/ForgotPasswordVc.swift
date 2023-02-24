@@ -21,7 +21,6 @@ class ForgotPasswordVc: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-  
         configureViewController()
         applyConstraints()
     }

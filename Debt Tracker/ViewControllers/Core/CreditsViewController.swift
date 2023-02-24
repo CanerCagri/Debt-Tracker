@@ -12,12 +12,12 @@ class CreditsViewController: UIViewController {
     
     let db = Firestore.firestore()
     var documentIds: [String] = []
-    
     let creditsTableView = UITableView()
     let contentView = UIView()
     var emptyState: DTEmptyStateView?
     
     private var credits: [CreditDetailModel] = []
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -55,7 +55,6 @@ class CreditsViewController: UIViewController {
     }
     
     private func fetchFromFirebase() {
-        
         FirestoreManager.shared.fetchCredit { [weak self] result in
             switch result {
             case .success(let success):
@@ -76,18 +75,6 @@ class CreditsViewController: UIViewController {
                 }
             case .failure(let failure):
                 self?.presentAlert(title: "Warning", message: failure.localizedDescription, buttonTitle: "OK")
-            }
-        }
-    }
-    
-    func deleteDocument(documentId: String) {
-        let documentRef = db.collection("credits").document(documentId)
-        
-        documentRef.delete { error in
-            if let error = error {
-                print(error.localizedDescription)
-            } else {
-                print("Succesfully removed")
             }
         }
     }
@@ -121,7 +108,7 @@ extension CreditsViewController: UITableViewDelegate, UITableViewDataSource {
         
         switch editingStyle {
         case .delete:
-            deleteDocument(documentId: documentIds[indexPath.row])
+            FirestoreManager.shared.deleteCredit(documentId: documentIds[indexPath.row])
             documentIds.remove(at: indexPath.row)
             credits.remove(at: indexPath.row)
         default:

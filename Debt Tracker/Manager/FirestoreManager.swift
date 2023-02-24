@@ -184,4 +184,16 @@ class FirestoreManager {
         }
         
     }
+    
+    func deleteCredit(documentId: String) {
+        let documentRef = db.collection("credits").document(documentId)
+        
+        documentRef.delete { error in
+            if let error = error {
+                print(error.localizedDescription)
+            } else {
+                print("Succesfully removed")
+            }
+        }
+    }
 }

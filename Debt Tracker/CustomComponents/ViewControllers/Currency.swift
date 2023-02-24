@@ -51,7 +51,25 @@ struct Currency {
         numberFormatter.locale = Locale(identifier: localeString)
         numberFormatter.numberStyle = .currency
         
-        return numberFormatter.number(from: stringAmount) as! Double
+        if let number = numberFormatter.number(from: stringAmount)?.doubleValue {
+            return number
+        } else {
+            print("Invalid format")
+            return 0.0
+        }
+    }
+    
+    //MARK: Same function with formatCurrencyStringAsDouble, but without Locale
+    static func convertToDouble(inputString: String) -> Double{
+        let numberFormatter = NumberFormatter()
+        numberFormatter.numberStyle = .currency
+        
+        if let number = numberFormatter.number(from: inputString)?.doubleValue {
+            return number
+        } else {
+            print("Invalid format")
+            return 0.0
+        }
     }
     
     //MARK: Currency Input Formatting - called when the user enters an amount in the
@@ -76,6 +94,34 @@ struct Currency {
             //ie. USD
             let amountAsDouble = Double(cleanedAmount) ?? 0.0
             
+            return numberFormatter.string(from: amountAsDouble / 100.0 as NSNumber) ?? ""
+        } else {
+            //ie. JPY
+            let amountAsNumber = Double(cleanedAmount) as NSNumber?
+            return numberFormatter.string(from: amountAsNumber ?? 0) ?? ""
+        }
+    }
+    
+    //MARK: Same function with formatCurrencyStringAsDouble, but without Locale
+    static func currencyInputFormattingWithoutLocale(for amount: String) -> String {
+        let numberFormatter = NumberFormatter()
+        numberFormatter.numberStyle = .currency
+        
+        let numberOfDecimalPlaces = numberFormatter.maximumFractionDigits
+        
+        //Clean the inputed string
+        var cleanedAmount = ""
+        
+        for character in amount {
+            if character.isNumber {
+                cleanedAmount.append(character)
+            }
+        }
+        
+        //Format the number based on number of decimal digits
+        if numberOfDecimalPlaces > 0 {
+            //ie. USD
+            let amountAsDouble = Double(cleanedAmount) ?? 0.0
             return numberFormatter.string(from: amountAsDouble / 100.0 as NSNumber) ?? ""
         } else {
             //ie. JPY

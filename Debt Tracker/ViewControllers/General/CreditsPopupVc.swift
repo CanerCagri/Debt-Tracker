@@ -305,6 +305,7 @@ class CreditsPopupVc: UIViewController {
 
 extension CreditsPopupVc: PassCurrencyDelegate {
     func pass(_ currency: Currency) {
+        print(currency.formatter.currencySymbol)
         selectedCurrency = currency
     }
 }

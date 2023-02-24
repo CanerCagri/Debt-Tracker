@@ -27,18 +27,17 @@ class RegisterViewController: UIViewController {
     
     private func configureViewController() {
         view.backgroundColor = .systemBackground
-        passwordTextField.isSecureTextEntry = true
-    
+
         let leftPaddingView = UIView(frame: CGRect(x: 0, y: 0, width: 40, height: 30))
         passwordTextField.leftView = leftPaddingView
         passwordTextField.leftViewMode = .always
+        passwordTextField.rightView = containerView
+        passwordTextField.rightViewMode = .always
+        passwordTextField.isSecureTextEntry = true
         
         showPasswordButton.setImage(UIImage(systemName: "eye.slash"), for: .normal)
         showPasswordButton.frame = CGRect(x: -5, y: 0, width: 30, height: 30)
         showPasswordButton.addTarget(self, action: #selector(togglePasswordVisibility), for: .touchUpInside)
-
-        passwordTextField.rightView = containerView
-        passwordTextField.rightViewMode = .always
         
         registerButton.addTarget(self, action: #selector(registerButtonTapped), for: .touchUpInside)
     }

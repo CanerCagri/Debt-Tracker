@@ -9,9 +9,6 @@ import UIKit
 import Firebase
 
 class CreditsMainViewController: UIViewController {
-    enum Section {
-        case main
-    }
     
     let db = Firestore.firestore()
     var documentIds: [String] = []
@@ -118,13 +115,12 @@ class CreditsMainViewController: UIViewController {
             }
             isRightBarButtonTapped = true
         }
-        
     }
     
     @objc func logoutButtonTapped() {
         do {
             try Auth.auth().signOut()
-            NotificationCenter.default.post(name: .didTapRightBarButton , object: nil)
+            NotificationCenter.default.post(name: .signOutButton , object: nil)
             
         } catch let signOutError as NSError {
             print("Error when signing out: %@", signOutError)
@@ -149,9 +145,7 @@ class CreditsMainViewController: UIViewController {
 }
 
 extension CreditsMainViewController: UICollectionViewDelegate {
-    
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        
         collectionView.deselectItem(at: indexPath, animated: true)
         view.backgroundColor = .gray
         
@@ -161,9 +155,6 @@ extension CreditsMainViewController: UICollectionViewDelegate {
             self?.addChild(popupVc)
             self?.view.addSubview(popupVc.view)
             popupVc.didMove(toParent: self)
-            
         }
     }
 }
-
-

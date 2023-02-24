@@ -30,5 +30,6 @@ enum Section {
 
 
 extension Notification.Name {
-    static let didTapRightBarButton = Notification.Name("didTapRightBarButton")
+    static let signOutButton = Notification.Name("signOutButton")
 }
+

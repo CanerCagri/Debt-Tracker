@@ -1,0 +1,53 @@
+//
+//  DTFacebookSigninButton.swift
+//  Debt Tracker
+//
+//  Created by Caner Çağrı on 24.02.2023.
+//
+
+import UIKit
+
+class DTFacebookSigninButton: UIButton {
+
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        configure()
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    init() {
+        super.init(frame: .zero)
+        configure()
+    }
+    
+    private func configure() {
+        configuration = .filled()
+        translatesAutoresizingMaskIntoConstraints = false
+        
+        configuration?.baseBackgroundColor = K.Colors.facebookBackgroundColor
+        configuration?.baseForegroundColor = .white
+        
+        var container = AttributeContainer()
+        container.font = UIFont.boldSystemFont(ofSize: 14)
+        configuration?.attributedTitle = AttributedString("Sign in with Facebook", attributes: container)
+        
+        configuration?.image = UIImage(named: "FacebookButton")
+        configuration?.imagePadding = 5
+        configuration?.imagePlacement = .leading
+        
+        if let imageView = subviews.first(where: { $0 is UIImageView }) {
+            imageView.translatesAutoresizingMaskIntoConstraints = false
+            imageView.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 10).isActive = true
+            imageView.centerYAnchor.constraint(equalTo: self.centerYAnchor).isActive = true
+        }
+        
+        if let label = subviews.first(where: { $0 is UILabel }) {
+            label.translatesAutoresizingMaskIntoConstraints = false
+            label.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 52).isActive = true
+            label.centerYAnchor.constraint(equalTo: self.centerYAnchor).isActive = true
+        }
+    }
+}
