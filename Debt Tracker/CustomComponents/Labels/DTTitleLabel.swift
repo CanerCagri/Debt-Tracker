@@ -39,7 +39,7 @@ class DTTitleLabel: UILabel {
     private func configure() {
         translatesAutoresizingMaskIntoConstraints = false
         adjustsFontSizeToFitWidth = true
-        minimumScaleFactor = 0.9
+        minimumScaleFactor = 0.72
         lineBreakMode = .byTruncatingTail
     }
 }

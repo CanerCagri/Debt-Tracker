@@ -10,41 +10,6 @@ import Firebase
 
 class CreditsDetailViewController: UIViewController {
     
-    let db = Firestore.firestore()
-    
-    var next12MonthsString: String?
-    var calculatedRowCount: Int?
-    var debtLabelText: Double?
-    let dateFormatter = DateFormatter()
-    let calendar = Calendar.current
-    var date = Date()
-    
-    var creditModel: CreditDetailModel! {
-        didSet
-        {
-            title = creditModel.name
-            next12MonthsString = creditModel.firstInstallmentDate
-            calculatedRowCount = (Int(creditModel.installmentCount) - Int(creditModel.paidCount))
-            detailLabel.text = creditModel.detail
-            totalDebtLabel.text = "Total Debt: \(creditModel.totalDebt)"
-            
-            let str = Currency.convertToDouble(inputString: creditModel.totalDebt)
-            let formatter = NumberFormatter()
-            formatter.numberStyle = .decimal
-            if let number = formatter.number(from: String(str))?.doubleValue {
-                let calculateRemaining = number - Currency.convertToDouble(inputString: creditModel.paidDebt)
-                let remainingTextFormatted = formatter.string(from: calculateRemaining as NSNumber)
-                remainingDebtLabel.text = "Remaining Debt: \(creditModel.currency)\(remainingTextFormatted ?? "Error")"
-                
-            } else {
-                print("Invalid format")
-            }
-            
-            totalPaidDebtLabel.text = "Paid Debt: \(creditModel.paidDebt)"
-            totalPaidMonthLabel.text = "\(String(creditModel.paidCount))/\(String(creditModel.installmentCount)) paid"
-        }
-    }
-    
     var detailLabel = DTTitleLabel(textAlignment: .left, fontSize: 18)
     var paymentTitleLabel = DTTitleLabel(textAlignment: .left, fontSize: 18, text: "All Installments")
     var startAndEndTitleLabel = DTTitleLabel(textAlignment: .left, fontSize: 15)
@@ -54,11 +19,23 @@ class CreditsDetailViewController: UIViewController {
     var totalPaidDebtLabel = DTTitleLabel(textAlignment: .center, fontSize: 18)
     var totalPaidMonthLabel = DTTitleLabel(textAlignment: .center, fontSize: 18)
     
-    var selectedMonthDate: String?
-    var selectedMonthCount: Int32?
-    var selectedRemainingDebt = ""
-    var selectedPaidDebt = ""
+    let db = Firestore.firestore()
+    let dateFormatter = DateFormatter()
+    var date = Date()
     var documentId: String!
+    
+    var creditModel: CreditDetailModel! {
+        didSet
+        {
+            title = creditModel.name
+            detailLabel.text = creditModel.detail
+            totalDebtLabel.text = "Total Debt: \(creditModel.totalDebt)"
+            remainingDebtLabel.text = "Remaining Debt: \(creditModel.remainingDebt)"
+            totalPaidDebtLabel.text = "Paid Debt: \(creditModel.paidDebt)"
+            totalPaidMonthLabel.text = "\(String(creditModel.paidCount))/\(String(creditModel.installmentCount)) paid"
+        }
+    }
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -163,6 +140,7 @@ extension CreditsDetailViewController: UITableViewDelegate, UITableViewDataSourc
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
         guard let email = Auth.auth().currentUser?.email else { return }
         
         let alert = UIAlertController(title: "Payment", message: nil, preferredStyle: .actionSheet)
@@ -178,19 +156,18 @@ extension CreditsDetailViewController: UITableViewDelegate, UITableViewDataSourc
         let monthString = String(format: "%02d", selectedDateComponents.month!)
         let yearString = String(selectedDateComponents.year!)
         
-        selectedMonthDate = "\(dayString).\(monthString).\(yearString)"
+        let selectedMonthDate = "\(dayString).\(monthString).\(yearString)"
+        let selectedMonthCount = Int32((creditModel.paidCount)) + 1
         
-        selectedMonthCount = Int32((creditModel.paidCount)) + 1
-        
-        let calculatedPaid = Currency.convertToDouble(inputString: creditModel.monthlyInstallment) * Double(indexPath.row + 1)
+        let calculatedPaid = Currency.formatCurrencyStringAsDouble(with: creditModel.locale, for: creditModel.monthlyInstallment, viewController: self, documentId: documentId) + Currency.formatCurrencyStringAsDouble(with: creditModel.locale, for: creditModel.paidDebt, viewController: self, documentId: documentId)
         let formattedPaid = String(format: "%.2f", calculatedPaid)
-        selectedPaidDebt = Currency.currencyInputFormattingWithoutLocale(for: String(formattedPaid))
+        let selectedPaidDebt = Currency.currencyInputFormatting(with: creditModel.locale, for: String(formattedPaid))
         
-        let calculatedRemainingDebt = Currency.convertToDouble(inputString: creditModel.totalDebt) - Currency.convertToDouble(inputString: creditModel.paidDebt)
+        let calculatedRemainingDebt = Currency.formatCurrencyStringAsDouble(with: creditModel.locale, for: creditModel.remainingDebt, viewController: self, documentId: documentId) - Currency.formatCurrencyStringAsDouble(with: creditModel.locale, for: creditModel.monthlyInstallment, viewController: self, documentId: documentId)
         let formattedRemaining = String(format: "%.2f", calculatedRemainingDebt)
-        selectedRemainingDebt = Currency.currencyInputFormattingWithoutLocale(for: String(formattedRemaining))
+        let selectedRemainingDebt = Currency.currencyInputFormatting(with: creditModel.locale, for: String(formattedRemaining))
         
-        let viewModel = CreditDetailModel(name: creditModel.name, detail: creditModel.detail, entryDebt: creditModel.entryDebt, installmentCount: Int(creditModel.installmentCount), paidCount: Int(selectedMonthCount!), monthlyInstallment: creditModel.monthlyInstallment, firstInstallmentDate: creditModel.firstInstallmentDate, currentInstallmentDate: selectedMonthDate!, totalDebt: creditModel.totalDebt, interestRate: creditModel.interestRate, remainingDebt: selectedRemainingDebt, paidDebt: selectedPaidDebt, email: email, currency: creditModel.currency)
+        let viewModel = CreditDetailModel(name: creditModel.name, detail: creditModel.detail, entryDebt: creditModel.entryDebt, installmentCount: Int(creditModel.installmentCount), paidCount: Int(selectedMonthCount), monthlyInstallment: creditModel.monthlyInstallment, firstInstallmentDate: creditModel.firstInstallmentDate, currentInstallmentDate: selectedMonthDate, totalDebt: creditModel.totalDebt, interestRate: creditModel.interestRate, remainingDebt: selectedRemainingDebt, paidDebt: selectedPaidDebt, email: email, currency: creditModel.currency, locale: creditModel.locale)
         
         let yesAction = UIAlertAction(title: "Yes, I did pay selected Installment.", style: .default) { [weak self] (action) in
             

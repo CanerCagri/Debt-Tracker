@@ -10,15 +10,11 @@ import Firebase
 
 class CreditsPopupVc: UIViewController {
     
-    let db = Firestore.firestore()
-    
-    let installmentBottomVc = SelectInstallmentBottomSheetVc()
-    let currencyBottomVc = SelectCurrencyBottomVc()
     private let containerView = DTContainerView()
     let titleLabel = DTTitleLabel(textAlignment: .center, fontSize: 20, textColor: .label, text: "Add Credit")
     let saveButton = DTButton(title: "Save", color: .systemPink, systemImageName: "square.and.arrow.down", size: 20)
     let creditNameLabel = DTTitleLabel(textAlignment: .left, fontSize: 25)
-    let creditDetailLabel = DTTitleLabel(textAlignment: .left, fontSize: 18)
+    let creditDetailLabel = DTTitleLabel(textAlignment: .left, fontSize: 25)
     var currencyButton = DTButton(title: "Select Currency", color: .systemRed, size: 20)
     var amountTextField = CurrencyTextField(size: 18)
     var monthlyTextField = CurrencyTextField(size: 18)
@@ -32,6 +28,9 @@ class CreditsPopupVc: UIViewController {
     let firstInstallmentDatePicker = UIDatePicker()
     private var closeButton = DTCloseButton()
     
+    let db = Firestore.firestore()
+    
+    let installmentBottomVc = SelectInstallmentBottomSheetVc()
     var monthCount = 12
     var currencySymbol = "$"
     var firstInstallmentDate = ""
@@ -118,7 +117,7 @@ class CreditsPopupVc: UIViewController {
             return
         }
         
-        let creditModel = CreditDetailModel(name: creditNameLabel.text!, detail: creditDetailLabel.text!, entryDebt: amount, installmentCount: monthCount, paidCount: 0, monthlyInstallment: monthly, firstInstallmentDate: firstInstallmentDate, currentInstallmentDate: firstInstallmentDate, totalDebt: calculatedPayment, interestRate: Double(interestRateCalculated)!, remainingDebt: calculatedPayment, paidDebt: "\(currencySymbol)0", email: userEmail, currency: currencySymbol)
+        let creditModel = CreditDetailModel(name: creditNameLabel.text!, detail: creditDetailLabel.text!, entryDebt: amount, installmentCount: monthCount, paidCount: 0, monthlyInstallment: monthly, firstInstallmentDate: firstInstallmentDate, currentInstallmentDate: firstInstallmentDate, totalDebt: calculatedPayment, interestRate: Double(interestRateCalculated)!, remainingDebt: calculatedPayment, paidDebt: "\(currencySymbol)0", email: userEmail, currency: currencySymbol, locale: locale)
         
         FirestoreManager.shared.createCredit(creditModel: creditModel) { [weak self] result in
             switch result {
@@ -162,12 +161,11 @@ class CreditsPopupVc: UIViewController {
         guard let amount = amountTextField.text, !amount.isEmpty else { return }
         guard let monthly = monthlyTextField.text, !monthly.isEmpty else { return }
         
-
-        let result = Currency.formatCurrencyStringAsDouble(with: locale, for: monthly) * Double(monthCount)
+        let result = Currency.convertToDouble(with: locale, for: monthly) * Double(monthCount)
         let calculated = String(format: "%.2f", result)
         totalPaymentResultLabel.text = Currency.currencyInputFormatting(with: locale, for: calculated)
         
-        let cleanedAmount = Currency.formatCurrencyStringAsDouble(with: locale, for: amount)
+        let cleanedAmount = Currency.convertToDouble(with: locale, for: amount)
 
         let interestPrice = result - cleanedAmount
         let interestRate = (interestPrice / cleanedAmount) * Double(monthCount)
@@ -250,8 +248,8 @@ class CreditsPopupVc: UIViewController {
         creditNameLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -20).isActive = true
         
         creditDetailLabel.topAnchor.constraint(equalTo: creditNameLabel.bottomAnchor, constant: 10).isActive = true
-        creditDetailLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 20).isActive = true
-        creditDetailLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -20).isActive = true
+        creditDetailLabel.leadingAnchor.constraint(equalTo: creditNameLabel.leadingAnchor).isActive = true
+        creditDetailLabel.trailingAnchor.constraint(equalTo: creditNameLabel.trailingAnchor).isActive = true
         
         currencyButton.centerXAnchor.constraint(equalTo: containerView.centerXAnchor).isActive = true
         currencyButton.topAnchor.constraint(equalTo: creditDetailLabel.bottomAnchor, constant: 15).isActive = true
@@ -305,7 +303,6 @@ class CreditsPopupVc: UIViewController {
 
 extension CreditsPopupVc: PassCurrencyDelegate {
     func pass(_ currency: Currency) {
-        print(currency.formatter.currencySymbol)
         selectedCurrency = currency
     }
 }

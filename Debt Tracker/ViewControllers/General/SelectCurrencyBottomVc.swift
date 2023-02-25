@@ -13,16 +13,14 @@ protocol PassCurrencyDelegate: AnyObject {
 
 class SelectCurrencyBottomVc: UIViewController {
     
+    weak var delegate: PassCurrencyDelegate?
+    
     var currencies = [Currency]()
     var filteredCurrencies = [Currency]()
     let searchBar = UISearchBar()
     var isFiltering = false
-    
-    weak var delegate: PassCurrencyDelegate?
-    
     var currencyTableView = UITableView()
-    var selectedRow: String?
-    var selectedISO: String?
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -88,4 +86,3 @@ extension SelectCurrencyBottomVc: UISearchBarDelegate {
         currencyTableView.reloadData()
     }
 }
-

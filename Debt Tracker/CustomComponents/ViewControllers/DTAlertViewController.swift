@@ -41,7 +41,6 @@ class DTAlertViewController: UIViewController {
         configureBodyLabel()
         
         actionButton.addTarget(self, action: #selector(dismissView), for: .touchUpInside)
-        
     }
     
     func configureContainerView() {

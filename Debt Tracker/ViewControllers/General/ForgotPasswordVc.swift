@@ -9,18 +9,17 @@ import UIKit
 import Firebase
 
 class ForgotPasswordVc: UIViewController {
-
-    private let containerView = DTContainerView()
     
+    private let containerView = DTContainerView()
     let titleLabel = DTTitleLabel(textAlignment: .center, fontSize: 18, textColor: .label, text: "Reset Password")
     let emailTextField = DTTextField(placeholder: "Enter Email", placeHolderSize: 15)
     let resetButton = DTButton(title: "RESET PASSWORD", color: .systemPink, systemImageName: "arrow.clockwise", size: 20)
     let closeButton = DTButton(title: "CLOSE", color: UIColor.systemGray.withAlphaComponent(0.5), systemImageName: "xmark", size: 20)
     
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         configureViewController()
         applyConstraints()
     }
@@ -105,6 +104,5 @@ class ForgotPasswordVc: UIViewController {
         closeButton.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -10).isActive = true
         closeButton.widthAnchor.constraint(equalToConstant: textFieldWidth).isActive = true
         closeButton.heightAnchor.constraint(equalToConstant: 40).isActive = true
-        
     }
 }

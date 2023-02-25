@@ -22,4 +22,5 @@ struct CreditDetailModel: Codable, Hashable {
     var paidDebt: String
     var email: String
     var currency: String
+    var locale: String
 }

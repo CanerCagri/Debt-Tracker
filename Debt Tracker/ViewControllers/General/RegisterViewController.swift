@@ -27,7 +27,7 @@ class RegisterViewController: UIViewController {
     
     private func configureViewController() {
         view.backgroundColor = .systemBackground
-
+        
         let leftPaddingView = UIView(frame: CGRect(x: 0, y: 0, width: 40, height: 30))
         passwordTextField.leftView = leftPaddingView
         passwordTextField.leftViewMode = .always
@@ -57,14 +57,14 @@ class RegisterViewController: UIViewController {
     }
     
     @objc func togglePasswordVisibility() {
-         passwordTextField.isSecureTextEntry.toggle()
-
-         if passwordTextField.isSecureTextEntry {
-             showPasswordButton.setImage(UIImage(systemName: "eye.slash"), for: .normal)
-         } else {
-             showPasswordButton.setImage(UIImage(systemName: "eye"), for: .normal)
-         }
-     }
+        passwordTextField.isSecureTextEntry.toggle()
+        
+        if passwordTextField.isSecureTextEntry {
+            showPasswordButton.setImage(UIImage(systemName: "eye.slash"), for: .normal)
+        } else {
+            showPasswordButton.setImage(UIImage(systemName: "eye"), for: .normal)
+        }
+    }
     
     private func applyConstraints() {
         view.addSubviews(detailLabel, emailTextField, passwordTextField, registerButton)

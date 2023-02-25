@@ -8,7 +8,7 @@
 import UIKit
 
 class CreditsTableViewCell: UITableViewCell {
-
+    
     var containerViewOne = UIView()
     var containerViewTwo = UIView()
     var containerViewThree = UIView()
@@ -51,12 +51,9 @@ class CreditsTableViewCell: UITableViewCell {
         return progressBar
     }()
     
+    
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-    
-        containerViewOne.backgroundColor = .systemGray5
-        containerViewTwo.backgroundColor = .systemGray5
-        containerViewThree.backgroundColor = .systemGray5
         
         applyConstraints()
     }
@@ -76,83 +73,25 @@ class CreditsTableViewCell: UITableViewCell {
         
         totalInstallmentCount = Int(credit.installmentCount)
         count = Int(credit.paidCount)
-    
+        
         monthlyDepth.text = "Monthly Installment: \(credit.monthlyInstallment)"
         nextPayment.text = "Next Payment: \(credit.currentInstallmentDate)"
         totalDebt.text = credit.totalDebt
         paid.text = credit.paidDebt
-//        remaining.text = currencyInputFormatting(for: "\(credit.currency)\(credit.remainingDebt)")
-        let str = convertToDouble(inputString: credit.totalDebt)
-        let formatter1 = NumberFormatter()
-        formatter1.numberStyle = .decimal
-        if let number = formatter1.number(from: String(str))?.doubleValue {
-            let calculateRemaining = number - convertToDouble(inputString: credit.paidDebt)
-            let remainingTextFormatted = formatter1.string(from: calculateRemaining as NSNumber)
-            remaining.text = "\(credit.currency)\(remainingTextFormatted ?? "Error")"
-            
-        } else {
-            print("Invalid format")
-           
-        }
-    }
-    
-    func convertToDouble(inputString: String) -> Double {
-        let pattern = "[\\d,.]+"
-        let regex = try! NSRegularExpression(pattern: pattern, options: [])
-        
-        let matches = regex.matches(in: inputString, options: [], range: NSRange(location: 0, length: inputString.utf16.count))
-        let numbersAndCommas = matches.map { match in
-            String(inputString[Range(match.range, in: inputString)!])
-        }
-        let result = numbersAndCommas.joined()
-        
-        let str = result
-        let formatter = NumberFormatter()
-        formatter.numberStyle = .decimal
-        if let number = formatter.number(from: str)?.doubleValue {
-            return number
-        } else {
-            print("Invalid format")
-            return 0.0
-        }
-    }
-    
-    func currencyInputFormatting(for amount: String) -> String {
-        let numberFormatter = NumberFormatter()
-        numberFormatter.numberStyle = .currency
-        
-        let numberOfDecimalPlaces = numberFormatter.maximumFractionDigits
-        
-        //Clean the inputed string
-        var cleanedAmount = ""
-        
-        for character in amount {
-            if character.isNumber {
-                cleanedAmount.append(character)
-            }
-        }
-        
-        //Format the number based on number of decimal digits
-        if numberOfDecimalPlaces > 0 {
-            //ie. USD
-            let amountAsDouble = Double(cleanedAmount) ?? 0.0
-            return numberFormatter.string(from: amountAsDouble / 100.0 as NSNumber) ?? ""
-        } else {
-            //ie. JPY
-            let amountAsNumber = Double(cleanedAmount) as NSNumber?
-            return numberFormatter.string(from: amountAsNumber ?? 0) ?? ""
-        }
+        remaining.text = credit.remainingDebt
     }
     
     func applyConstraints() {
-        
         nameLabel.numberOfLines = 2
         
         addSubviews(nameLabel, entryDebt, paidCount, remainingCount, progressBar, monthlyDepth, nextPayment, containerViewOne, containerViewTwo, containerViewThree)
         progressBar.translatesAutoresizingMaskIntoConstraints = false
+        containerViewOne.translatesAutoresizingMaskIntoConstraints = false
         containerViewTwo.translatesAutoresizingMaskIntoConstraints = false
         containerViewThree.translatesAutoresizingMaskIntoConstraints = false
-        containerViewOne.translatesAutoresizingMaskIntoConstraints = false
+        containerViewOne.backgroundColor = .systemGray5
+        containerViewTwo.backgroundColor = .systemGray5
+        containerViewThree.backgroundColor = .systemGray5
         accessoryType = .disclosureIndicator
         
         nameLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: 10).isActive = true

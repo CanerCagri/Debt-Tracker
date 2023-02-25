@@ -8,17 +8,16 @@
 import UIKit
 import Firebase
 
-class CreateCreditPopupVc: UIViewController {
-    
-    let db = Firestore.firestore()
+class CreateBankPopupVc: UIViewController {
     
     private let containerView = DTContainerView()
-    
     let titleLabel = DTTitleLabel(textAlignment: .center, fontSize: 18, textColor: .label, text: "Add Bank")
     let saveButton = DTButton(title: "SAVE", color: .systemPink, systemImageName: "square.and.arrow.down", size: 20)
-    let nameTextField = DTTextField(placeholder: "Enter Name", placeHolderSize: 15)
-    let detailTextField = DTTextField(placeholder: "Enter Detail", placeHolderSize: 15)
+    let nameTextField = DTTextField(placeholder: "Ban Name", placeHolderSize: 15)
+    let detailTextField = DTTextField(placeholder: "Detail", placeHolderSize: 15)
     private var closeButton = DTCloseButton()
+    
+    let db = Firestore.firestore()
     
     
     override func viewDidLoad() {
@@ -106,7 +105,7 @@ class CreateCreditPopupVc: UIViewController {
         closeButton.widthAnchor.constraint(equalToConstant: 44).isActive = true
         
         nameTextField.centerXAnchor.constraint(equalTo: containerView.centerXAnchor).isActive = true
-        nameTextField.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 20).isActive = true
+        nameTextField.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 35).isActive = true
         nameTextField.widthAnchor.constraint(equalToConstant: textFieldWidth ).isActive = true
         nameTextField.heightAnchor.constraint(equalToConstant: 40).isActive = true
         

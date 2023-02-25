@@ -8,12 +8,12 @@
 import UIKit
 
 class SplashScreenViewController: UIViewController {
-
+    
     private let welcomeLabel = DTTitleLabel(textAlignment: .center, fontSize: 32)
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         view.backgroundColor = .systemPink
         welcomeLabel.textColor = .systemBackground
         welcomeLabel.text = "Debt Tracker"

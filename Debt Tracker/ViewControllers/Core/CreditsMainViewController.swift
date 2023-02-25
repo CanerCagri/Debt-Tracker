@@ -12,7 +12,6 @@ class CreditsMainViewController: UIViewController {
     
     let db = Firestore.firestore()
     var documentIds: [String] = []
-    
     private var banks: [BankDetails] = []
     var emptyState: DTEmptyStateView?
     
@@ -55,7 +54,6 @@ class CreditsMainViewController: UIViewController {
     }
     
     private func fetchFromFirestore() {
-        
         FirestoreManager.shared.fetchBanks { [weak self] result in
             switch result {
             case .success(let success):
@@ -107,7 +105,8 @@ class CreditsMainViewController: UIViewController {
             view.backgroundColor = .gray
             
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.2 ) { [weak self] in
-                let popupVc = CreateCreditPopupVc()
+                
+                let popupVc = CreateBankPopupVc()
                 
                 self?.addChild(popupVc)
                 self?.view.addSubview(popupVc.view)

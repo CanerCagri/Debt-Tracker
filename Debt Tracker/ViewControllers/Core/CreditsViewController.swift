@@ -15,7 +15,6 @@ class CreditsViewController: UIViewController {
     let creditsTableView = UITableView()
     let contentView = UIView()
     var emptyState: DTEmptyStateView?
-    
     private var credits: [CreditDetailModel] = []
     
     
@@ -35,7 +34,6 @@ class CreditsViewController: UIViewController {
     private func configureViewController() {
         view.backgroundColor = .systemBackground
         title = "Credits"
-        
         view.addSubviews(contentView)
         contentView.translatesAutoresizingMaskIntoConstraints = false
         contentView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true

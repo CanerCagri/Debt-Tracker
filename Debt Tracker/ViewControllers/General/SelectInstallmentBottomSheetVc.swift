@@ -69,5 +69,4 @@ extension SelectInstallmentBottomSheetVc: UIPickerViewDataSource, UIPickerViewDe
       func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
           return "\(numbers[row])"
       }
-    
 }
