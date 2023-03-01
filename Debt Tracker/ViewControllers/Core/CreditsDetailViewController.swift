@@ -30,8 +30,8 @@ class CreditsDetailViewController: UIViewController {
             title = creditModel.name
             detailLabel.text = creditModel.detail
             totalDebtLabel.text = "Total Debt: \(creditModel.totalDebt)"
-            remainingDebtLabel.text = "Remaining Debt: \(creditModel.remainingDebt)"
-            totalPaidDebtLabel.text = "Paid Debt: \(creditModel.paidDebt)"
+            remainingDebtLabel.text = "Remaining: \(creditModel.remainingDebt)"
+            totalPaidDebtLabel.text = "Paid: \(creditModel.paidDebt)"
             totalPaidMonthLabel.text = "\(String(creditModel.paidCount))/\(String(creditModel.installmentCount)) paid"
         }
     }

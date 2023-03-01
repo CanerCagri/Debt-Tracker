@@ -61,6 +61,7 @@ class LoginViewController: UIViewController {
         passwordTextField.rightViewMode = .always
         
         loginButton.addTarget(self, action: #selector(loginButtonTapped), for: .touchUpInside)
+        googleSignInButton.addTarget(self, action: #selector(signInWithGooglePressed), for: .touchUpInside)
         facebookLoginButton.addTarget(self, action: #selector(signInWithFacebookPressed), for: .touchUpInside)
         
         forgetPasswordLabel.isUserInteractionEnabled = true
@@ -76,8 +77,6 @@ class LoginViewController: UIViewController {
         NotificationCenter.default.addObserver(forName: NSNotification.Name("resetCloseTapped"), object: nil, queue: nil) { [weak self] (notification) in
             self?.isForgetPasswordTapped = false
         }
-        
-        googleSignInButton.addTarget(self, action: #selector(signInWithGooglePressed), for: .touchUpInside)
     }
     
     
@@ -213,7 +212,7 @@ class LoginViewController: UIViewController {
         forgetPasswordLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         forgetPasswordLabel.topAnchor.constraint(equalTo: loginButton.bottomAnchor, constant: 5).isActive = true
         
-        googleSignInButton.topAnchor.constraint(equalTo: forgetPasswordLabel.bottomAnchor, constant: 60).isActive = true
+        googleSignInButton.topAnchor.constraint(equalTo: loginButton.bottomAnchor, constant: 80).isActive = true
         googleSignInButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20).isActive = true
         googleSignInButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20).isActive = true
         googleSignInButton.heightAnchor.constraint(equalToConstant: 40).isActive = true

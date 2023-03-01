@@ -35,14 +35,24 @@
 		011E8C89298A911A00F163D4 /* CreditsPopupVc.swift in Sources */ = {isa = PBXBuildFile; fileRef = 011E8C88298A911A00F163D4 /* CreditsPopupVc.swift */; };
 		011E8C8F298B2D0700F163D4 /* SelectInstallmentBottomSheetVc.swift in Sources */ = {isa = PBXBuildFile; fileRef = 011E8C8E298B2D0700F163D4 /* SelectInstallmentBottomSheetVc.swift */; };
 		011E8C91298BF6AA00F163D4 /* CreditDetailModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 011E8C90298BF6AA00F163D4 /* CreditDetailModel.swift */; };
-		011E8C93298C6A6000F163D4 /* CreateCreditPopupVc.swift in Sources */ = {isa = PBXBuildFile; fileRef = 011E8C92298C6A6000F163D4 /* CreateCreditPopupVc.swift */; };
+		011E8C93298C6A6000F163D4 /* CreateBankPopupVc.swift in Sources */ = {isa = PBXBuildFile; fileRef = 011E8C92298C6A6000F163D4 /* CreateBankPopupVc.swift */; };
 		0129E075299558FC002FBAA0 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0129E074299558FC002FBAA0 /* LoginViewController.swift */; };
 		0129E07729995E2B002FBAA0 /* AuthManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0129E07629995E2B002FBAA0 /* AuthManager.swift */; };
 		0129E079299985F8002FBAA0 /* ForgotPasswordVc.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0129E078299985F8002FBAA0 /* ForgotPasswordVc.swift */; };
 		0129E07B299A8454002FBAA0 /* DTCloseButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0129E07A299A8454002FBAA0 /* DTCloseButton.swift */; };
 		0129E07D299A8B1D002FBAA0 /* SelectCurrencyBottomVc.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0129E07C299A8B1D002FBAA0 /* SelectCurrencyBottomVc.swift */; };
-		0129E07F299A8E79002FBAA0 /* CurrencyTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0129E07E299A8E79002FBAA0 /* CurrencyTableViewCell.swift */; };
-		0129E081299A8F9C002FBAA0 /* CurrencyData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0129E080299A8F9C002FBAA0 /* CurrencyData.swift */; };
+		0129E0A0299EF27C002FBAA0 /* GoogleSignIn in Frameworks */ = {isa = PBXBuildFile; productRef = 0129E09F299EF27C002FBAA0 /* GoogleSignIn */; };
+		0129E0A2299EF27C002FBAA0 /* GoogleSignInSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 0129E0A1299EF27C002FBAA0 /* GoogleSignInSwift */; };
+		0129E0A5299EF94F002FBAA0 /* FacebookCore in Frameworks */ = {isa = PBXBuildFile; productRef = 0129E0A4299EF94F002FBAA0 /* FacebookCore */; };
+		0129E0A7299EF94F002FBAA0 /* FacebookLogin in Frameworks */ = {isa = PBXBuildFile; productRef = 0129E0A6299EF94F002FBAA0 /* FacebookLogin */; };
+		0129E0AA29A0D823002FBAA0 /* CurrencyTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0129E0A929A0D823002FBAA0 /* CurrencyTextField.swift */; };
+		0129E0AC29A0F2C3002FBAA0 /* UITableViewCell+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0129E0AB29A0F2C3002FBAA0 /* UITableViewCell+Ext.swift */; };
+		0129E0AE29A0F2D5002FBAA0 /* String+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0129E0AD29A0F2D5002FBAA0 /* String+Ext.swift */; };
+		0129E0B029A0F322002FBAA0 /* Currency.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0129E0AF29A0F322002FBAA0 /* Currency.swift */; };
+		0129E0B229A0FA24002FBAA0 /* SelectCurrencyCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0129E0B129A0FA24002FBAA0 /* SelectCurrencyCell.swift */; };
+		015D324429A8FEBA008E6FD7 /* SplashScreenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 015D324329A8FEBA008E6FD7 /* SplashScreenViewController.swift */; };
+		015D324729A901DD008E6FD7 /* DTFacebookSigninButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 015D324629A901DD008E6FD7 /* DTFacebookSigninButton.swift */; };
+		017EDC3B29A68B7E00AD87D7 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 017EDC3A29A68B7E00AD87D7 /* Constants.swift */; };
 		01D8F50829944D1C00369895 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 01D8F50729944D1C00369895 /* GoogleService-Info.plist */; };
 		01D8F50B29944D9A00369895 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 01D8F50A29944D9A00369895 /* FirebaseAuth */; };
 		01D8F50D29944D9A00369895 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 01D8F50C29944D9A00369895 /* FirebaseFirestore */; };
@@ -81,14 +91,21 @@
 		011E8C88298A911A00F163D4 /* CreditsPopupVc.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreditsPopupVc.swift; sourceTree = "<group>"; };
 		011E8C8E298B2D0700F163D4 /* SelectInstallmentBottomSheetVc.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectInstallmentBottomSheetVc.swift; sourceTree = "<group>"; };
 		011E8C90298BF6AA00F163D4 /* CreditDetailModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreditDetailModel.swift; sourceTree = "<group>"; };
-		011E8C92298C6A6000F163D4 /* CreateCreditPopupVc.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateCreditPopupVc.swift; sourceTree = "<group>"; };
+		011E8C92298C6A6000F163D4 /* CreateBankPopupVc.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateBankPopupVc.swift; sourceTree = "<group>"; };
 		0129E074299558FC002FBAA0 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		0129E07629995E2B002FBAA0 /* AuthManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthManager.swift; sourceTree = "<group>"; };
 		0129E078299985F8002FBAA0 /* ForgotPasswordVc.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForgotPasswordVc.swift; sourceTree = "<group>"; };
 		0129E07A299A8454002FBAA0 /* DTCloseButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DTCloseButton.swift; sourceTree = "<group>"; };
 		0129E07C299A8B1D002FBAA0 /* SelectCurrencyBottomVc.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectCurrencyBottomVc.swift; sourceTree = "<group>"; };
-		0129E07E299A8E79002FBAA0 /* CurrencyTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrencyTableViewCell.swift; sourceTree = "<group>"; };
-		0129E080299A8F9C002FBAA0 /* CurrencyData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrencyData.swift; sourceTree = "<group>"; };
+		0129E0A8299F0219002FBAA0 /* Debt Tracker.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Debt Tracker.entitlements"; sourceTree = "<group>"; };
+		0129E0A929A0D823002FBAA0 /* CurrencyTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrencyTextField.swift; sourceTree = "<group>"; };
+		0129E0AB29A0F2C3002FBAA0 /* UITableViewCell+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITableViewCell+Ext.swift"; sourceTree = "<group>"; };
+		0129E0AD29A0F2D5002FBAA0 /* String+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Ext.swift"; sourceTree = "<group>"; };
+		0129E0AF29A0F322002FBAA0 /* Currency.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Currency.swift; sourceTree = "<group>"; };
+		0129E0B129A0FA24002FBAA0 /* SelectCurrencyCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectCurrencyCell.swift; sourceTree = "<group>"; };
+		015D324329A8FEBA008E6FD7 /* SplashScreenViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashScreenViewController.swift; sourceTree = "<group>"; };
+		015D324629A901DD008E6FD7 /* DTFacebookSigninButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DTFacebookSigninButton.swift; sourceTree = "<group>"; };
+		017EDC3A29A68B7E00AD87D7 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		01D8F50729944D1C00369895 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		01D8F51029953F3000369895 /* RegisterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -98,8 +115,12 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0129E0A2299EF27C002FBAA0 /* GoogleSignInSwift in Frameworks */,
+				0129E0A5299EF94F002FBAA0 /* FacebookCore in Frameworks */,
 				01D8F50B29944D9A00369895 /* FirebaseAuth in Frameworks */,
+				0129E0A0299EF27C002FBAA0 /* GoogleSignIn in Frameworks */,
 				01D8F50D29944D9A00369895 /* FirebaseFirestore in Frameworks */,
+				0129E0A7299EF94F002FBAA0 /* FacebookLogin in Frameworks */,
 				01D8F50F29944D9A00369895 /* FirebaseStorage in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -126,6 +147,7 @@
 		011E8C26298346BE00F163D4 /* Debt Tracker */ = {
 			isa = PBXGroup;
 			children = (
+				0129E0A8299F0219002FBAA0 /* Debt Tracker.entitlements */,
 				011E8C83298A884500F163D4 /* Utilities */,
 				011E8C4E2983534500F163D4 /* Models */,
 				011E8C4B298352B900F163D4 /* Extensions */,
@@ -155,7 +177,7 @@
 				011E8C3D29834A1800F163D4 /* CreditsTableViewCell.swift */,
 				011E8C792985C92300F163D4 /* CreditsDetailTableViewCell.swift */,
 				011E8C81298A84CA00F163D4 /* CreditsCollectionViewCell.swift */,
-				0129E07E299A8E79002FBAA0 /* CurrencyTableViewCell.swift */,
+				0129E0B129A0FA24002FBAA0 /* SelectCurrencyCell.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -190,6 +212,8 @@
 				011E8C4C298352C700F163D4 /* UIView+Ext.swift */,
 				011E8C6F2984A8C300F163D4 /* Int+Ext.swift */,
 				011E8C7729858CD700F163D4 /* UIViewController+Ext.swift */,
+				0129E0AB29A0F2C3002FBAA0 /* UITableViewCell+Ext.swift */,
+				0129E0AD29A0F2D5002FBAA0 /* String+Ext.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -199,7 +223,6 @@
 			children = (
 				011E8C86298A890300F163D4 /* BankDetails.swift */,
 				011E8C90298BF6AA00F163D4 /* CreditDetailModel.swift */,
-				0129E080299A8F9C002FBAA0 /* CurrencyData.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -226,6 +249,7 @@
 			isa = PBXGroup;
 			children = (
 				011E8C6329848B6200F163D4 /* DTTextField.swift */,
+				0129E0A929A0D823002FBAA0 /* CurrencyTextField.swift */,
 			);
 			path = TextFields;
 			sourceTree = "<group>";
@@ -235,6 +259,7 @@
 			children = (
 				011E8C66298497A900F163D4 /* DTButton.swift */,
 				0129E07A299A8454002FBAA0 /* DTCloseButton.swift */,
+				015D324629A901DD008E6FD7 /* DTFacebookSigninButton.swift */,
 			);
 			path = Buttons;
 			sourceTree = "<group>";
@@ -242,6 +267,7 @@
 		011E8C6829849B6700F163D4 /* Core */ = {
 			isa = PBXGroup;
 			children = (
+				015D324329A8FEBA008E6FD7 /* SplashScreenViewController.swift */,
 				0129E074299558FC002FBAA0 /* LoginViewController.swift */,
 				011E8C7F298A808300F163D4 /* CreditsMainViewController.swift */,
 				011E8C2B298346BE00F163D4 /* CreditsViewController.swift */,
@@ -263,6 +289,7 @@
 			isa = PBXGroup;
 			children = (
 				011E8C7229858BC600F163D4 /* DTAlertViewController.swift */,
+				0129E0AF29A0F322002FBAA0 /* Currency.swift */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -280,6 +307,7 @@
 			isa = PBXGroup;
 			children = (
 				011E8C84298A885D00F163D4 /* UIHelper.swift */,
+				017EDC3A29A68B7E00AD87D7 /* Constants.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -289,7 +317,7 @@
 			children = (
 				01D8F51029953F3000369895 /* RegisterViewController.swift */,
 				0129E078299985F8002FBAA0 /* ForgotPasswordVc.swift */,
-				011E8C92298C6A6000F163D4 /* CreateCreditPopupVc.swift */,
+				011E8C92298C6A6000F163D4 /* CreateBankPopupVc.swift */,
 				011E8C88298A911A00F163D4 /* CreditsPopupVc.swift */,
 				011E8C8E298B2D0700F163D4 /* SelectInstallmentBottomSheetVc.swift */,
 				0129E07C299A8B1D002FBAA0 /* SelectCurrencyBottomVc.swift */,
@@ -317,6 +345,10 @@
 				01D8F50A29944D9A00369895 /* FirebaseAuth */,
 				01D8F50C29944D9A00369895 /* FirebaseFirestore */,
 				01D8F50E29944D9A00369895 /* FirebaseStorage */,
+				0129E09F299EF27C002FBAA0 /* GoogleSignIn */,
+				0129E0A1299EF27C002FBAA0 /* GoogleSignInSwift */,
+				0129E0A4299EF94F002FBAA0 /* FacebookCore */,
+				0129E0A6299EF94F002FBAA0 /* FacebookLogin */,
 			);
 			productName = "Debt Tracker";
 			productReference = 011E8C24298346BE00F163D4 /* Debt Tracker.app */;
@@ -348,6 +380,8 @@
 			mainGroup = 011E8C1B298346BE00F163D4;
 			packageReferences = (
 				01D8F50929944D9A00369895 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+				0129E09E299EF27C002FBAA0 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */,
+				0129E0A3299EF94F002FBAA0 /* XCRemoteSwiftPackageReference "facebook-ios-sdk" */,
 			);
 			productRefGroup = 011E8C25298346BE00F163D4 /* Products */;
 			projectDirPath = "";
@@ -376,12 +410,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0129E081299A8F9C002FBAA0 /* CurrencyData.swift in Sources */,
 				011E8C7829858CD700F163D4 /* UIViewController+Ext.swift in Sources */,
 				011E8C6E29849F5F00F163D4 /* DTDatePicker.swift in Sources */,
 				011E8C7E298A801200F163D4 /* MainTabBarViewController.swift in Sources */,
 				011E8C3E29834A1800F163D4 /* CreditsTableViewCell.swift in Sources */,
 				011E8C4D298352C700F163D4 /* UIView+Ext.swift in Sources */,
+				0129E0AA29A0D823002FBAA0 /* CurrencyTextField.swift in Sources */,
 				011E8C8F298B2D0700F163D4 /* SelectInstallmentBottomSheetVc.swift in Sources */,
 				011E8C7C2986A14300F163D4 /* DTEmptyStateView.swift in Sources */,
 				011E8C80298A808300F163D4 /* CreditsMainViewController.swift in Sources */,
@@ -389,12 +423,17 @@
 				011E8C91298BF6AA00F163D4 /* CreditDetailModel.swift in Sources */,
 				011E8C4629834CDD00F163D4 /* DTTitleLabel.swift in Sources */,
 				011E8C6429848B6200F163D4 /* DTTextField.swift in Sources */,
-				011E8C93298C6A6000F163D4 /* CreateCreditPopupVc.swift in Sources */,
+				0129E0AC29A0F2C3002FBAA0 /* UITableViewCell+Ext.swift in Sources */,
+				011E8C93298C6A6000F163D4 /* CreateBankPopupVc.swift in Sources */,
 				011E8C5D2984014200F163D4 /* FirestoreManager.swift in Sources */,
+				015D324729A901DD008E6FD7 /* DTFacebookSigninButton.swift in Sources */,
 				011E8C67298497A900F163D4 /* DTButton.swift in Sources */,
 				011E8C7A2985C92300F163D4 /* CreditsDetailTableViewCell.swift in Sources */,
+				015D324429A8FEBA008E6FD7 /* SplashScreenViewController.swift in Sources */,
 				011E8C4129834C4D00F163D4 /* CreditsDetailViewController.swift in Sources */,
 				011E8C7629858C1900F163D4 /* DTContainerView.swift in Sources */,
+				017EDC3B29A68B7E00AD87D7 /* Constants.swift in Sources */,
+				0129E0B029A0F322002FBAA0 /* Currency.swift in Sources */,
 				0129E075299558FC002FBAA0 /* LoginViewController.swift in Sources */,
 				0129E07729995E2B002FBAA0 /* AuthManager.swift in Sources */,
 				011E8C2C298346BE00F163D4 /* CreditsViewController.swift in Sources */,
@@ -403,9 +442,10 @@
 				0129E07D299A8B1D002FBAA0 /* SelectCurrencyBottomVc.swift in Sources */,
 				0129E079299985F8002FBAA0 /* ForgotPasswordVc.swift in Sources */,
 				0129E07B299A8454002FBAA0 /* DTCloseButton.swift in Sources */,
+				0129E0B229A0FA24002FBAA0 /* SelectCurrencyCell.swift in Sources */,
 				011E8C702984A8C300F163D4 /* Int+Ext.swift in Sources */,
 				011E8C7329858BC600F163D4 /* DTAlertViewController.swift in Sources */,
-				0129E07F299A8E79002FBAA0 /* CurrencyTableViewCell.swift in Sources */,
+				0129E0AE29A0F2D5002FBAA0 /* String+Ext.swift in Sources */,
 				011E8C87298A890300F163D4 /* BankDetails.swift in Sources */,
 				011E8C85298A885D00F163D4 /* UIHelper.swift in Sources */,
 				011E8C82298A84CA00F163D4 /* CreditsCollectionViewCell.swift in Sources */,
@@ -547,6 +587,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = "Debt Tracker/Debt Tracker.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = XSY7H53P5K;
@@ -579,6 +620,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = "Debt Tracker/Debt Tracker.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = XSY7H53P5K;
@@ -630,6 +672,22 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		0129E09E299EF27C002FBAA0 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/google/GoogleSignIn-iOS";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
+		0129E0A3299EF94F002FBAA0 /* XCRemoteSwiftPackageReference "facebook-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/facebook/facebook-ios-sdk?fbclid=IwAR0SRmq0Ia71geUhjh8F6kqioNPoMT3EtcLLU45c-6LlailvyaYrgoBBVZ0";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
 		01D8F50929944D9A00369895 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
@@ -641,6 +699,26 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		0129E09F299EF27C002FBAA0 /* GoogleSignIn */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 0129E09E299EF27C002FBAA0 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */;
+			productName = GoogleSignIn;
+		};
+		0129E0A1299EF27C002FBAA0 /* GoogleSignInSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 0129E09E299EF27C002FBAA0 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */;
+			productName = GoogleSignInSwift;
+		};
+		0129E0A4299EF94F002FBAA0 /* FacebookCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 0129E0A3299EF94F002FBAA0 /* XCRemoteSwiftPackageReference "facebook-ios-sdk" */;
+			productName = FacebookCore;
+		};
+		0129E0A6299EF94F002FBAA0 /* FacebookLogin */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 0129E0A3299EF94F002FBAA0 /* XCRemoteSwiftPackageReference "facebook-ios-sdk" */;
+			productName = FacebookLogin;
+		};
 		01D8F50A29944D9A00369895 /* FirebaseAuth */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 01D8F50929944D9A00369895 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
