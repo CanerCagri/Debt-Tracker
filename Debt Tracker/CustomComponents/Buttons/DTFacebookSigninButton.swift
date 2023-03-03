@@ -25,7 +25,12 @@ class DTFacebookSigninButton: UIButton {
     
     init(iconCentered: Bool) {
         super.init(frame: .zero)
-        configureWithIconCentered()
+        
+        if iconCentered == true {
+            configure()
+        } else {
+            configureWithIconCentered()
+        }
     }
     
     private func configure() {

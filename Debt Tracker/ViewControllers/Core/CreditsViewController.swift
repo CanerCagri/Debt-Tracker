@@ -44,12 +44,16 @@ class CreditsViewController: UIViewController {
     }
     
     private func configureTableView() {
-        creditsTableView.frame = view.bounds
-        
         creditsTableView.delegate = self
         creditsTableView.dataSource = self
         creditsTableView.rowHeight = 200
         creditsTableView.register(CreditsTableViewCell.self, forCellReuseIdentifier:CreditsTableViewCell.identifier)
+        
+        creditsTableView.translatesAutoresizingMaskIntoConstraints = false
+        creditsTableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
+        creditsTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
+        creditsTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
+        creditsTableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor).isActive = true
     }
     
     private func fetchFromFirebase() {
