@@ -18,18 +18,13 @@ class DTFacebookSigninButton: UIButton {
         fatalError("init(coder:) has not been implemented")
     }
     
-    init() {
-        super.init(frame: .zero)
-        configure()
-    }
-    
     init(iconCentered: Bool) {
         super.init(frame: .zero)
         
         if iconCentered == true {
-            configure()
-        } else {
             configureWithIconCentered()
+        } else {
+            configure()
         }
     }
     

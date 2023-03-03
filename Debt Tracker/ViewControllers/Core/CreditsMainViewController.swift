@@ -119,6 +119,7 @@ class CreditsMainViewController: UIViewController {
     @objc func logoutButtonTapped() {
         do {
             try Auth.auth().signOut()
+            FirestoreManager.shared.stopFetchingCredit()
             NotificationCenter.default.post(name: .signOutButton , object: nil)
             
         } catch let signOutError as NSError {

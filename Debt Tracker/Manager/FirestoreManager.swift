@@ -23,6 +23,7 @@ class FirestoreManager {
     
     static let shared = FirestoreManager()
     let db = Firestore.firestore()
+    var banksListener: ListenerRegistration?
     
     
     func createBank(name: String, detail: String, completion: @escaping (Result<Void, Error>) -> Void) {
@@ -91,7 +92,7 @@ class FirestoreManager {
         var banks: [CreditDetailModel] = []
         var documentIds: [String] = []
         
-        db.collection("credits").addSnapshotListener { querySnapShot, error in
+        banksListener = db.collection("credits").addSnapshotListener { querySnapShot, error in
             
             banks = []
             documentIds = []
@@ -131,6 +132,10 @@ class FirestoreManager {
                 completion(.success(CreditData(creditDetails: banks, stringArray: documentIds)))
             }
         }
+    }
+    
+    func stopFetchingCredit() {
+        banksListener?.remove()
     }
     
     func createCredit(creditModel: CreditDetailModel, completion: @escaping (Result<Void, Error>) -> Void) {

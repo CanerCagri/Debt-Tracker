@@ -25,7 +25,7 @@ class LoginViewController: UIViewController {
     let dontHaveAccLabel = DTTitleLabel(textAlignment: .center, fontSize: 16, textColor: .label, text: "Don't have an account?")
     let registerLabel = DTTitleLabel(textAlignment: .center, fontSize: 18, textColor: .systemGray2, text: "REGISTER")
     let googleSignInButton = GIDSignInButton()
-    var facebookLoginButton = DTFacebookSigninButton()
+    var facebookLoginButton = DTFacebookSigninButton(iconCentered: false)
     
     var isLoginTapped = false
     var isForgetPasswordTapped = false
