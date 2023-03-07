@@ -143,12 +143,12 @@ class RegisterViewController: UIViewController {
         registerButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20).isActive = true
         registerButton.heightAnchor.constraint(equalToConstant: 40).isActive = true
         
-        appleSignInButton.topAnchor.constraint(equalTo: registerButton.bottomAnchor, constant: 80).isActive = true
+        appleSignInButton.topAnchor.constraint(equalTo: registerButton.bottomAnchor, constant: 50).isActive = true
         appleSignInButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20).isActive = true
         appleSignInButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20).isActive = true
         appleSignInButton.heightAnchor.constraint(equalToConstant: 40).isActive = true
         
-        facebookSignInButton.topAnchor.constraint(equalTo: appleSignInButton.bottomAnchor, constant: 20).isActive = true
+        facebookSignInButton.topAnchor.constraint(equalTo: appleSignInButton.bottomAnchor, constant: 10).isActive = true
         facebookSignInButton.leadingAnchor.constraint(equalTo: appleSignInButton.leadingAnchor).isActive = true
         facebookSignInButton.trailingAnchor.constraint(equalTo: appleSignInButton.trailingAnchor).isActive = true
         facebookSignInButton.heightAnchor.constraint(equalToConstant: 40).isActive = true

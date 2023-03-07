@@ -31,7 +31,7 @@ class CreateBankPopupVc: UIViewController {
         view.backgroundColor = UIColor.systemGray.withAlphaComponent(0.5)
         view.frame = UIScreen.main.bounds
         
-        closeButton.addTarget(self, action: #selector(dismissVC), for: .touchUpInside)
+        closeButton.addTarget(self, action: #selector(animateOut), for: .touchUpInside)
         saveButton.addTarget(self, action: #selector(saveButtonTapped), for: .touchUpInside)
     }
     
@@ -48,19 +48,16 @@ class CreateBankPopupVc: UIViewController {
         FirestoreManager.shared.createBank(name: name, detail: detail) { [weak self] result in
             switch result {
             case .success(_):
-                self?.dismissVC()
+                self?.animateOut()
             case .failure(let failure):
                 self?.presentAlert(title: "Warning", message: failure.localizedDescription, buttonTitle: "OK")
             }
         }
     }
     
-    @objc func dismissVC() {
+    @objc func animateOut() {
         NotificationCenter.default.post(Notification(name: Notification.Name("popupButtonTapped"), userInfo: nil))
-        animateOut()
-    }
-    
-    func animateOut() {
+        
         UIView.animate(withDuration: 0.2, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 1, options: .curveEaseIn) { [weak self] in
             self?.containerView.transform = CGAffineTransform(translationX: 0, y: -(self?.view.frame.height)!)
             self?.view.alpha = 0
@@ -92,7 +89,7 @@ class CreateBankPopupVc: UIViewController {
         containerView.addSubviews(titleLabel, closeButton, saveButton, nameTextField, detailTextField)
         
         containerView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        containerView.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
+        containerView.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: -30).isActive = true
         containerView.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.82).isActive = true
         containerView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.30).isActive = true
         
@@ -105,7 +102,7 @@ class CreateBankPopupVc: UIViewController {
         closeButton.widthAnchor.constraint(equalToConstant: 44).isActive = true
         
         nameTextField.centerXAnchor.constraint(equalTo: containerView.centerXAnchor).isActive = true
-        nameTextField.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 35).isActive = true
+        nameTextField.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 25).isActive = true
         nameTextField.widthAnchor.constraint(equalToConstant: textFieldWidth ).isActive = true
         nameTextField.heightAnchor.constraint(equalToConstant: 40).isActive = true
         
@@ -115,7 +112,7 @@ class CreateBankPopupVc: UIViewController {
         detailTextField.heightAnchor.constraint(equalToConstant: 40).isActive = true
         
         saveButton.centerXAnchor.constraint(equalTo: containerView.centerXAnchor).isActive = true
-        saveButton.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -10).isActive = true
+        saveButton.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -5).isActive = true
         saveButton.widthAnchor.constraint(equalToConstant: textFieldWidth).isActive = true
         saveButton.heightAnchor.constraint(equalToConstant: 40).isActive = true
     }

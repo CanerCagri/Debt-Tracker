@@ -24,7 +24,7 @@ class SplashScreenViewController: UIViewController {
             welcomeLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor),
         ])
         
-        DispatchQueue.main.asyncAfter(deadline: .now() + 3) { [weak self] in
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2) { [weak self] in
             guard let self = self else { return }
             let loginViewController = LoginViewController()
             loginViewController.navigationItem.hidesBackButton = true

@@ -72,10 +72,13 @@ class CreditsDetailViewController: UIViewController {
         startAndEndTitleLabel.topAnchor.constraint(equalTo: paymentTitleLabel.topAnchor, constant: 5).isActive = true
         startAndEndTitleLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -10).isActive = true
         
+        let tableViewHeight: CGFloat = DeviceTypes.isiPhoneSE || DeviceTypes.isiPhone8PlusZoomed || DeviceTypes.isiPhone8Standard || DeviceTypes.isiPhone8Zoomed || DeviceTypes.isiPhone8PlusStandard ? 285 : 400
+        
+        
         detailTableView.topAnchor.constraint(equalTo: paymentTitleLabel.bottomAnchor, constant: 10).isActive = true
         detailTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10).isActive = true
         detailTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -10).isActive = true
-        detailTableView.heightAnchor.constraint(equalToConstant: 400).isActive = true
+        detailTableView.heightAnchor.constraint(equalToConstant: tableViewHeight).isActive = true
         
         totalDebtLabel.topAnchor.constraint(equalTo: detailTableView.bottomAnchor, constant: 10).isActive = true
         totalDebtLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true

@@ -148,6 +148,7 @@ extension CreditsMainViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         collectionView.deselectItem(at: indexPath, animated: true)
         view.backgroundColor = .gray
+        navigationController?.isNavigationBarHidden = true
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.2 ) { [weak self] in
             let popupVc = CreditsPopupVc()

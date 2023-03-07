@@ -10,37 +10,9 @@ import Firebase
 
 class CreditsPopupVc: UIViewController {
     
-    private let containerView = DTContainerView()
-    let titleLabel = DTTitleLabel(textAlignment: .center, fontSize: 20, textColor: .label, text: "Add Credit")
-    let saveButton = DTButton(title: "Save", color: .systemPink, systemImageName: "square.and.arrow.down", size: 20)
-    let creditNameLabel = DTTitleLabel(textAlignment: .left, fontSize: 25)
-    let creditDetailLabel = DTTitleLabel(textAlignment: .left, fontSize: 25)
-    var currencyButton = DTButton(title: "Select Currency", color: .systemRed, size: 20)
-    var amountTextField = CurrencyTextField(size: 18)
-    var monthlyTextField = CurrencyTextField(size: 18)
-    let monthlyInstallmentCountLabel = DTTitleLabel(textAlignment: .left, fontSize: 15, text: "Select Number Of Installments:")
-    var monthlyInstallmentCountButton = DTButton(title: "12", color: .systemRed)
-    let rateLabel = DTTitleLabel(textAlignment: .left, fontSize: 18, textColor: .systemGray, text: "Interest Rate: ")
-    let rateResultLabel = DTTitleLabel(textAlignment: .left, fontSize: 18, textColor: .systemGray, text: "%0.0")
-    let totalPaymentLabel = DTTitleLabel(textAlignment: .left, fontSize: 18, textColor: .systemGray, text: "Total Payment:")
-    let totalPaymentResultLabel = DTTitleLabel(textAlignment: .left, fontSize: 18, textColor: .systemGray, text: "$0")
-    let firstInstallmentLabel = DTTitleLabel(textAlignment: .left, fontSize: 15, text: "Select First Installment:")
-    let firstInstallmentDatePicker = UIDatePicker()
-    private var closeButton = DTCloseButton()
-    
-    let db = Firestore.firestore()
-    
-    let installmentBottomVc = SelectInstallmentBottomSheetVc()
-    var monthCount = 12
-    var currencySymbol = "$"
-    var firstInstallmentDate = ""
-    var interestRateCalculated = ""
-    var locale = "en_EN"
-    
     var selectedCredit: BankDetails? {
         didSet {
-            creditNameLabel.text = selectedCredit?.name
-            creditDetailLabel.text = selectedCredit?.detail
+            creditNameLabel.text = "\(selectedCredit?.name ?? "Error") - \(selectedCredit?.detail ?? "Error")"
         }
     }
     
@@ -60,13 +32,45 @@ class CreditsPopupVc: UIViewController {
         }
     }
     
-
+    private let containerView = DTContainerView()
+    let titleLabel = DTTitleLabel(textAlignment: .center, fontSize: 20, textColor: .label, text: "Add Credit")
+    let saveButton = DTButton(title: "Save", color: .systemPink, systemImageName: "square.and.arrow.down", size: 20)
+    let creditNameLabel = DTTitleLabel(textAlignment: .left, fontSize: 25)
+    var currencyButton = DTButton(title: "Select Currency", color: .systemRed, size: 20)
+    var amountTextField = CurrencyTextField(size: 18)
+    var monthlyTextField = CurrencyTextField(size: 18)
+    let monthlyInstallmentCountLabel = DTTitleLabel(textAlignment: .left, fontSize: 15, text: "Select Number Of Installments:")
+    var monthlyInstallmentCountButton = DTButton(title: "12", color: .systemRed)
+    let rateLabel = DTTitleLabel(textAlignment: .left, fontSize: 18, textColor: .systemGray, text: "Interest Rate: ")
+    let rateResultLabel = DTTitleLabel(textAlignment: .left, fontSize: 18, textColor: .systemGray, text: "%0.0")
+    let totalPaymentLabel = DTTitleLabel(textAlignment: .left, fontSize: 18, textColor: .systemGray, text: "Total Payment:")
+    let totalPaymentResultLabel = DTTitleLabel(textAlignment: .left, fontSize: 18, textColor: .systemGray, text: "$0")
+    let firstInstallmentLabel = DTTitleLabel(textAlignment: .left, fontSize: 15, text: "Select First Installment:")
+    let firstInstallmentDatePicker = UIDatePicker()
+    private var closeButton = DTCloseButton()
+    var textFieldButton: UIButton?
+    
+    let db = Firestore.firestore()
+    
+    let installmentBottomVc = SelectInstallmentBottomSheetVc()
+    var monthCount = 12
+    var currencySymbol = "$"
+    var firstInstallmentDate = ""
+    var interestRateCalculated = ""
+    var locale = "en_EN"
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         configureViewController()
         setCurrencyOnStart()
         applyConstraints()
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        navigationController?.isNavigationBarHidden = false
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -77,12 +81,15 @@ class CreditsPopupVc: UIViewController {
         view.backgroundColor = UIColor.systemGray.withAlphaComponent(0.5)
         view.frame = UIScreen.main.bounds
         
+        amountTextField.placeholder = "Entry Amount"
+        monthlyTextField.placeholder = "Monthly Installment"
+        
         firstInstallmentDatePicker.datePickerMode = .date
         firstInstallmentDatePicker.addTarget(self, action: #selector(datePickerValueChanged), for: .valueChanged)
         
         datePickerValueChanged(sender: firstInstallmentDatePicker)
         
-        closeButton.addTarget(self, action: #selector(dismissVC), for: .touchUpInside)
+        closeButton.addTarget(self, action: #selector(animateOut), for: .touchUpInside)
         saveButton.addTarget(self, action: #selector(saveButtonTapped), for: .touchUpInside)
         currencyButton.addTarget(self, action: #selector(openCurrencyBottomVc), for: .touchUpInside)
         monthlyInstallmentCountButton.addTarget(self, action: #selector(openInstallmentBottomSheet), for: .touchUpInside)
@@ -96,8 +103,46 @@ class CreditsPopupVc: UIViewController {
             self?.calculateRateAndTotalPayment()
         }
         
+        NotificationCenter.default.addObserver(
+           self,
+           selector: #selector(keyboardWillShow),
+           name: UIResponder.keyboardWillShowNotification,
+           object: nil
+        )
+        
+        NotificationCenter.default.addObserver(
+           self,
+           selector: #selector(keyboardWillHide),
+           name: UIResponder.keyboardWillHideNotification,
+           object: nil
+        )
+        
+        textFieldButton = UIButton(frame: CGRect(x: 0, y: 0, width: view.frame.size.width, height: 50))
+        textFieldButton!.backgroundColor = UIColor.systemPink
+        textFieldButton!.setTitle("SAVE", for: .normal)
+        textFieldButton!.setTitleColor(UIColor.white, for: .normal)
+        textFieldButton!.addTarget(self, action: #selector(saveButtonTapped), for: .touchUpInside)
+        amountTextField.inputAccessoryView = textFieldButton
+        monthlyTextField.inputAccessoryView = textFieldButton
     }
     
+    @objc func keyboardWillShow(notification: NSNotification) {
+        textFieldButton = UIButton(frame: CGRect(x: 0, y: 0, width: view.frame.size.width, height: 50))
+        textFieldButton!.backgroundColor = UIColor.systemPink
+        textFieldButton!.setTitle("SAVE", for: .normal)
+        textFieldButton!.setTitleColor(UIColor.white, for: .normal)
+        textFieldButton!.addTarget(self, action: #selector(saveButtonTapped), for: .touchUpInside)
+        amountTextField.inputAccessoryView = textFieldButton
+        monthlyTextField.inputAccessoryView = textFieldButton
+    }
+    
+    @objc func keyboardWillHide(notification: NSNotification) {
+        if let textFieldButton {
+            textFieldButton.removeFromSuperview()
+            view.endEditing(false)
+        }
+    }
+
     @objc func saveButtonTapped() {
         
         guard let amount = amountTextField.text, !amount.isEmpty else {
@@ -117,7 +162,7 @@ class CreditsPopupVc: UIViewController {
             return
         }
         
-        let creditModel = CreditDetailModel(name: creditNameLabel.text!, detail: creditDetailLabel.text!, entryDebt: amount, installmentCount: monthCount, paidCount: 0, monthlyInstallment: monthly, firstInstallmentDate: firstInstallmentDate, currentInstallmentDate: firstInstallmentDate, totalDebt: calculatedPayment, interestRate: Double(interestRateCalculated)!, remainingDebt: calculatedPayment, paidDebt: "\(currencySymbol)0", email: userEmail, currency: currencySymbol, locale: locale)
+        let creditModel = CreditDetailModel(name: selectedCredit?.name ?? "Error", detail: selectedCredit?.detail ?? "Error", entryDebt: amount, installmentCount: monthCount, paidCount: 0, monthlyInstallment: monthly, firstInstallmentDate: firstInstallmentDate, currentInstallmentDate: firstInstallmentDate, totalDebt: calculatedPayment, interestRate: Double(interestRateCalculated)!, remainingDebt: calculatedPayment, paidDebt: "\(currencySymbol)0", email: userEmail, currency: currencySymbol, locale: locale)
         
         FirestoreManager.shared.createCredit(creditModel: creditModel) { [weak self] result in
             switch result {
@@ -132,10 +177,6 @@ class CreditsPopupVc: UIViewController {
             }
         }
         
-    }
-    
-    @objc func dismissVC() {
-        animateOut()
     }
     
     @objc func datePickerValueChanged(sender: UIDatePicker){
@@ -166,14 +207,14 @@ class CreditsPopupVc: UIViewController {
         totalPaymentResultLabel.text = Currency.currencyInputFormatting(with: locale, for: calculated)
         
         let cleanedAmount = Currency.convertToDouble(with: locale, for: amount)
-
+        
         let interestPrice = result - cleanedAmount
         let interestRate = (interestPrice / cleanedAmount) * Double(monthCount)
         interestRateCalculated = String(format: "%.2f", interestRate)
         rateResultLabel.text = "%\(interestRateCalculated)"
     }
-        
-    func animateOut() {
+    
+    @objc func animateOut() {
         UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 1, options: .curveEaseIn) { [weak self] in
             self?.containerView.transform = CGAffineTransform(translationX: 0, y: -(self?.view.frame.height)!)
             self?.view.alpha = 0
@@ -221,15 +262,15 @@ class CreditsPopupVc: UIViewController {
         view.addSubview(containerView)
         containerView.backgroundColor = .systemGray5
         firstInstallmentDatePicker.translatesAutoresizingMaskIntoConstraints = false
-        amountTextField.placeholder = "Entry Amount"
-        monthlyTextField.placeholder = "Monthly Installment"
+        
+        let containerViewHeightMultiplier: CGFloat = DeviceTypes.isiPhoneSE || DeviceTypes.isiPhone8PlusZoomed || DeviceTypes.isiPhone8Standard || DeviceTypes.isiPhone8Zoomed || DeviceTypes.isiPhone8PlusStandard ? 0.82 : 0.72
         
         containerView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         containerView.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
         containerView.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.82).isActive = true
-        containerView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.62).isActive = true
+        containerView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: containerViewHeightMultiplier).isActive = true
         
-        containerView.addSubviews(titleLabel, closeButton, saveButton, creditNameLabel, creditDetailLabel, currencyButton, amountTextField, monthlyTextField, monthlyInstallmentCountLabel, monthlyInstallmentCountButton, firstInstallmentLabel, firstInstallmentDatePicker, rateLabel, rateResultLabel, totalPaymentLabel, totalPaymentResultLabel)
+        containerView.addSubviews(titleLabel, closeButton, saveButton, creditNameLabel, currencyButton, amountTextField, monthlyTextField, monthlyInstallmentCountLabel, monthlyInstallmentCountButton, firstInstallmentLabel, firstInstallmentDatePicker, rateLabel, rateResultLabel, totalPaymentLabel, totalPaymentResultLabel)
         
         let totalWidth = view.frame.width
         let textFieldWidth = totalWidth / 1.5
@@ -247,12 +288,9 @@ class CreditsPopupVc: UIViewController {
         creditNameLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 20).isActive = true
         creditNameLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -20).isActive = true
         
-        creditDetailLabel.topAnchor.constraint(equalTo: creditNameLabel.bottomAnchor, constant: 10).isActive = true
-        creditDetailLabel.leadingAnchor.constraint(equalTo: creditNameLabel.leadingAnchor).isActive = true
-        creditDetailLabel.trailingAnchor.constraint(equalTo: creditNameLabel.trailingAnchor).isActive = true
-        
+
         currencyButton.centerXAnchor.constraint(equalTo: containerView.centerXAnchor).isActive = true
-        currencyButton.topAnchor.constraint(equalTo: creditDetailLabel.bottomAnchor, constant: 15).isActive = true
+        currencyButton.topAnchor.constraint(equalTo: creditNameLabel.bottomAnchor, constant: 15).isActive = true
         currencyButton.widthAnchor.constraint(equalToConstant: currenyButtonWidth ).isActive = true
         currencyButton.heightAnchor.constraint(equalToConstant: 40).isActive = true
         
@@ -293,11 +331,10 @@ class CreditsPopupVc: UIViewController {
         totalPaymentResultLabel.topAnchor.constraint(equalTo: rateLabel.bottomAnchor, constant: 15).isActive = true
         totalPaymentResultLabel.trailingAnchor.constraint(equalTo: rateResultLabel.trailingAnchor).isActive = true
         
-        saveButton.topAnchor.constraint(equalTo: totalPaymentResultLabel.bottomAnchor , constant: 20).isActive = true
+        saveButton.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -10).isActive = true
         saveButton.centerXAnchor.constraint(equalTo: containerView.centerXAnchor).isActive = true
         saveButton.widthAnchor.constraint(equalToConstant: textFieldWidth ).isActive = true
         saveButton.heightAnchor.constraint(equalToConstant: 40).isActive = true
-        
     }
 }
 
