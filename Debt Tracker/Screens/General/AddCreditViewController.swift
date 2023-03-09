@@ -86,9 +86,6 @@ class AddCreditViewController: UIViewController {
         amountTextField.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
         monthlyTextField.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
         
-        let tap = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
-        containerView.addGestureRecognizer(tap)
-        
         NotificationCenter.default.addObserver(forName: NSNotification.Name("selectedCount"), object: nil, queue: nil) { [weak self] (notification) in
             self?.monthCount = (notification.userInfo?["selectedCount"] as? Int)!
             self?.monthlyInstallmentCountButton.setTitle(String(self!.monthCount), for: .normal)
@@ -101,6 +98,9 @@ class AddCreditViewController: UIViewController {
            name: UIResponder.keyboardWillShowNotification,
            object: nil
         )
+        
+        let tap = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        containerView.addGestureRecognizer(tap)
     
         keyboardSaveButton = UIButton(frame: CGRect(x: 0, y: 0, width: view.frame.size.width, height: 50))
         keyboardSaveButton.backgroundColor = UIColor.systemPink

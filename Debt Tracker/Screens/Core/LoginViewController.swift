@@ -15,6 +15,26 @@ import FacebookCore
 
 class LoginViewController: UIViewController {
     
+    lazy var contentSize = CGSize(width: self.view.frame.width, height: self.view.frame.height + 100)
+    
+    lazy var scrollView: UIScrollView = {
+        let view = UIScrollView(frame: .zero)
+        view.backgroundColor = .white
+        view.contentSize = contentSize
+        view.frame = self.view.bounds
+        view.autoresizingMask = .flexibleHeight
+        view.bounces = true
+        view.showsHorizontalScrollIndicator = true
+        return view
+    }()
+    
+    lazy var contentView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .white
+        view.frame.size = contentSize
+        return view
+    }()
+    
     let detailLabel = DTTitleLabel(textAlignment: .left, fontSize: 24, text: "Login Account")
     let emailTextField = DTTextField(placeholder: "Your Email", placeHolderSize: 15, cornerRadius: 14)
     let passwordTextField = DTTextField(placeholder: "Password", placeHolderSize: 15, cornerRadius: 14)
@@ -29,6 +49,7 @@ class LoginViewController: UIViewController {
     
     var isLoginTapped = false
     var isForgetPasswordTapped = false
+    var isKeyboardAppear = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -43,6 +64,7 @@ class LoginViewController: UIViewController {
         emailTextField.text = ""
         passwordTextField.text = ""
         isLoginTapped = false
+        contentView.endEditing(true)
         
         emailTextField.text = "1@gmail.com"
         passwordTextField.text = "123456"
@@ -51,6 +73,8 @@ class LoginViewController: UIViewController {
     private func configureViewController() {
         view.backgroundColor = .systemBackground
         passwordTextField.isSecureTextEntry = true
+        passwordTextField.delegate = self
+        emailTextField.delegate = self
         
         let leftPaddingView = UIView(frame: CGRect(x: 0, y: 0, width: 40, height: 30))
         passwordTextField.leftView = leftPaddingView
@@ -75,6 +99,16 @@ class LoginViewController: UIViewController {
         let registerTapGesture = UITapGestureRecognizer(target: self, action: #selector(registerPagePresent))
         registerLabel.addGestureRecognizer(registerTapGesture)
         
+        let tap = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        contentView.addGestureRecognizer(tap)
+        
+        NotificationCenter.default.addObserver(
+           self,
+           selector: #selector(keyboardWillShow),
+           name: UIResponder.keyboardWillShowNotification,
+           object: nil
+        )
+        
         NotificationCenter.default.addObserver(self, selector: #selector(signOutButton), name: .signOutButton, object: nil)
         
         NotificationCenter.default.addObserver(forName: NSNotification.Name("resetCloseTapped"), object: nil, queue: nil) { [weak self] (notification) in
@@ -82,8 +116,25 @@ class LoginViewController: UIViewController {
         }
     }
     
+    @objc func keyboardWillShow(notification: NSNotification) {
+        if !isKeyboardAppear {
+            scrollView.isScrollEnabled = true
+            isKeyboardAppear = true
+        }
+    }
+    
+    @objc func dismissKeyboard() {
+        if isKeyboardAppear {
+            scrollView.isScrollEnabled = false
+            let topRect = CGRect(x: 0, y: 0, width: 1, height: 1)
+            scrollView.scrollRectToVisible(topRect, animated: true)
+            contentView.endEditing(true)
+            isKeyboardAppear = false
+        }
+    }
     
     @objc func signInWithGooglePressed() {
+        print("aa")
         GIDSignIn.sharedInstance.signIn(withPresenting: self) { [weak self] signInResult, err in
             
             if let error = err {
@@ -108,6 +159,7 @@ class LoginViewController: UIViewController {
     }
     
     @objc func signInWithFacebookPressed() {
+        print("bbb")
         LoginManager().logIn(permissions: ["public_profile", "email"], from: self) { result, error in
             if error != nil {
                 print(error!.localizedDescription)
@@ -188,36 +240,40 @@ class LoginViewController: UIViewController {
     }
     
     private func applyConstraints() {
-        view.addSubviews(detailLabel, emailTextField, passwordTextField, loginButton, forgetPasswordLabel, googleSignInButton, facebookLoginButton, dontHaveAccLabel, registerLabel)
+        view.addSubview(scrollView)
+        scrollView.isScrollEnabled = false
+        scrollView.addSubview(contentView)
+        
+        contentView.addSubviews(detailLabel, emailTextField, passwordTextField, loginButton, forgetPasswordLabel, googleSignInButton, facebookLoginButton, dontHaveAccLabel, registerLabel)
         containerView.addSubview(showPasswordButton)
         googleSignInButton.translatesAutoresizingMaskIntoConstraints = false
         googleSignInButton.style = .wide
         googleSignInButton.colorScheme = .light
         
-        detailLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        detailLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 50).isActive = true
+        detailLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor).isActive = true
+        detailLabel.topAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.topAnchor, constant: 50).isActive = true
         
         emailTextField.topAnchor.constraint(equalTo: detailLabel.bottomAnchor, constant: 50).isActive = true
-        emailTextField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20).isActive = true
-        emailTextField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20).isActive = true
+        emailTextField.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20).isActive = true
+        emailTextField.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20).isActive = true
         emailTextField.heightAnchor.constraint(equalToConstant: 40).isActive = true
         
         passwordTextField.topAnchor.constraint(equalTo: emailTextField.bottomAnchor, constant: 10).isActive = true
-        passwordTextField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20).isActive = true
-        passwordTextField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20).isActive = true
+        passwordTextField.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20).isActive = true
+        passwordTextField.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20).isActive = true
         passwordTextField.heightAnchor.constraint(equalToConstant: 40).isActive = true
         
         loginButton.topAnchor.constraint(equalTo: passwordTextField.bottomAnchor, constant: 20).isActive = true
-        loginButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20).isActive = true
-        loginButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20).isActive = true
+        loginButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20).isActive = true
+        loginButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20).isActive = true
         loginButton.heightAnchor.constraint(equalToConstant: 40).isActive = true
         
-        forgetPasswordLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        forgetPasswordLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor).isActive = true
         forgetPasswordLabel.topAnchor.constraint(equalTo: loginButton.bottomAnchor, constant: 5).isActive = true
         
         googleSignInButton.topAnchor.constraint(equalTo: loginButton.bottomAnchor, constant: 50).isActive = true
-        googleSignInButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20).isActive = true
-        googleSignInButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20).isActive = true
+        googleSignInButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20).isActive = true
+        googleSignInButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20).isActive = true
         googleSignInButton.heightAnchor.constraint(equalToConstant: 40).isActive = true
         
         facebookLoginButton.topAnchor.constraint(equalTo: googleSignInButton.bottomAnchor, constant: 10).isActive = true
@@ -225,10 +281,17 @@ class LoginViewController: UIViewController {
         facebookLoginButton.trailingAnchor.constraint(equalTo: loginButton.trailingAnchor).isActive = true
         facebookLoginButton.heightAnchor.constraint(equalToConstant: 40).isActive = true
         
-        registerLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        registerLabel.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -100).isActive = true
+        registerLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor).isActive = true
+        registerLabel.topAnchor.constraint(equalTo: facebookLoginButton.bottomAnchor, constant: 150).isActive = true
         
         dontHaveAccLabel.bottomAnchor.constraint(equalTo: registerLabel.topAnchor, constant: -5).isActive = true
-        dontHaveAccLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        dontHaveAccLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor).isActive = true
+    }
+}
+
+extension LoginViewController: UITextFieldDelegate {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        loginButtonTapped()
+        return true
     }
 }
