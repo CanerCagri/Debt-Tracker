@@ -107,7 +107,6 @@ class CreditsMainViewController: UIViewController {
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.2 ) { [weak self] in
                 
                 let popupVc = CreateBankPopupVc()
-                
                 self?.addChild(popupVc)
                 self?.view.addSubview(popupVc.view)
                 popupVc.didMove(toParent: self)
