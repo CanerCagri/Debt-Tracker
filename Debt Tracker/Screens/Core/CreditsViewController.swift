@@ -29,6 +29,7 @@ class CreditsViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.navigationBar.prefersLargeTitles = false
+        navigationItem.hidesBackButton = true
     }
     
     private func configureViewController() {
@@ -63,7 +64,8 @@ class CreditsViewController: UIViewController {
                 self?.credits = success.creditDetails
                 self?.documentIds = success.stringArray
                 
-                if self!.credits.isEmpty {
+                guard let credits = self?.credits.isEmpty else { return }
+                if credits {
                     self?.emptyState = DTEmptyStateView(message: "Currently don't have a Credit")
                     self?.emptyState?.frame = (self?.view.bounds)!
                     self?.view.addSubview((self?.emptyState!)!)

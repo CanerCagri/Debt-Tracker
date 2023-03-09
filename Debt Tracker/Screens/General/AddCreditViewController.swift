@@ -8,7 +8,7 @@
 import UIKit
 import Firebase
 
-class CreditsPopupVc: UIViewController {
+class AddCreditViewController: UIViewController {
     
     var selectedCredit: BankDetails? {
         didSet {
@@ -32,8 +32,6 @@ class CreditsPopupVc: UIViewController {
         }
     }
     
-    private let containerView = DTContainerView()
-    let titleLabel = DTTitleLabel(textAlignment: .center, fontSize: 20, textColor: .label, text: "Add Credit")
     let saveButton = DTButton(title: "Save", color: .systemPink, systemImageName: "square.and.arrow.down", size: 20)
     let creditNameLabel = DTTitleLabel(textAlignment: .left, fontSize: 25)
     var currencyButton = DTButton(title: "Select Currency", color: .systemRed, size: 20)
@@ -47,8 +45,6 @@ class CreditsPopupVc: UIViewController {
     let totalPaymentResultLabel = DTTitleLabel(textAlignment: .left, fontSize: 18, textColor: .systemGray, text: "$0")
     let firstInstallmentLabel = DTTitleLabel(textAlignment: .left, fontSize: 15, text: "Select First Installment:")
     let firstInstallmentDatePicker = UIDatePicker()
-    private var closeButton = DTCloseButton()
-    var textFieldButton: UIButton?
     
     let db = Firestore.firestore()
     
@@ -68,18 +64,14 @@ class CreditsPopupVc: UIViewController {
         applyConstraints()
     }
     
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
-        navigationController?.isNavigationBarHidden = false
-    }
-    
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         view.endEditing(true)
     }
     
     private func configureViewController() {
-        view.backgroundColor = UIColor.systemGray.withAlphaComponent(0.5)
-        view.frame = UIScreen.main.bounds
+        view.backgroundColor = .systemBackground
+        title = "Add Credit"
+        navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: .plain, target: nil, action: nil)
         
         amountTextField.placeholder = "Entry Amount"
         monthlyTextField.placeholder = "Monthly Installment"
@@ -89,7 +81,6 @@ class CreditsPopupVc: UIViewController {
         
         datePickerValueChanged(sender: firstInstallmentDatePicker)
         
-        closeButton.addTarget(self, action: #selector(animateOut), for: .touchUpInside)
         saveButton.addTarget(self, action: #selector(saveButtonTapped), for: .touchUpInside)
         currencyButton.addTarget(self, action: #selector(openCurrencyBottomVc), for: .touchUpInside)
         monthlyInstallmentCountButton.addTarget(self, action: #selector(openInstallmentBottomSheet), for: .touchUpInside)
@@ -102,47 +93,8 @@ class CreditsPopupVc: UIViewController {
             self?.monthlyInstallmentCountButton.setTitle(String(self!.monthCount), for: .normal)
             self?.calculateRateAndTotalPayment()
         }
-        
-        NotificationCenter.default.addObserver(
-           self,
-           selector: #selector(keyboardWillShow),
-           name: UIResponder.keyboardWillShowNotification,
-           object: nil
-        )
-        
-        NotificationCenter.default.addObserver(
-           self,
-           selector: #selector(keyboardWillHide),
-           name: UIResponder.keyboardWillHideNotification,
-           object: nil
-        )
-        
-        textFieldButton = UIButton(frame: CGRect(x: 0, y: 0, width: view.frame.size.width, height: 50))
-        textFieldButton!.backgroundColor = UIColor.systemPink
-        textFieldButton!.setTitle("SAVE", for: .normal)
-        textFieldButton!.setTitleColor(UIColor.white, for: .normal)
-        textFieldButton!.addTarget(self, action: #selector(saveButtonTapped), for: .touchUpInside)
-        amountTextField.inputAccessoryView = textFieldButton
-        monthlyTextField.inputAccessoryView = textFieldButton
     }
     
-    @objc func keyboardWillShow(notification: NSNotification) {
-        textFieldButton = UIButton(frame: CGRect(x: 0, y: 0, width: view.frame.size.width, height: 50))
-        textFieldButton!.backgroundColor = UIColor.systemPink
-        textFieldButton!.setTitle("SAVE", for: .normal)
-        textFieldButton!.setTitleColor(UIColor.white, for: .normal)
-        textFieldButton!.addTarget(self, action: #selector(saveButtonTapped), for: .touchUpInside)
-        amountTextField.inputAccessoryView = textFieldButton
-        monthlyTextField.inputAccessoryView = textFieldButton
-    }
-    
-    @objc func keyboardWillHide(notification: NSNotification) {
-        if let textFieldButton {
-            textFieldButton.removeFromSuperview()
-            view.endEditing(false)
-        }
-    }
-
     @objc func saveButtonTapped() {
         
         guard let amount = amountTextField.text, !amount.isEmpty else {
@@ -167,7 +119,8 @@ class CreditsPopupVc: UIViewController {
         FirestoreManager.shared.createCredit(creditModel: creditModel) { [weak self] result in
             switch result {
             case .success(_):
-                self?.animateOut()
+                let creditsVc = CreditsViewController()
+                self?.navigationController?.pushViewController(creditsVc, animated: true)
                 
                 if let tabBarController = self?.tabBarController {
                     tabBarController.selectedIndex = 1
@@ -214,27 +167,6 @@ class CreditsPopupVc: UIViewController {
         rateResultLabel.text = "%\(interestRateCalculated)"
     }
     
-    @objc func animateOut() {
-        UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 1, options: .curveEaseIn) { [weak self] in
-            self?.containerView.transform = CGAffineTransform(translationX: 0, y: -(self?.view.frame.height)!)
-            self?.view.alpha = 0
-        } completion: { complete in
-            if complete {
-                self.view.removeFromSuperview()
-            }
-        }
-    }
-    
-    func animateIn() {
-        self.containerView.transform = CGAffineTransform(translationX: 0, y: -self.view.frame.height)
-        self.view.alpha = 0
-        
-        UIView.animate(withDuration: 0.2, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 1, options: .curveEaseIn) {
-            self.containerView.transform = .identity
-            self.view.alpha = 1
-        }
-    }
-    
     @objc func openCurrencyBottomVc() {
         let rootViewController = SelectCurrencyBottomVc()
         let navController = UINavigationController(rootViewController: rootViewController)
@@ -258,87 +190,67 @@ class CreditsPopupVc: UIViewController {
     }
     
     private func applyConstraints() {
-        animateIn()
-        view.addSubview(containerView)
-        containerView.backgroundColor = .systemGray5
         firstInstallmentDatePicker.translatesAutoresizingMaskIntoConstraints = false
         
-        let containerViewHeightMultiplier: CGFloat = DeviceTypes.isiPhoneSE || DeviceTypes.isiPhone8PlusZoomed || DeviceTypes.isiPhone8Standard || DeviceTypes.isiPhone8Zoomed || DeviceTypes.isiPhone8PlusStandard ? 0.82 : 0.72
-        
-        containerView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        containerView.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
-        containerView.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.82).isActive = true
-        containerView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: containerViewHeightMultiplier).isActive = true
-        
-        containerView.addSubviews(titleLabel, closeButton, saveButton, creditNameLabel, currencyButton, amountTextField, monthlyTextField, monthlyInstallmentCountLabel, monthlyInstallmentCountButton, firstInstallmentLabel, firstInstallmentDatePicker, rateLabel, rateResultLabel, totalPaymentLabel, totalPaymentResultLabel)
+        view.addSubviews(saveButton, creditNameLabel, currencyButton, amountTextField, monthlyTextField, monthlyInstallmentCountLabel, monthlyInstallmentCountButton, firstInstallmentLabel, firstInstallmentDatePicker, rateLabel, rateResultLabel, totalPaymentLabel, totalPaymentResultLabel)
         
         let totalWidth = view.frame.width
-        let textFieldWidth = totalWidth / 1.5
         let currenyButtonWidth = totalWidth / 2
         
-        titleLabel.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 10).isActive = true
-        titleLabel.centerXAnchor.constraint(equalTo: containerView.centerXAnchor).isActive = true
+        creditNameLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10).isActive = true
+        creditNameLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20).isActive = true
+        creditNameLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20).isActive = true
         
-        closeButton.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 2).isActive = true
-        closeButton.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 2).isActive = true
-        closeButton.heightAnchor.constraint(equalToConstant: 44).isActive = true
-        closeButton.widthAnchor.constraint(equalToConstant: 44).isActive = true
-        
-        creditNameLabel.topAnchor.constraint(equalTo: closeButton.bottomAnchor, constant: 10).isActive = true
-        creditNameLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 20).isActive = true
-        creditNameLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -20).isActive = true
-        
-
-        currencyButton.centerXAnchor.constraint(equalTo: containerView.centerXAnchor).isActive = true
-        currencyButton.topAnchor.constraint(equalTo: creditNameLabel.bottomAnchor, constant: 15).isActive = true
+        currencyButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        currencyButton.topAnchor.constraint(equalTo: creditNameLabel.bottomAnchor, constant: 30).isActive = true
         currencyButton.widthAnchor.constraint(equalToConstant: currenyButtonWidth ).isActive = true
         currencyButton.heightAnchor.constraint(equalToConstant: 40).isActive = true
         
-        amountTextField.centerXAnchor.constraint(equalTo: containerView.centerXAnchor).isActive = true
+        amountTextField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20).isActive = true
+        amountTextField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20).isActive = true
         amountTextField.topAnchor.constraint(equalTo: currencyButton.bottomAnchor, constant: 10).isActive = true
-        amountTextField.widthAnchor.constraint(equalToConstant: textFieldWidth ).isActive = true
         amountTextField.heightAnchor.constraint(equalToConstant: 40).isActive = true
         
-        monthlyTextField.centerXAnchor.constraint(equalTo: containerView.centerXAnchor).isActive = true
+        monthlyTextField.leadingAnchor.constraint(equalTo: amountTextField.leadingAnchor).isActive = true
+        monthlyTextField.trailingAnchor.constraint(equalTo: amountTextField.trailingAnchor).isActive = true
         monthlyTextField.topAnchor.constraint(equalTo: amountTextField.bottomAnchor, constant: 5).isActive = true
-        monthlyTextField.widthAnchor.constraint(equalToConstant: textFieldWidth).isActive = true
         monthlyTextField.heightAnchor.constraint(equalToConstant: 40).isActive = true
         
         monthlyInstallmentCountLabel.topAnchor.constraint(equalTo: monthlyTextField.bottomAnchor, constant: 30).isActive = true
-        monthlyInstallmentCountLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 20).isActive = true
+        monthlyInstallmentCountLabel.leadingAnchor.constraint(equalTo: amountTextField.leadingAnchor).isActive = true
         
         monthlyInstallmentCountButton.topAnchor.constraint(equalTo: monthlyTextField.bottomAnchor, constant: 15).isActive = true
-        monthlyInstallmentCountButton.leadingAnchor.constraint(equalTo: monthlyInstallmentCountLabel.trailingAnchor, constant: 15).isActive = true
-        monthlyInstallmentCountButton.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -5).isActive = true
-        monthlyInstallmentCountButton.heightAnchor.constraint(equalToConstant: 50).isActive = true
+        monthlyInstallmentCountButton.leadingAnchor.constraint(equalTo: monthlyInstallmentCountLabel.trailingAnchor, constant: 2).isActive = true
+        monthlyInstallmentCountButton.trailingAnchor.constraint(equalTo: amountTextField.trailingAnchor).isActive = true
+        monthlyInstallmentCountButton.heightAnchor.constraint(equalToConstant: 40).isActive = true
         
         firstInstallmentLabel.topAnchor.constraint(equalTo: monthlyInstallmentCountButton.bottomAnchor, constant: 17).isActive = true
-        firstInstallmentLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 20).isActive = true
+        firstInstallmentLabel.leadingAnchor.constraint(equalTo: amountTextField.leadingAnchor).isActive = true
         
         firstInstallmentDatePicker.topAnchor.constraint(equalTo: monthlyInstallmentCountButton.bottomAnchor, constant: 10).isActive = true
         firstInstallmentDatePicker.leadingAnchor.constraint(equalTo: firstInstallmentLabel.trailingAnchor, constant: 10).isActive = true
         firstInstallmentDatePicker.trailingAnchor.constraint(equalTo: monthlyInstallmentCountButton.trailingAnchor).isActive = true
         
         rateLabel.topAnchor.constraint(equalTo: firstInstallmentDatePicker.bottomAnchor, constant: 20).isActive = true
-        rateLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 20).isActive = true
+        rateLabel.leadingAnchor.constraint(equalTo: amountTextField.leadingAnchor).isActive = true
         
         rateResultLabel.topAnchor.constraint(equalTo: rateLabel.topAnchor).isActive = true
-        rateResultLabel.trailingAnchor.constraint(equalTo: monthlyTextField.trailingAnchor).isActive = true
+        rateResultLabel.trailingAnchor.constraint(equalTo: monthlyTextField.trailingAnchor, constant: -5).isActive = true
         
         totalPaymentLabel.topAnchor.constraint(equalTo: rateLabel.bottomAnchor, constant: 15).isActive = true
-        totalPaymentLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 20).isActive = true
+        totalPaymentLabel.leadingAnchor.constraint(equalTo: amountTextField.leadingAnchor).isActive = true
         
         totalPaymentResultLabel.topAnchor.constraint(equalTo: rateLabel.bottomAnchor, constant: 15).isActive = true
         totalPaymentResultLabel.trailingAnchor.constraint(equalTo: rateResultLabel.trailingAnchor).isActive = true
         
-        saveButton.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -10).isActive = true
-        saveButton.centerXAnchor.constraint(equalTo: containerView.centerXAnchor).isActive = true
-        saveButton.widthAnchor.constraint(equalToConstant: textFieldWidth ).isActive = true
+        saveButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -5).isActive = true
+        saveButton.leadingAnchor.constraint(equalTo: amountTextField.leadingAnchor).isActive = true
+        saveButton.trailingAnchor.constraint(equalTo: amountTextField.trailingAnchor).isActive = true
         saveButton.heightAnchor.constraint(equalToConstant: 40).isActive = true
     }
 }
 
-extension CreditsPopupVc: PassCurrencyDelegate {
+extension AddCreditViewController: PassCurrencyDelegate {
     func pass(_ currency: Currency) {
         selectedCurrency = currency
     }

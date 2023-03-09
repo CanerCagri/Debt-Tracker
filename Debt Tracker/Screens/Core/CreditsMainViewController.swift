@@ -148,14 +148,10 @@ extension CreditsMainViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         collectionView.deselectItem(at: indexPath, animated: true)
         view.backgroundColor = .gray
-        navigationController?.isNavigationBarHidden = true
+       
+        let addCreditVc = AddCreditViewController()
+        addCreditVc.selectedCredit = banks[indexPath.row]
+        navigationController?.pushViewController(addCreditVc, animated: true)
         
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2 ) { [weak self] in
-            let popupVc = CreditsPopupVc()
-            popupVc.selectedCredit = self?.banks[indexPath.row]
-            self?.addChild(popupVc)
-            self?.view.addSubview(popupVc.view)
-            popupVc.didMove(toParent: self)
-        }
     }
 }

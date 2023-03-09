@@ -32,7 +32,7 @@
 		011E8C82298A84CA00F163D4 /* CreditsCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 011E8C81298A84CA00F163D4 /* CreditsCollectionViewCell.swift */; };
 		011E8C85298A885D00F163D4 /* UIHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 011E8C84298A885D00F163D4 /* UIHelper.swift */; };
 		011E8C87298A890300F163D4 /* BankDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 011E8C86298A890300F163D4 /* BankDetails.swift */; };
-		011E8C89298A911A00F163D4 /* CreditsPopupVc.swift in Sources */ = {isa = PBXBuildFile; fileRef = 011E8C88298A911A00F163D4 /* CreditsPopupVc.swift */; };
+		011E8C89298A911A00F163D4 /* AddCreditViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 011E8C88298A911A00F163D4 /* AddCreditViewController.swift */; };
 		011E8C8F298B2D0700F163D4 /* SelectInstallmentBottomSheetVc.swift in Sources */ = {isa = PBXBuildFile; fileRef = 011E8C8E298B2D0700F163D4 /* SelectInstallmentBottomSheetVc.swift */; };
 		011E8C91298BF6AA00F163D4 /* CreditDetailModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 011E8C90298BF6AA00F163D4 /* CreditDetailModel.swift */; };
 		011E8C93298C6A6000F163D4 /* CreateBankPopupVc.swift in Sources */ = {isa = PBXBuildFile; fileRef = 011E8C92298C6A6000F163D4 /* CreateBankPopupVc.swift */; };
@@ -88,7 +88,7 @@
 		011E8C81298A84CA00F163D4 /* CreditsCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreditsCollectionViewCell.swift; sourceTree = "<group>"; };
 		011E8C84298A885D00F163D4 /* UIHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIHelper.swift; sourceTree = "<group>"; };
 		011E8C86298A890300F163D4 /* BankDetails.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BankDetails.swift; sourceTree = "<group>"; };
-		011E8C88298A911A00F163D4 /* CreditsPopupVc.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreditsPopupVc.swift; sourceTree = "<group>"; };
+		011E8C88298A911A00F163D4 /* AddCreditViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddCreditViewController.swift; sourceTree = "<group>"; };
 		011E8C8E298B2D0700F163D4 /* SelectInstallmentBottomSheetVc.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectInstallmentBottomSheetVc.swift; sourceTree = "<group>"; };
 		011E8C90298BF6AA00F163D4 /* CreditDetailModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreditDetailModel.swift; sourceTree = "<group>"; };
 		011E8C92298C6A6000F163D4 /* CreateBankPopupVc.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateBankPopupVc.swift; sourceTree = "<group>"; };
@@ -154,7 +154,7 @@
 				011E8C4329834C8400F163D4 /* SupportingFiles */,
 				011E8C5B298400CC00F163D4 /* Manager */,
 				011E8C4429834CAC00F163D4 /* CustomComponents */,
-				011E8C3F29834BE400F163D4 /* ViewControllers */,
+				011E8C3F29834BE400F163D4 /* Screens */,
 				011E8C4229834C6600F163D4 /* Views */,
 				011E8C35298346BF00F163D4 /* Info.plist */,
 				01D8F50729944D1C00369895 /* GoogleService-Info.plist */,
@@ -162,13 +162,13 @@
 			path = "Debt Tracker";
 			sourceTree = "<group>";
 		};
-		011E8C3F29834BE400F163D4 /* ViewControllers */ = {
+		011E8C3F29834BE400F163D4 /* Screens */ = {
 			isa = PBXGroup;
 			children = (
 				011E8C6829849B6700F163D4 /* Core */,
 				011E8C8B298A922E00F163D4 /* General */,
 			);
-			path = ViewControllers;
+			path = Screens;
 			sourceTree = "<group>";
 		};
 		011E8C4229834C6600F163D4 /* Views */ = {
@@ -318,7 +318,7 @@
 				01D8F51029953F3000369895 /* RegisterViewController.swift */,
 				0129E078299985F8002FBAA0 /* ForgotPasswordVc.swift */,
 				011E8C92298C6A6000F163D4 /* CreateBankPopupVc.swift */,
-				011E8C88298A911A00F163D4 /* CreditsPopupVc.swift */,
+				011E8C88298A911A00F163D4 /* AddCreditViewController.swift */,
 				011E8C8E298B2D0700F163D4 /* SelectInstallmentBottomSheetVc.swift */,
 				0129E07C299A8B1D002FBAA0 /* SelectCurrencyBottomVc.swift */,
 			);
@@ -449,7 +449,7 @@
 				011E8C87298A890300F163D4 /* BankDetails.swift in Sources */,
 				011E8C85298A885D00F163D4 /* UIHelper.swift in Sources */,
 				011E8C82298A84CA00F163D4 /* CreditsCollectionViewCell.swift in Sources */,
-				011E8C89298A911A00F163D4 /* CreditsPopupVc.swift in Sources */,
+				011E8C89298A911A00F163D4 /* AddCreditViewController.swift in Sources */,
 				01D8F51129953F3000369895 /* RegisterViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
