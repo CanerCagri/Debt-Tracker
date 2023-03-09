@@ -45,9 +45,14 @@ class SelectCurrencyBottomVc: UIViewController {
         currencyTableView.dataSource = self
         currencyTableView.rowHeight = 40
         currencyTableView.layer.cornerRadius = 14
-        currencyTableView.frame = view.bounds
         currencyTableView.register(SelectCurrencyCell.self, forCellReuseIdentifier:SelectCurrencyCell.identifier)
         view.addSubview(currencyTableView)
+        
+        currencyTableView.translatesAutoresizingMaskIntoConstraints = false
+        currencyTableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
+        currencyTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
+        currencyTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
+        currencyTableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor).isActive = true
     }
 }
 

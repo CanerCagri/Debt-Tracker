@@ -10,7 +10,7 @@ import Firebase
 
 class CreditsDetailViewController: UIViewController {
     
-    var detailLabel = DTTitleLabel(textAlignment: .left, fontSize: 18)
+    var detailLabel = DTTitleLabel(textAlignment: .left, fontSize: 23)
     var paymentTitleLabel = DTTitleLabel(textAlignment: .left, fontSize: 18, text: "All Installments")
     var startAndEndTitleLabel = DTTitleLabel(textAlignment: .left, fontSize: 15)
     var detailTableView = UITableView()
@@ -27,12 +27,22 @@ class CreditsDetailViewController: UIViewController {
     var creditModel: CreditDetailModel! {
         didSet
         {
-            title = creditModel.name
-            detailLabel.text = creditModel.detail
+            detailLabel.text = "\(creditModel.detail) - \(creditModel.detail) - %\(creditModel.interestRate)"
             totalDebtLabel.text = "Total Debt: \(creditModel.totalDebt)"
             remainingDebtLabel.text = "Remaining: \(creditModel.remainingDebt)"
             totalPaidDebtLabel.text = "Paid: \(creditModel.paidDebt)"
             totalPaidMonthLabel.text = "\(String(creditModel.paidCount))/\(String(creditModel.installmentCount)) paid"
+            
+            
+            dateFormatter.dateFormat = "dd.MM.yyyy"
+            date = dateFormatter.date(from: creditModel.firstInstallmentDate)!
+            
+            let lastDate = Calendar.current.date(byAdding: .month, value: Int(creditModel.installmentCount) - 1, to: date)!
+            let nextDateComponents = Calendar.current.dateComponents([.day, .month, .year], from: lastDate)
+            let dayString = String(format: "%02d", nextDateComponents.day!)
+            let monthString = String(format: "%02d", nextDateComponents.month!)
+            let yearString = String(nextDateComponents.year!)
+            startAndEndTitleLabel.text = "\(creditModel.firstInstallmentDate) - \(dayString).\(monthString).\(yearString)"
         }
     }
     
@@ -40,12 +50,15 @@ class CreditsDetailViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        view.backgroundColor = .systemBackground
-        dateFormatter.dateFormat = "dd.MM.yyyy"
-        date = dateFormatter.date(from: creditModel.firstInstallmentDate)!
-        
+        configureViewController()
         configureTableView()
         applyConstraints()
+    }
+    
+    private func configureViewController() {
+        view.backgroundColor = .systemBackground
+        let doneButton = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(dismissVC))
+        navigationItem.rightBarButtonItem = doneButton
     }
     
     private func configureTableView() {
@@ -54,6 +67,10 @@ class CreditsDetailViewController: UIViewController {
         detailTableView.rowHeight = 40
         detailTableView.layer.cornerRadius = 14
         detailTableView.register(CreditsDetailTableViewCell.self, forCellReuseIdentifier:CreditsDetailTableViewCell.identifier)
+    }
+    
+    @objc func dismissVC() {
+        dismiss(animated: true)
     }
     
     func applyConstraints() {
@@ -129,16 +146,6 @@ extension CreditsDetailViewController: UITableViewDelegate, UITableViewDataSourc
             cell.dateLabel.text = "\(dayString).\(monthString).\(yearString)"
         }
         
-        if indexPath.row == creditModel.installmentCount - 3{
-            
-            let lastDate = Calendar.current.date(byAdding: .month, value: Int(creditModel.installmentCount) - 1, to: date)!
-            let nextDateComponents = Calendar.current.dateComponents([.day, .month, .year], from: lastDate)
-            let dayString = String(format: "%02d", nextDateComponents.day!)
-            let monthString = String(format: "%02d", nextDateComponents.month!)
-            let yearString = String(nextDateComponents.year!)
-            startAndEndTitleLabel.text = "\(creditModel.firstInstallmentDate) - \(dayString).\(monthString).\(yearString)"
-        }
-        
         return cell
     }
     
@@ -184,8 +191,8 @@ extension CreditsDetailViewController: UITableViewDelegate, UITableViewDataSourc
             }
             let alertController = UIAlertController(title: "Payment Successful", message: nil, preferredStyle: .alert)
             
-            let deleteButton = UIAlertAction(title: "OK", style: .default) { _ in
-                self?.navigationController?.popToRootViewController(animated: true)
+            let deleteButton = UIAlertAction(title: "OK", style: .default) { [weak self] _ in
+                self?.dismissVC()
             }
             
             alertController.addAction(deleteButton)

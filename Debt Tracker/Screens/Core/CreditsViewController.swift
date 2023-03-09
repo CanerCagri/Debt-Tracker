@@ -103,7 +103,8 @@ extension CreditsViewController: UITableViewDelegate, UITableViewDataSource {
         let detailVc = CreditsDetailViewController()
         detailVc.documentId = documentIds[indexPath.row]
         detailVc.creditModel = selectedCredit
-        navigationController?.pushViewController(detailVc, animated: true)
+        let navigationController = UINavigationController(rootViewController: detailVc)
+        present(navigationController, animated: true)
     }
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
