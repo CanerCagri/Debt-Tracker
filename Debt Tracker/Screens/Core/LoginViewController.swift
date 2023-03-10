@@ -44,7 +44,7 @@ class LoginViewController: UIViewController {
     var forgetPasswordLabel = DTTitleLabel(textAlignment: .center, fontSize: 18, textColor: .systemGray2, text: "Forgot Password?")
     let dontHaveAccLabel = DTTitleLabel(textAlignment: .center, fontSize: 16, textColor: .label, text: "Don't have an account?")
     let registerLabel = DTTitleLabel(textAlignment: .center, fontSize: 18, textColor: .systemGray2, text: "REGISTER")
-    let googleSignInButton = GIDSignInButton()
+    var googleSignInButton = GIDSignInButton()
     var facebookLoginButton = DTFacebookSigninButton(iconCentered: false)
     
     var isLoginTapped = false
@@ -116,20 +116,21 @@ class LoginViewController: UIViewController {
         }
     }
     
-    @objc func keyboardWillShow(notification: NSNotification) {
-        if !isKeyboardAppear {
-            scrollView.isScrollEnabled = true
-            isKeyboardAppear = true
-        }
-    }
-    
-    @objc func dismissKeyboard() {
-        if isKeyboardAppear {
-            scrollView.isScrollEnabled = false
-            let topRect = CGRect(x: 0, y: 0, width: 1, height: 1)
-            scrollView.scrollRectToVisible(topRect, animated: true)
-            contentView.endEditing(true)
-            isKeyboardAppear = false
+    @objc func loginButtonTapped() {
+        if let email = emailTextField.text, let password = passwordTextField.text {
+            
+            if isLoginTapped != true {
+                showLoading()
+                AuthManager.shared.signInUser(email: email, password: password) { [weak self] result in
+                    switch result {
+                    case .success(_):
+                        self?.openMainTabBarVc()
+                    case .failure(let failure):
+                        self?.presentAlert(title: "Warning", message: failure.localizedDescription, buttonTitle: "OK")
+                    }
+                    self?.dismissLoading()
+                }
+            }
         }
     }
     
@@ -146,6 +147,7 @@ class LoginViewController: UIViewController {
             
             let credential = GoogleAuthProvider.credential(withIDToken: idToken,
                                                            accessToken: authentication.accessToken.tokenString)
+            self?.showLoading()
             
             AuthManager.shared.signInUserWith(with: credential) { [weak self] result in
                 switch result {
@@ -154,13 +156,14 @@ class LoginViewController: UIViewController {
                 case .failure(let failure):
                     self?.presentAlert(title: "Warning", message: failure.localizedDescription, buttonTitle: "OK")
                 }
+                self?.dismissLoading()
             }
         }
     }
     
     @objc func signInWithFacebookPressed() {
         print("bbb")
-        LoginManager().logIn(permissions: ["public_profile", "email"], from: self) { result, error in
+        LoginManager().logIn(permissions: ["public_profile", "email"], from: self) { [weak self] result, error in
             if error != nil {
                 print(error!.localizedDescription)
                 return
@@ -168,6 +171,7 @@ class LoginViewController: UIViewController {
             
             guard let resultTokenString = result?.token?.tokenString else { return }
             let credential = FacebookAuthProvider.credential(withAccessToken: resultTokenString)
+            self?.showLoading()
             
             AuthManager.shared.signInUserWith(with: credential) { [weak self] result in
                 switch result {
@@ -176,6 +180,7 @@ class LoginViewController: UIViewController {
                 case .failure(let failure):
                     self?.presentAlert(title: "Warning", message: failure.localizedDescription, buttonTitle: "OK")
                 }
+                self?.dismissLoading()
             }
         }
     }
@@ -190,23 +195,6 @@ class LoginViewController: UIViewController {
             tabBarVC.navigationItem.hidesBackButton = true
             navigationController?.pushViewController(tabBarVC, animated: true)
             isLoginTapped = true
-        }
-    }
-    
-    @objc func loginButtonTapped() {
-        if let email = emailTextField.text, let password = passwordTextField.text {
-            
-            if isLoginTapped != true {
-                
-                AuthManager.shared.signInUser(email: email, password: password) { [weak self] result in
-                    switch result {
-                    case .success(_):
-                        self?.openMainTabBarVc()
-                    case .failure(let failure):
-                        self?.presentAlert(title: "Warning", message: failure.localizedDescription, buttonTitle: "OK")
-                    }
-                }
-            }
         }
     }
     
@@ -239,17 +227,35 @@ class LoginViewController: UIViewController {
         }
     }
     
+    @objc func keyboardWillShow(notification: NSNotification) {
+        if !isKeyboardAppear {
+            scrollView.isScrollEnabled = true
+            isKeyboardAppear = true
+        }
+    }
+    
+    @objc func dismissKeyboard() {
+        if isKeyboardAppear {
+            scrollView.isScrollEnabled = false
+            let topRect = CGRect(x: 0, y: 0, width: 1, height: 1)
+            scrollView.scrollRectToVisible(topRect, animated: true)
+            contentView.endEditing(true)
+            isKeyboardAppear = false
+        }
+    }
+    
     private func applyConstraints() {
         view.addSubview(scrollView)
         scrollView.isScrollEnabled = false
         scrollView.addSubview(contentView)
         
-        contentView.addSubviews(detailLabel, emailTextField, passwordTextField, loginButton, forgetPasswordLabel, googleSignInButton, facebookLoginButton, dontHaveAccLabel, registerLabel)
-        containerView.addSubview(showPasswordButton)
         googleSignInButton.translatesAutoresizingMaskIntoConstraints = false
         googleSignInButton.style = .wide
         googleSignInButton.colorScheme = .light
         
+        contentView.addSubviews(detailLabel, emailTextField, passwordTextField, loginButton, forgetPasswordLabel, googleSignInButton, facebookLoginButton, dontHaveAccLabel, registerLabel)
+        containerView.addSubview(showPasswordButton)
+
         detailLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor).isActive = true
         detailLabel.topAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.topAnchor, constant: 50).isActive = true
         
@@ -281,8 +287,10 @@ class LoginViewController: UIViewController {
         facebookLoginButton.trailingAnchor.constraint(equalTo: loginButton.trailingAnchor).isActive = true
         facebookLoginButton.heightAnchor.constraint(equalToConstant: 40).isActive = true
         
+        let registerLabelTopConstant: CGFloat = DeviceTypes.isiPhoneSE || DeviceTypes.isiPhone8PlusZoomed || DeviceTypes.isiPhone8Standard || DeviceTypes.isiPhone8Zoomed || DeviceTypes.isiPhone8PlusStandard ? 100 : 150
+        
         registerLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor).isActive = true
-        registerLabel.topAnchor.constraint(equalTo: facebookLoginButton.bottomAnchor, constant: 150).isActive = true
+        registerLabel.topAnchor.constraint(equalTo: facebookLoginButton.bottomAnchor, constant: registerLabelTopConstant).isActive = true
         
         dontHaveAccLabel.bottomAnchor.constraint(equalTo: registerLabel.topAnchor, constant: -5).isActive = true
         dontHaveAccLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor).isActive = true

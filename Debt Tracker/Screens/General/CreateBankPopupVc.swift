@@ -101,8 +101,10 @@ class CreateBankPopupVc: UIViewController {
         closeButton.heightAnchor.constraint(equalToConstant: 44).isActive = true
         closeButton.widthAnchor.constraint(equalToConstant: 44).isActive = true
         
+        let nameTextFieldTopConstant: CGFloat = DeviceTypes.isiPhoneSE || DeviceTypes.isiPhone8PlusZoomed || DeviceTypes.isiPhone8Standard || DeviceTypes.isiPhone8Zoomed || DeviceTypes.isiPhone8PlusStandard ? 25 : 50
+        
         nameTextField.centerXAnchor.constraint(equalTo: containerView.centerXAnchor).isActive = true
-        nameTextField.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 25).isActive = true
+        nameTextField.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: nameTextFieldTopConstant).isActive = true
         nameTextField.widthAnchor.constraint(equalToConstant: textFieldWidth ).isActive = true
         nameTextField.heightAnchor.constraint(equalToConstant: 40).isActive = true
         

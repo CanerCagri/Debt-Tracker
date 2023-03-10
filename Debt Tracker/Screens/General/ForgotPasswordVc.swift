@@ -34,14 +34,15 @@ class ForgotPasswordVc: UIViewController {
     
     @objc func saveButtonTapped() {
         if let email = emailTextField.text {
-            
+            showLoading()
             AuthManager.shared.resetPassword(email: email) { [weak self] result in
                 switch result {
                 case .success(_):
-                    print("succesfully sended mail")
+                    self?.presentAlert(title: "Mail Sended", message: "Password Reset Mail Succesfully Sended.", buttonTitle: "OK")
                 case .failure(let failure):
                     self?.presentAlert(title: "Warning", message: failure.localizedDescription, buttonTitle: "OK")
                 }
+                self?.dismissLoading()
             }
         }
     }

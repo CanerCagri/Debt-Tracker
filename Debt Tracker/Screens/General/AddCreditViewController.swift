@@ -148,6 +148,7 @@ class AddCreditViewController: UIViewController {
         guard let userEmail = Auth.auth().currentUser?.email else {
             return
         }
+        showLoading()
         
         let creditModel = CreditDetailModel(name: selectedCredit?.name ?? "Error", detail: selectedCredit?.detail ?? "Error", entryDebt: amount, installmentCount: monthCount, paidCount: 0, monthlyInstallment: monthly, firstInstallmentDate: firstInstallmentDate, currentInstallmentDate: firstInstallmentDate, totalDebt: calculatedPayment, interestRate: Double(interestRateCalculated)!, remainingDebt: calculatedPayment, paidDebt: "\(currencySymbol)0", email: userEmail, currency: currencySymbol, locale: locale)
         
@@ -163,6 +164,7 @@ class AddCreditViewController: UIViewController {
             case .failure(let failure):
                 self?.presentAlert(title: "Warning", message: failure.localizedDescription, buttonTitle: "OK")
             }
+            self?.dismissLoading()
         }
         
     }
@@ -284,7 +286,9 @@ class AddCreditViewController: UIViewController {
         totalPaymentResultLabel.topAnchor.constraint(equalTo: rateLabel.bottomAnchor, constant: 15).isActive = true
         totalPaymentResultLabel.trailingAnchor.constraint(equalTo: rateResultLabel.trailingAnchor).isActive = true
         
-        saveButton.topAnchor.constraint(equalTo: totalPaymentResultLabel.bottomAnchor, constant: 160).isActive = true
+        let saveButtonTopConstant: CGFloat = DeviceTypes.isiPhoneSE || DeviceTypes.isiPhone8PlusZoomed || DeviceTypes.isiPhone8Standard || DeviceTypes.isiPhone8Zoomed || DeviceTypes.isiPhone8PlusStandard ? 80 : 180
+        
+        saveButton.topAnchor.constraint(equalTo: totalPaymentResultLabel.bottomAnchor, constant: saveButtonTopConstant).isActive = true
         saveButton.leadingAnchor.constraint(equalTo: amountTextField.leadingAnchor).isActive = true
         saveButton.trailingAnchor.constraint(equalTo: amountTextField.trailingAnchor).isActive = true
         saveButton.heightAnchor.constraint(equalToConstant: 40).isActive = true

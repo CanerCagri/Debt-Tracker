@@ -67,7 +67,7 @@ class RegisterViewController: UIViewController {
     }
     
     @objc func signInWithFacebookPressed() {
-        LoginManager().logIn(permissions: ["public_profile", "email"], from: self) { result, error in
+        LoginManager().logIn(permissions: ["public_profile", "email"], from: self) { [weak self] result, error in
             if error != nil {
                 print(error!.localizedDescription)
                 return
@@ -75,6 +75,7 @@ class RegisterViewController: UIViewController {
             
             guard let resultTokenString = result?.token?.tokenString else { return }
             let credential = FacebookAuthProvider.credential(withAccessToken: resultTokenString)
+            self?.showLoading()
             
             AuthManager.shared.signInUserWith(with: credential) { [weak self] result in
                 switch result {
@@ -83,20 +84,23 @@ class RegisterViewController: UIViewController {
                 case .failure(let failure):
                     self?.presentAlert(title: "Warning", message: failure.localizedDescription, buttonTitle: "OK")
                 }
+                self?.dismissLoading()
             }
         }
     }
     
     @objc func registerButtonTapped() {
         if let email = emailTextField.text, let password = passwordTextField.text {
-            
+            showLoading()
             AuthManager.shared.createUser(email: email, password: password) { [weak self] result in
                 switch result {
                 case .success(_):
-                    self?.navigationController?.popToRootViewController(animated: true)
+                    self?.presentAlert(title: "Welcome", message: "Account Succesfully Created", buttonTitle: "OK")
+                    NotificationCenter.default.post(name: .signOutButton , object: nil)
                 case .failure(let failure):
                     self?.presentAlert(title: "Warning", message: failure.localizedDescription, buttonTitle: "OK")
                 }
+                self?.dismissLoading()
             }
         }
     }
