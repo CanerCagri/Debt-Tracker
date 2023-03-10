@@ -92,7 +92,7 @@ extension CreditsViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: CreditsTableViewCell.identifier) as! CreditsTableViewCell
-        
+        cell.applyShadow(cornerRadius: 8)
         cell.set(credit: credits[indexPath.row])
         return cell
     }

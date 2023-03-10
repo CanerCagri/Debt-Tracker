@@ -19,7 +19,10 @@ class RegisterViewController: UIViewController {
     let containerView = UIView(frame: CGRect(x: 0, y: 0, width: 40, height: 30))
     let showPasswordButton = UIButton(type: .system)
     let registerButton = DTButton(title: "REGISTER", color: .systemPink, systemImageName: "checkmark.circle", size: 20)
-    private let appleSignInButton = ASAuthorizationAppleIDButton(type: .continue, style: .black)
+    private let appleSignInButton: ASAuthorizationAppleIDButton = ASAuthorizationAppleIDButton(
+        authorizationButtonType: .default,
+        authorizationButtonStyle: UITraitCollection.current.userInterfaceStyle == .dark ? .white : .black
+    )
     private let facebookSignInButton = DTFacebookSigninButton(iconCentered: true)
     
     fileprivate var currentNonce: String?

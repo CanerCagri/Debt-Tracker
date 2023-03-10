@@ -155,12 +155,10 @@ class AddCreditViewController: UIViewController {
         FirestoreManager.shared.createCredit(creditModel: creditModel) { [weak self] result in
             switch result {
             case .success(_):
-                let creditsVc = CreditsViewController()
-                self?.navigationController?.pushViewController(creditsVc, animated: true)
-                
                 if let tabBarController = self?.tabBarController {
                     tabBarController.selectedIndex = 1
                 }
+                self?.dismiss(animated: true)
             case .failure(let failure):
                 self?.presentAlert(title: "Warning", message: failure.localizedDescription, buttonTitle: "OK")
             }

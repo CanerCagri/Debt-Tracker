@@ -19,7 +19,6 @@ class LoginViewController: UIViewController {
     
     lazy var scrollView: UIScrollView = {
         let view = UIScrollView(frame: .zero)
-        view.backgroundColor = .white
         view.contentSize = contentSize
         view.frame = self.view.bounds
         view.autoresizingMask = .flexibleHeight
@@ -30,7 +29,6 @@ class LoginViewController: UIViewController {
     
     lazy var contentView: UIView = {
         let view = UIView()
-        view.backgroundColor = .white
         view.frame.size = contentSize
         return view
     }()
@@ -103,12 +101,7 @@ class LoginViewController: UIViewController {
         tap.cancelsTouchesInView = false
         contentView.addGestureRecognizer(tap)
         
-        NotificationCenter.default.addObserver(
-           self,
-           selector: #selector(keyboardWillShow),
-           name: UIResponder.keyboardWillShowNotification,
-           object: nil
-        )
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil )
         
         NotificationCenter.default.addObserver(self, selector: #selector(signOutButton), name: .signOutButton, object: nil)
         
@@ -136,7 +129,6 @@ class LoginViewController: UIViewController {
     }
     
     @objc func signInWithGooglePressed() {
-        print("aa")
         GIDSignIn.sharedInstance.signIn(withPresenting: self) { [weak self] signInResult, err in
             
             if let error = err {
@@ -163,7 +155,6 @@ class LoginViewController: UIViewController {
     }
     
     @objc func signInWithFacebookPressed() {
-        print("bbb")
         LoginManager().logIn(permissions: ["public_profile", "email"], from: self) { [weak self] result, error in
             if error != nil {
                 print(error!.localizedDescription)
@@ -249,6 +240,7 @@ class LoginViewController: UIViewController {
         view.addSubview(scrollView)
         scrollView.isScrollEnabled = false
         scrollView.addSubview(contentView)
+        contentView.backgroundColor = .systemBackground
         
         googleSignInButton.translatesAutoresizingMaskIntoConstraints = false
         googleSignInButton.style = .wide
