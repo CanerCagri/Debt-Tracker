@@ -61,7 +61,7 @@ class CreditsMainViewController: UIViewController {
                 self?.documentIds = success.stringArray
                 
                 if self!.banks.isEmpty {
-                    self?.emptyState = DTEmptyStateView(message: "Currently don't have a Bank\nAdd from (+)")
+                    self?.emptyState = DTEmptyStateView(message: "Currently don't have Bank\nAdd from (+)")
                     self?.emptyState?.frame = (self?.view.bounds)!
                     self?.view.addSubview((self?.emptyState!)!)
                     

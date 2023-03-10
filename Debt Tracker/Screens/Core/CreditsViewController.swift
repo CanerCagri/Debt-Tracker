@@ -66,7 +66,7 @@ class CreditsViewController: UIViewController {
                 
                 guard let credits = self?.credits.isEmpty else { return }
                 if credits {
-                    self?.emptyState = DTEmptyStateView(message: "Currently don't have a Credit")
+                    self?.emptyState = DTEmptyStateView(message: "Currently don't have Credit\nAdd from Create Credit Page.")
                     self?.emptyState?.frame = (self?.view.bounds)!
                     self?.view.addSubview((self?.emptyState!)!)
                     

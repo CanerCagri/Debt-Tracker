@@ -100,6 +100,7 @@ class LoginViewController: UIViewController {
         registerLabel.addGestureRecognizer(registerTapGesture)
         
         let tap = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        tap.cancelsTouchesInView = false
         contentView.addGestureRecognizer(tap)
         
         NotificationCenter.default.addObserver(
