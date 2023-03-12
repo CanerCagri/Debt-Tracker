@@ -12,10 +12,11 @@ class ForgotPasswordVc: UIViewController {
     
     private let containerView = DTContainerView()
     let titleLabel = DTTitleLabel(textAlignment: .center, fontSize: 18, textColor: .label, text: "Reset Password")
-    let emailTextField = DTTextField(placeholder: "Enter Email", placeHolderSize: 15)
+    let emailTextField = DTTextField(placeholder: "Enter Email", placeHolderSize: 15, cornerRadius: 14)
     let resetButton = DTButton(title: "RESET PASSWORD", color: .systemPink, systemImageName: "arrow.clockwise", size: 20)
     let closeButton = DTButton(title: "CLOSE", color: UIColor.systemGray.withAlphaComponent(0.5), systemImageName: "xmark", size: 20)
     
+    var containerViewYConstraint: NSLayoutConstraint!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -24,15 +25,63 @@ class ForgotPasswordVc: UIViewController {
         applyConstraints()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        emailTextField.text = ""
+        view.endEditing(true)
+    }
+    
     private func configureViewController() {
         view.backgroundColor = UIColor.systemGray.withAlphaComponent(0.5)
         view.frame = UIScreen.main.bounds
         
+        emailTextField.delegate = self
         closeButton.addTarget(self, action: #selector(dismissVC), for: .touchUpInside)
-        resetButton.addTarget(self, action: #selector(saveButtonTapped), for: .touchUpInside)
+        resetButton.addTarget(self, action: #selector(resetButtonTapped), for: .touchUpInside)
+        
+        let tap = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        view.addGestureRecognizer(tap)
+        
+        NotificationCenter.default.addObserver(
+           self,
+           selector: #selector(keyboardWillShow),
+           name: UIResponder.keyboardWillShowNotification,
+           object: nil
+        )
+        
+        NotificationCenter.default.addObserver(
+           self,
+           selector: #selector(keyboardWillHide),
+           name: UIResponder.keyboardWillHideNotification,
+           object: nil
+        )
     }
     
-    @objc func saveButtonTapped() {
+    @objc func keyboardWillShow(notification: NSNotification) {
+        let containerViewYAnchor: CGFloat = -30
+
+        
+        UIView.animate(withDuration: 0.3) {
+            self.containerViewYConstraint.constant = containerViewYAnchor
+            self.containerView.layoutIfNeeded()
+        }
+    }
+    
+    @objc func keyboardWillHide(notification: NSNotification) {
+        let containerViewYAnchor: CGFloat = 0
+        
+        UIView.animate(withDuration: 0.3) {
+            self.containerViewYConstraint.constant = containerViewYAnchor
+            self.containerView.layoutIfNeeded()
+        }
+    }
+    
+    @objc func dismissKeyboard() {
+        containerView.endEditing(true)
+    }
+    
+    @objc func resetButtonTapped() {
         if let email = emailTextField.text {
             showLoading()
             AuthManager.shared.resetPassword(email: email) { [weak self] result in
@@ -84,7 +133,8 @@ class ForgotPasswordVc: UIViewController {
         containerView.addSubviews(titleLabel, emailTextField, resetButton, closeButton)
         
         containerView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        containerView.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
+        containerViewYConstraint = containerView.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: 0)
+        containerViewYConstraint.isActive = true
         containerView.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.82).isActive = true
         containerView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.30).isActive = true
         
@@ -105,5 +155,12 @@ class ForgotPasswordVc: UIViewController {
         closeButton.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -10).isActive = true
         closeButton.widthAnchor.constraint(equalToConstant: textFieldWidth).isActive = true
         closeButton.heightAnchor.constraint(equalToConstant: 40).isActive = true
+    }
+}
+
+extension ForgotPasswordVc: UITextFieldDelegate {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        resetButtonTapped()
+        return true
     }
 }

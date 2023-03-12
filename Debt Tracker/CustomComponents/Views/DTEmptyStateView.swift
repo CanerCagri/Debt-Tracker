@@ -36,19 +36,19 @@ class DTEmptyStateView: UIView {
         logoImageView.image = UIImage(systemName: "plus.message.fill")
         logoImageView.translatesAutoresizingMaskIntoConstraints = false
         
-//        let labelCenterYConstant: CGFloat = DeviceTypes.isiPhoneSE || DeviceTypes.isiPhone8PlusZoomed ? -90 : -150
-//        let logoImageViewBottomConstant: CGFloat = DeviceTypes.isiPhoneSE || DeviceTypes.isiPhone8PlusZoomed ? 80 : 40
+        let labelCenterYConstant: CGFloat = DeviceTypes.isiPhoneSE || DeviceTypes.isiPhone8PlusZoomed || DeviceTypes.isiPhone8Standard || DeviceTypes.isiPhone8Zoomed || DeviceTypes.isiPhone8PlusStandard ? -90 : -150
+        let logoImageViewBottomConstant: CGFloat = DeviceTypes.isiPhoneSE || DeviceTypes.isiPhone8PlusZoomed || DeviceTypes.isiPhone8Standard || DeviceTypes.isiPhone8Zoomed || DeviceTypes.isiPhone8PlusStandard ? 100 : 60
         
         NSLayoutConstraint.activate([
-            messageLabel.centerYAnchor.constraint(equalTo: centerYAnchor, constant: -150),
+            messageLabel.centerYAnchor.constraint(equalTo: centerYAnchor, constant: labelCenterYConstant),
             messageLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 40),
             messageLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -40),
             messageLabel.heightAnchor.constraint(equalToConstant: 200),
         
-            logoImageView.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: 20),
-            logoImageView.widthAnchor.constraint(equalToConstant: 300),
-            logoImageView.heightAnchor.constraint(equalToConstant: 300),
-            logoImageView.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: 110),
+            logoImageView.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: logoImageViewBottomConstant),
+            logoImageView.widthAnchor.constraint(equalTo: widthAnchor, multiplier: 1.3),
+            logoImageView.heightAnchor.constraint(equalTo: widthAnchor, multiplier: 1.3),
+            logoImageView.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: 150),
         ])
     }
 }

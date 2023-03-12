@@ -33,6 +33,13 @@ class CreateBankPopupVc: UIViewController {
         
         closeButton.addTarget(self, action: #selector(animateOut), for: .touchUpInside)
         saveButton.addTarget(self, action: #selector(saveButtonTapped), for: .touchUpInside)
+        
+        let tap = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        view.addGestureRecognizer(tap)
+    }
+    
+    @objc func dismissKeyboard() {
+        view.endEditing(true)
     }
     
     @objc func saveButtonTapped() {
@@ -113,8 +120,10 @@ class CreateBankPopupVc: UIViewController {
         detailTextField.widthAnchor.constraint(equalToConstant: textFieldWidth).isActive = true
         detailTextField.heightAnchor.constraint(equalToConstant: 40).isActive = true
         
+        let saveButtonBottomConstant: CGFloat = DeviceTypes.isiPhoneSE || DeviceTypes.isiPhone8PlusZoomed || DeviceTypes.isiPhone8Standard || DeviceTypes.isiPhone8Zoomed || DeviceTypes.isiPhone8PlusStandard ? -5 : -12
+        
         saveButton.centerXAnchor.constraint(equalTo: containerView.centerXAnchor).isActive = true
-        saveButton.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -5).isActive = true
+        saveButton.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: saveButtonBottomConstant).isActive = true
         saveButton.widthAnchor.constraint(equalToConstant: textFieldWidth).isActive = true
         saveButton.heightAnchor.constraint(equalToConstant: 40).isActive = true
     }

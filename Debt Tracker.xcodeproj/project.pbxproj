@@ -38,7 +38,7 @@
 		011E8C93298C6A6000F163D4 /* CreateBankPopupVc.swift in Sources */ = {isa = PBXBuildFile; fileRef = 011E8C92298C6A6000F163D4 /* CreateBankPopupVc.swift */; };
 		0129E075299558FC002FBAA0 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0129E074299558FC002FBAA0 /* LoginViewController.swift */; };
 		0129E07729995E2B002FBAA0 /* AuthManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0129E07629995E2B002FBAA0 /* AuthManager.swift */; };
-		0129E079299985F8002FBAA0 /* ForgotPasswordVc.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0129E078299985F8002FBAA0 /* ForgotPasswordVc.swift */; };
+		0129E079299985F8002FBAA0 /* ResetPasswordVc.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0129E078299985F8002FBAA0 /* ResetPasswordVc.swift */; };
 		0129E07B299A8454002FBAA0 /* DTCloseButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0129E07A299A8454002FBAA0 /* DTCloseButton.swift */; };
 		0129E07D299A8B1D002FBAA0 /* SelectCurrencyBottomVc.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0129E07C299A8B1D002FBAA0 /* SelectCurrencyBottomVc.swift */; };
 		0129E0A0299EF27C002FBAA0 /* GoogleSignIn in Frameworks */ = {isa = PBXBuildFile; productRef = 0129E09F299EF27C002FBAA0 /* GoogleSignIn */; };
@@ -94,7 +94,7 @@
 		011E8C92298C6A6000F163D4 /* CreateBankPopupVc.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateBankPopupVc.swift; sourceTree = "<group>"; };
 		0129E074299558FC002FBAA0 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		0129E07629995E2B002FBAA0 /* AuthManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthManager.swift; sourceTree = "<group>"; };
-		0129E078299985F8002FBAA0 /* ForgotPasswordVc.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForgotPasswordVc.swift; sourceTree = "<group>"; };
+		0129E078299985F8002FBAA0 /* ResetPasswordVc.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResetPasswordVc.swift; sourceTree = "<group>"; };
 		0129E07A299A8454002FBAA0 /* DTCloseButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DTCloseButton.swift; sourceTree = "<group>"; };
 		0129E07C299A8B1D002FBAA0 /* SelectCurrencyBottomVc.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectCurrencyBottomVc.swift; sourceTree = "<group>"; };
 		0129E0A8299F0219002FBAA0 /* Debt Tracker.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Debt Tracker.entitlements"; sourceTree = "<group>"; };
@@ -316,7 +316,7 @@
 			isa = PBXGroup;
 			children = (
 				01D8F51029953F3000369895 /* RegisterViewController.swift */,
-				0129E078299985F8002FBAA0 /* ForgotPasswordVc.swift */,
+				0129E078299985F8002FBAA0 /* ResetPasswordVc.swift */,
 				011E8C92298C6A6000F163D4 /* CreateBankPopupVc.swift */,
 				011E8C88298A911A00F163D4 /* AddCreditViewController.swift */,
 				011E8C8E298B2D0700F163D4 /* SelectInstallmentBottomSheetVc.swift */,
@@ -440,7 +440,7 @@
 				011E8C28298346BE00F163D4 /* AppDelegate.swift in Sources */,
 				011E8C2A298346BE00F163D4 /* SceneDelegate.swift in Sources */,
 				0129E07D299A8B1D002FBAA0 /* SelectCurrencyBottomVc.swift in Sources */,
-				0129E079299985F8002FBAA0 /* ForgotPasswordVc.swift in Sources */,
+				0129E079299985F8002FBAA0 /* ResetPasswordVc.swift in Sources */,
 				0129E07B299A8454002FBAA0 /* DTCloseButton.swift in Sources */,
 				0129E0B229A0FA24002FBAA0 /* SelectCurrencyCell.swift in Sources */,
 				011E8C702984A8C300F163D4 /* Int+Ext.swift in Sources */,

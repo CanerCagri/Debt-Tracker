@@ -20,20 +20,27 @@ class RegisterViewController: UIViewController {
     let showPasswordButton = UIButton(type: .system)
     let registerButton = DTButton(title: "REGISTER", color: .systemPink, systemImageName: "checkmark.circle", size: 20)
     private let appleSignInButton: ASAuthorizationAppleIDButton = ASAuthorizationAppleIDButton(
-        authorizationButtonType: .default,
+        authorizationButtonType: .continue,
         authorizationButtonStyle: UITraitCollection.current.userInterfaceStyle == .dark ? .white : .black
     )
     private let facebookSignInButton = DTFacebookSigninButton(iconCentered: true)
     
     fileprivate var currentNonce: String?
     var isLoginTapped = false
-    
+    var appleButtonTopConstraint: NSLayoutConstraint!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         configureViewController()
         applyConstraints()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        emailTextField.text = ""
+        view.endEditing(true)
     }
     
     private func configureViewController() {
@@ -45,6 +52,7 @@ class RegisterViewController: UIViewController {
         passwordTextField.rightView = containerView
         passwordTextField.rightViewMode = .always
         passwordTextField.isSecureTextEntry = true
+        passwordTextField.delegate = self
         
         showPasswordButton.setImage(UIImage(systemName: "eye.slash"), for: .normal)
         showPasswordButton.frame = CGRect(x: -5, y: 0, width: 30, height: 30)
@@ -53,6 +61,46 @@ class RegisterViewController: UIViewController {
         registerButton.addTarget(self, action: #selector(registerButtonTapped), for: .touchUpInside)
         appleSignInButton.addTarget(self, action: #selector(didTapSignInWithApple), for: .touchUpInside)
         facebookSignInButton.addTarget(self, action: #selector(signInWithFacebookPressed), for: .touchUpInside)
+        
+        let tap = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        view.addGestureRecognizer(tap)
+        
+        NotificationCenter.default.addObserver(
+           self,
+           selector: #selector(keyboardWillShow),
+           name: UIResponder.keyboardWillShowNotification,
+           object: nil
+        )
+        
+        NotificationCenter.default.addObserver(
+           self,
+           selector: #selector(keyboardWillHide),
+           name: UIResponder.keyboardWillHideNotification,
+           object: nil
+        )
+    }
+    
+    @objc func keyboardWillShow(notification: NSNotification) {
+        let appleButtonTopAnchor: CGFloat = DeviceTypes.isiPhoneSE || DeviceTypes.isiPhone8PlusZoomed || DeviceTypes.isiPhone8Standard || DeviceTypes.isiPhone8Zoomed || DeviceTypes.isiPhone8PlusStandard ? 10 : 50
+
+        
+        UIView.animate(withDuration: 0.3) {
+            self.appleButtonTopConstraint.constant = appleButtonTopAnchor
+            self.view.layoutIfNeeded()
+        }
+    }
+    
+    @objc func keyboardWillHide(notification: NSNotification) {
+        let appleButtonTopAnchor: CGFloat = 50
+        
+        UIView.animate(withDuration: 0.3) {
+            self.appleButtonTopConstraint.constant = appleButtonTopAnchor
+            self.view.layoutIfNeeded()
+        }
+    }
+    
+    @objc func dismissKeyboard() {
+        view.endEditing(true)
     }
     
     @objc func didTapSignInWithApple() {
@@ -150,7 +198,8 @@ class RegisterViewController: UIViewController {
         registerButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20).isActive = true
         registerButton.heightAnchor.constraint(equalToConstant: 40).isActive = true
         
-        appleSignInButton.topAnchor.constraint(equalTo: registerButton.bottomAnchor, constant: 50).isActive = true
+        appleButtonTopConstraint = appleSignInButton.topAnchor.constraint(equalTo: registerButton.bottomAnchor, constant: 50)
+        appleButtonTopConstraint.isActive = true
         appleSignInButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20).isActive = true
         appleSignInButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20).isActive = true
         appleSignInButton.heightAnchor.constraint(equalToConstant: 40).isActive = true
@@ -199,5 +248,12 @@ extension RegisterViewController: ASAuthorizationControllerDelegate {
 extension RegisterViewController: ASAuthorizationControllerPresentationContextProviding {
     func presentationAnchor(for controller: ASAuthorizationController) -> ASPresentationAnchor {
         return view.window!
+    }
+}
+
+extension RegisterViewController: UITextFieldDelegate {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        registerButtonTapped()
+        return true
     }
 }
