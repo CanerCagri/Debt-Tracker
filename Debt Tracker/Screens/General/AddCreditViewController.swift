@@ -34,7 +34,7 @@ class AddCreditViewController: UIViewController {
     
     let scrollView = UIScrollView()
     let containerView = UIView()
-    let saveButton = DTButton(title: "Save", color: .systemPink, systemImageName: "square.and.arrow.down", size: 20)
+    let saveButton = DTButton(title: "SAVE", color: .systemGray2, systemImageName: "square.and.arrow.down", size: 20)
     let creditNameLabel = DTTitleLabel(textAlignment: .left, fontSize: 25)
     var currencyButton = DTButton(title: "Select Currency", color: .systemRed, size: 20)
     var amountTextField = CurrencyTextField(size: 18)
@@ -69,7 +69,13 @@ class AddCreditViewController: UIViewController {
     }
  
     private func configureViewController() {
-        view.backgroundColor = .systemBackground
+        if traitCollection.userInterfaceStyle == .dark {
+            view.backgroundColor = UIColor(red: 28/255, green: 30/255, blue: 33/255, alpha: 1.0)
+            containerView.backgroundColor = UIColor(red: 28/255, green: 30/255, blue: 33/255, alpha: 1.0)
+        } else {
+            view.backgroundColor = UIColor.secondarySystemBackground
+            containerView.backgroundColor = .secondarySystemBackground
+        }
         title = "Add Credit"
         
         amountTextField.placeholder = "Entry Amount"
@@ -103,7 +109,7 @@ class AddCreditViewController: UIViewController {
         containerView.addGestureRecognizer(tap)
     
         keyboardSaveButton = UIButton(frame: CGRect(x: 0, y: 0, width: view.frame.size.width, height: 50))
-        keyboardSaveButton.backgroundColor = UIColor.systemPink
+        keyboardSaveButton.backgroundColor = UIColor.systemGray2
         keyboardSaveButton.setTitle("SAVE", for: .normal)
         keyboardSaveButton.setTitleColor(UIColor.white, for: .normal)
         keyboardSaveButton.addTarget(self, action: #selector(saveButtonTapped), for: .touchUpInside)
@@ -133,11 +139,11 @@ class AddCreditViewController: UIViewController {
     @objc func saveButtonTapped() {
         
         guard let amount = amountTextField.text, !amount.isEmpty else {
-            presentAlert(title: "Warning", message: "Please enter a Price", buttonTitle: "Ok")
+            presentAlert(title: "Warning", message: "Please Enter Price", buttonTitle: "Ok")
             return
         }
         guard let monthly = monthlyTextField.text, !monthly.isEmpty else {
-            presentAlert(title: "Warning", message: "Please enter a Monthly Installment Price", buttonTitle: "Ok")
+            presentAlert(title: "Warning", message: "Please Enter Monthly Installment Price", buttonTitle: "Ok")
             return
         }
         
@@ -187,13 +193,23 @@ class AddCreditViewController: UIViewController {
         guard let amount = amountTextField.text, !amount.isEmpty else { return }
         guard let monthly = monthlyTextField.text, !monthly.isEmpty else { return }
         
-        let result = Currency.convertToDouble(with: locale, for: monthly) * Double(monthCount)
-        let calculated = String(format: "%.2f", result)
+        if keyboardSaveButton != nil {
+            keyboardSaveButton.backgroundColor = .systemPurple
+        }
+        
+        saveButton.configuration?.baseBackgroundColor = .systemPurple
+        
+        let calculatedPayment = Currency.convertToDouble(with: locale, for: monthly) * Double(monthCount)
+        let calculated = String(format: "%.2f", calculatedPayment)
         totalPaymentResultLabel.text = Currency.currencyInputFormatting(with: locale, for: calculated)
         
-        let cleanedAmount = Currency.convertToDouble(with: locale, for: amount)
+//        Faiz Oranı = (((Toplam Ödeme / Kredi Tutarı) - 1) / Kredi Vadesi) x 12
+//        Faiz Oranı = (((2.295.000 / 1.320.000) - 1) / 60) x 12 = 0,0203 veya %2,03
         
-        let interestPrice = result - cleanedAmount
+        let cleanedAmount = Currency.convertToDouble(with: locale, for: amount)
+        let interestPrice = calculatedPayment - cleanedAmount
+        let rate = (((calculatedPayment / cleanedAmount) - 1) / Double(monthCount)) * 12
+        print(rate)
         let interestRate = (interestPrice / cleanedAmount) * Double(monthCount)
         interestRateCalculated = String(format: "%.2f", interestRate)
         rateResultLabel.text = "%\(interestRateCalculated)"
@@ -289,7 +305,7 @@ class AddCreditViewController: UIViewController {
         saveButton.topAnchor.constraint(equalTo: totalPaymentResultLabel.bottomAnchor, constant: saveButtonTopConstant).isActive = true
         saveButton.leadingAnchor.constraint(equalTo: amountTextField.leadingAnchor).isActive = true
         saveButton.trailingAnchor.constraint(equalTo: amountTextField.trailingAnchor).isActive = true
-        saveButton.heightAnchor.constraint(equalToConstant: 40).isActive = true
+        saveButton.heightAnchor.constraint(equalToConstant: 50).isActive = true
     }
 }
 

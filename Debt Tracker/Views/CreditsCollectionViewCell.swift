@@ -13,7 +13,7 @@ class CreditsCollectionViewCell: UICollectionViewCell {
     
     var creditNameLabel = DTTitleLabel(textAlignment: .center, fontSize: 18)
     var creditDetailLabel = DTTitleLabel(textAlignment: .center, fontSize: 16)
-    var creditButton = DTButton(title: "Apply", color: .systemRed)
+    var creditButton = DTButton(title: "Create Credit", color: .systemRed, size: 12)
     
     
     override init(frame: CGRect) {

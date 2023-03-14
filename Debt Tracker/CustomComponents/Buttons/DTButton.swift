@@ -38,7 +38,6 @@ class DTButton: UIButton {
     
     private func configure() {
         configuration = .filled()
-        configuration?.cornerStyle = .capsule
         translatesAutoresizingMaskIntoConstraints = false
     }
     

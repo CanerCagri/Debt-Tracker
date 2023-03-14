@@ -23,7 +23,7 @@ class MainTabBarViewController: UITabBarController {
         vc2.title = "Credits"
         
         tabBar.tintColor = .label
-        tabBar.backgroundColor = .secondarySystemBackground
+        tabBar.backgroundColor = .systemBackground
         
         setViewControllers([vc1, vc2], animated: true)
     }

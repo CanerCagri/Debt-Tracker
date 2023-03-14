@@ -17,8 +17,8 @@ class CreditsTableViewCell: UITableViewCell {
     var entryDebt = DTTitleLabel(textAlignment: .left, fontSize: 17)
     var paidCount = DTTitleLabel(textAlignment: .left, fontSize: 12, textColor: .label)
     var remainingCount = DTTitleLabel(textAlignment: .left, fontSize: 12, textColor: .label)
-    var monthlyDepth = DTTitleLabel(textAlignment: .left, fontSize: 12, textColor: .systemGray2)
-    var nextPayment = DTTitleLabel(textAlignment: .left, fontSize: 12, textColor: .systemGray2)
+    var monthlyDepth = DTTitleLabel(textAlignment: .left, fontSize: 12, textColor: .label)
+    var nextPayment = DTTitleLabel(textAlignment: .left, fontSize: 12, textColor: .label)
     var totalDebtLabel = DTTitleLabel(textAlignment: .center, fontSize: 11, textColor: .systemGray2, text: "Total Debt")
     var totalDebt = DTTitleLabel(textAlignment: .center, fontSize: 14, textColor: .label)
     var paidLabel = DTTitleLabel(textAlignment: .center, fontSize: 11, textColor: .systemGray2, text: "Paid")
@@ -35,12 +35,8 @@ class CreditsTableViewCell: UITableViewCell {
             
             if count == totalInstallmentCount{
                 backgroundColor = .systemGreen
-                monthlyDepth.textColor = .label
-                nextPayment.textColor = .label
             } else {
-                backgroundColor = .systemBackground
-                monthlyDepth.textColor = .systemGray2
-                nextPayment.textColor = .systemGray2
+                backgroundColor = .systemGray2
             }
         }
     }

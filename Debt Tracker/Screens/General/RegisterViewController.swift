@@ -44,7 +44,11 @@ class RegisterViewController: UIViewController {
     }
     
     private func configureViewController() {
-        view.backgroundColor = .systemBackground
+        if traitCollection.userInterfaceStyle == .dark {
+            view.backgroundColor = UIColor(red: 28/255, green: 30/255, blue: 33/255, alpha: 1.0)
+        } else {
+            view.backgroundColor = UIColor.secondarySystemBackground
+        }
         
         let leftPaddingView = UIView(frame: CGRect(x: 0, y: 0, width: 40, height: 30))
         passwordTextField.leftView = leftPaddingView

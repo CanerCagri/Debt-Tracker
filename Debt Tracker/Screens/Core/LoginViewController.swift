@@ -15,7 +15,7 @@ import FacebookCore
 
 class LoginViewController: UIViewController {
     
-    lazy var contentSize = CGSize(width: self.view.frame.width, height: self.view.frame.height + 100)
+    lazy var contentSize = CGSize(width: self.view.frame.width, height: self.view.frame.height + 150)
     
     lazy var scrollView: UIScrollView = {
         let view = UIScrollView(frame: .zero)
@@ -64,12 +64,20 @@ class LoginViewController: UIViewController {
         isLoginTapped = false
         contentView.endEditing(true)
         
+        #if DEBUG
         emailTextField.text = "1@gmail.com"
         passwordTextField.text = "123456"
+        #endif
     }
     
     private func configureViewController() {
-        view.backgroundColor = .systemBackground
+        if traitCollection.userInterfaceStyle == .dark {
+            view.backgroundColor = UIColor(red: 28/255, green: 30/255, blue: 33/255, alpha: 1.0)
+            contentView.backgroundColor = UIColor(red: 28/255, green: 30/255, blue: 33/255, alpha: 1.0)
+        } else {
+            view.backgroundColor = UIColor.secondarySystemBackground
+            contentView.backgroundColor = .secondarySystemBackground
+        }
         passwordTextField.isSecureTextEntry = true
         passwordTextField.delegate = self
         emailTextField.delegate = self
@@ -240,11 +248,17 @@ class LoginViewController: UIViewController {
         view.addSubview(scrollView)
         scrollView.isScrollEnabled = false
         scrollView.addSubview(contentView)
-        contentView.backgroundColor = .systemBackground
         
         googleSignInButton.translatesAutoresizingMaskIntoConstraints = false
         googleSignInButton.style = .wide
         googleSignInButton.colorScheme = .light
+        
+        let underlineAttr = [NSAttributedString.Key.underlineStyle: NSUnderlineStyle.single.rawValue]
+        let forgetPasswordLabelString = NSAttributedString(string: "Forgot Password?", attributes: underlineAttr)
+        let registerLabelString = NSAttributedString(string: "REGISTER", attributes: underlineAttr)
+
+        forgetPasswordLabel.attributedText = forgetPasswordLabelString
+        registerLabel.attributedText = registerLabelString
         
         contentView.addSubviews(detailLabel, emailTextField, passwordTextField, loginButton, forgetPasswordLabel, googleSignInButton, facebookLoginButton, dontHaveAccLabel, registerLabel)
         containerView.addSubview(showPasswordButton)
@@ -268,9 +282,9 @@ class LoginViewController: UIViewController {
         loginButton.heightAnchor.constraint(equalToConstant: 40).isActive = true
         
         forgetPasswordLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor).isActive = true
-        forgetPasswordLabel.topAnchor.constraint(equalTo: loginButton.bottomAnchor, constant: 5).isActive = true
+        forgetPasswordLabel.topAnchor.constraint(equalTo: loginButton.bottomAnchor, constant: 15).isActive = true
         
-        googleSignInButton.topAnchor.constraint(equalTo: loginButton.bottomAnchor, constant: 50).isActive = true
+        googleSignInButton.topAnchor.constraint(equalTo: loginButton.bottomAnchor, constant: 70).isActive = true
         googleSignInButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20).isActive = true
         googleSignInButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20).isActive = true
         googleSignInButton.heightAnchor.constraint(equalToConstant: 40).isActive = true

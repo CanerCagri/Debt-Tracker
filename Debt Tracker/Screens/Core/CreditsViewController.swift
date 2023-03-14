@@ -33,15 +33,20 @@ class CreditsViewController: UIViewController {
     }
     
     private func configureViewController() {
-        view.backgroundColor = .systemBackground
+        if traitCollection.userInterfaceStyle == .dark {
+            view.backgroundColor = UIColor(red: 28/255, green: 30/255, blue: 33/255, alpha: 1.0)
+            creditsTableView.backgroundColor = UIColor(red: 28/255, green: 30/255, blue: 33/255, alpha: 1.0)
+        } else {
+            view.backgroundColor = UIColor.secondarySystemBackground
+            creditsTableView.backgroundColor = .secondarySystemBackground
+        }
         title = "Credits"
-        view.addSubviews(contentView)
-        contentView.translatesAutoresizingMaskIntoConstraints = false
-        contentView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
-        contentView.widthAnchor.constraint(equalTo: view.widthAnchor).isActive = true
-        contentView.heightAnchor.constraint(equalToConstant: 600).isActive = true
-        contentView.addSubview(creditsTableView)
-        contentView.backgroundColor = .systemGray5
+        view.addSubview(creditsTableView)
+        creditsTableView.translatesAutoresizingMaskIntoConstraints = false
+        creditsTableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
+        creditsTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
+        creditsTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
+        creditsTableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor).isActive = true
     }
     
     private func configureTableView() {
@@ -49,12 +54,6 @@ class CreditsViewController: UIViewController {
         creditsTableView.dataSource = self
         creditsTableView.rowHeight = 200
         creditsTableView.register(CreditsTableViewCell.self, forCellReuseIdentifier:CreditsTableViewCell.identifier)
-        
-        creditsTableView.translatesAutoresizingMaskIntoConstraints = false
-        creditsTableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
-        creditsTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
-        creditsTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
-        creditsTableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor).isActive = true
     }
     
     private func fetchFromFirebase() {

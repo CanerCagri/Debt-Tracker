@@ -56,7 +56,11 @@ class CreditsDetailViewController: UIViewController {
     }
     
     private func configureViewController() {
-        view.backgroundColor = .systemBackground
+        if traitCollection.userInterfaceStyle == .dark {
+            view.backgroundColor = UIColor(red: 28/255, green: 30/255, blue: 33/255, alpha: 1.0)
+        } else {
+            view.backgroundColor = UIColor.secondarySystemBackground
+        }
         let doneButton = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(dismissVC))
         navigationItem.rightBarButtonItem = doneButton
     }
@@ -180,23 +184,23 @@ extension CreditsDetailViewController: UITableViewDelegate, UITableViewDataSourc
         let viewModel = CreditDetailModel(name: creditModel.name, detail: creditModel.detail, entryDebt: creditModel.entryDebt, installmentCount: Int(creditModel.installmentCount), paidCount: Int(selectedMonthCount), monthlyInstallment: creditModel.monthlyInstallment, firstInstallmentDate: creditModel.firstInstallmentDate, currentInstallmentDate: selectedMonthDate, totalDebt: creditModel.totalDebt, interestRate: creditModel.interestRate, remainingDebt: selectedRemainingDebt, paidDebt: selectedPaidDebt, email: email, currency: creditModel.currency, locale: creditModel.locale)
         
         let yesAction = UIAlertAction(title: "Yes, I did pay selected Installment.", style: .default) { [weak self] (action) in
-            
+            self?.showLoading()
             FirestoreManager.shared.editCredit(documentId: self?.documentId ?? "", viewModel: viewModel) { result in
+                self?.dismissLoading()
                 switch result {
                 case .success(_):
-                    print("successfully paid")
+                    let alertController = UIAlertController(title: "Payment Successful", message: nil, preferredStyle: .alert)
+                    
+                    let deleteButton = UIAlertAction(title: "OK", style: .default) { [weak self] _ in
+                        self?.dismissVC()
+                    }
+                    
+                    alertController.addAction(deleteButton)
+                    self?.present(alertController, animated: true)
                 case .failure(let failure):
                     self?.presentAlert(title: "Warning", message: failure.localizedDescription, buttonTitle: "OK")
                 }
             }
-            let alertController = UIAlertController(title: "Payment Successful", message: nil, preferredStyle: .alert)
-            
-            let deleteButton = UIAlertAction(title: "OK", style: .default) { [weak self] _ in
-                self?.dismissVC()
-            }
-            
-            alertController.addAction(deleteButton)
-            self?.present(alertController, animated: true)
         }
         
         let noAction = UIAlertAction(title: "No, I didn't pay yet.", style: .cancel) { (action) in

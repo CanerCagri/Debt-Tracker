@@ -22,14 +22,20 @@ class CreditsMainViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        configureViewController()
         configureCollectionView()
+        configureViewController()
         configureDataSource()
         fetchFromFirestore()
     }
     
     private func configureViewController() {
-        view.backgroundColor = .systemBackground
+        if traitCollection.userInterfaceStyle == .dark {
+            view.backgroundColor = UIColor(red: 28/255, green: 30/255, blue: 33/255, alpha: 1.0)
+            creditsCollectionView.backgroundColor = UIColor(red: 28/255, green: 30/255, blue: 33/255, alpha: 1.0)
+        } else {
+            view.backgroundColor = UIColor.secondarySystemBackground
+            creditsCollectionView.backgroundColor = .secondarySystemBackground
+        }
         title = "Create Credit"
         
         navigationItem.rightBarButtonItems = [
@@ -40,6 +46,7 @@ class CreditsMainViewController: UIViewController {
         NotificationCenter.default.addObserver(forName: NSNotification.Name("popupButtonTapped"), object: nil, queue: nil) { [weak self] (notification) in
             self?.isRightBarButtonTapped = false
         }
+        self.tabBarController?.delegate = self
     }
     
     func configureCollectionView() {
@@ -86,9 +93,11 @@ class CreditsMainViewController: UIViewController {
             guard let selectedIndexPath = creditsCollectionView.indexPathForItem(at: gesture.location(in: creditsCollectionView)) else { break }
             let alertController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
             let deleteAction = UIAlertAction(title: "Delete", style: .destructive) { [weak self] _ in
+                self?.showLoading()
                 FirestoreManager.shared.deleteBank(documentId: (self?.documentIds[selectedIndexPath.row])!)
                 self?.banks.remove(at: selectedIndexPath.row)
                 self?.documentIds.remove(at: selectedIndexPath.row)
+                self?.dismissLoading()
             }
             let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
             alertController.addAction(deleteAction)
@@ -102,8 +111,6 @@ class CreditsMainViewController: UIViewController {
     @objc func rightBarButtonTapped() {
         
         if !isRightBarButtonTapped {
-            view.backgroundColor = .gray
-            
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.2 ) { [weak self] in
                 
                 let popupVc = CreateBankPopupVc()
@@ -151,6 +158,13 @@ extension CreditsMainViewController: UICollectionViewDelegate {
         let addCreditVc = AddCreditViewController()
         addCreditVc.selectedCredit = banks[indexPath.row]
         navigationController?.pushViewController(addCreditVc, animated: true)
-        
+    }
+}
+
+extension CreditsMainViewController: UITabBarControllerDelegate {
+    func tabBarController(_ tabBarController: UITabBarController, didSelect viewController: UIViewController) {
+        if let navigationController = viewController as? UINavigationController {
+            navigationController.popToRootViewController(animated: false)
+        }
     }
 }

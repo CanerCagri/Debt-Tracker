@@ -27,8 +27,22 @@ class CreateBankPopupVc: UIViewController {
         applyConstraints()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        nameTextField.text = ""
+        detailTextField.text = ""
+        view.endEditing(true)
+    }
+    
     private func configureViewController() {
-        view.backgroundColor = UIColor.systemGray.withAlphaComponent(0.5)
+        if traitCollection.userInterfaceStyle == .dark {
+            view.backgroundColor = UIColor.systemGray.withAlphaComponent(0.5)
+            containerView.backgroundColor = UIColor(red: 28/255, green: 30/255, blue: 33/255, alpha: 1.0)
+        } else {
+            view.backgroundColor = UIColor.systemGray.withAlphaComponent(0.5)
+            containerView.backgroundColor = .secondarySystemBackground
+        }
         view.frame = UIScreen.main.bounds
         
         closeButton.addTarget(self, action: #selector(animateOut), for: .touchUpInside)
@@ -51,6 +65,7 @@ class CreateBankPopupVc: UIViewController {
             presentAlert(title: "Warning", message: "Please enter Detail", buttonTitle: "Ok")
             return
         }
+        showLoading()
         
         FirestoreManager.shared.createBank(name: name, detail: detail) { [weak self] result in
             switch result {
@@ -59,6 +74,7 @@ class CreateBankPopupVc: UIViewController {
             case .failure(let failure):
                 self?.presentAlert(title: "Warning", message: failure.localizedDescription, buttonTitle: "OK")
             }
+            self?.dismissLoading()
         }
     }
     
@@ -88,7 +104,6 @@ class CreateBankPopupVc: UIViewController {
     private func applyConstraints() {
         animateIn()
         view.addSubview(containerView)
-        containerView.backgroundColor = .systemGray5
         
         let totalWidth = view.frame.width
         let textFieldWidth = totalWidth / 1.5
