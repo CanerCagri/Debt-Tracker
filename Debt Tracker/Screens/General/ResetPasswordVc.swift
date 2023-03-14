@@ -33,16 +33,17 @@ class ForgotPasswordVc: UIViewController {
     
     private func configureViewController() {
         if traitCollection.userInterfaceStyle == .dark {
-            view.backgroundColor = UIColor.systemGray.withAlphaComponent(0.5)
+            view.backgroundColor = UIColor.black.withAlphaComponent(0.75)
             containerView.backgroundColor = UIColor(red: 28/255, green: 30/255, blue: 33/255, alpha: 1.0)
         } else {
-            view.backgroundColor = UIColor.systemGray.withAlphaComponent(0.5)
+            view.backgroundColor = UIColor.black.withAlphaComponent(0.75)
             containerView.backgroundColor = .secondarySystemBackground
         }
+        
         view.frame = UIScreen.main.bounds
         
         emailTextField.delegate = self
-        closeButton.addTarget(self, action: #selector(dismissVC), for: .touchUpInside)
+        closeButton.addTarget(self, action: #selector(dismissVc), for: .touchUpInside)
         resetButton.addTarget(self, action: #selector(resetButtonTapped), for: .touchUpInside)
         
         let tap = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
@@ -68,22 +69,11 @@ class ForgotPasswordVc: UIViewController {
         }
     }
     
-    @objc func dismissVC() {
+    @objc func dismissVc() {
         NotificationCenter.default.post(Notification(name: Notification.Name("resetCloseTapped"), userInfo: nil))
-        animateOut()
+        dismiss(animated: true)
     }
-    
-    func animateOut() {
-        UIView.animate(withDuration: 0.2, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 1, options: .curveEaseIn) { [weak self] in
-            self?.containerView.transform = CGAffineTransform(translationX: 0, y: -(self?.view.frame.height)!)
-            self?.view.alpha = 0
-        } completion: { complete in
-            if complete {
-                self.view.removeFromSuperview()
-            }
-        }
-    }
-    
+
     func animateIn() {
         self.containerView.transform = CGAffineTransform(translationX: 0, y: -self.view.frame.height)
         self.view.alpha = 0

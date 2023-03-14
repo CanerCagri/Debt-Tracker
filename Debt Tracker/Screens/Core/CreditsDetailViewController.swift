@@ -56,11 +56,8 @@ class CreditsDetailViewController: UIViewController {
     }
     
     private func configureViewController() {
-        if traitCollection.userInterfaceStyle == .dark {
-            view.backgroundColor = UIColor(red: 28/255, green: 30/255, blue: 33/255, alpha: 1.0)
-        } else {
-            view.backgroundColor = UIColor.secondarySystemBackground
-        }
+        view.setBackgroundColor()
+        
         let doneButton = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(dismissVC))
         navigationItem.rightBarButtonItem = doneButton
     }

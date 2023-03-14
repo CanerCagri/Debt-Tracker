@@ -34,4 +34,13 @@ extension UIView {
         layer.shadowColor = UIColor.gray.cgColor
         layer.shadowOffset = CGSize(width: 0, height: 5)
     }
+    
+    func setBackgroundColor() {
+        if #available(iOS 13.0, *) {
+            let setColor = traitCollection.userInterfaceStyle == .dark ? UIColor(red: 28/255, green: 30/255, blue: 33/255, alpha: 1.0) : UIColor.secondarySystemBackground
+            backgroundColor = setColor
+        } else {
+            backgroundColor = UIColor.secondarySystemBackground
+        }
+    }
 }

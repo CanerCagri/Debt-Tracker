@@ -74,6 +74,8 @@ class LoginViewController: UIViewController {
         if traitCollection.userInterfaceStyle == .dark {
             view.backgroundColor = UIColor(red: 28/255, green: 30/255, blue: 33/255, alpha: 1.0)
             contentView.backgroundColor = UIColor(red: 28/255, green: 30/255, blue: 33/255, alpha: 1.0)
+            forgetPasswordLabel.textColor = .systemGray
+            registerLabel.textColor = .systemGray
         } else {
             view.backgroundColor = UIColor.secondarySystemBackground
             contentView.backgroundColor = .secondarySystemBackground
@@ -203,10 +205,10 @@ class LoginViewController: UIViewController {
             
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.2 ) { [weak self] in
                 let popupVc = ForgotPasswordVc()
-                
-                self?.addChild(popupVc)
-                self?.view.addSubview(popupVc.view)
-                popupVc.didMove(toParent: self)
+ 
+                popupVc.modalTransitionStyle = .crossDissolve
+                popupVc.modalPresentationStyle = .overFullScreen
+                self?.present(popupVc, animated: true)
             }
             isForgetPasswordTapped = true
         }

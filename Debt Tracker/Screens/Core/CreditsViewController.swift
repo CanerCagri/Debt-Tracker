@@ -33,13 +33,9 @@ class CreditsViewController: UIViewController {
     }
     
     private func configureViewController() {
-        if traitCollection.userInterfaceStyle == .dark {
-            view.backgroundColor = UIColor(red: 28/255, green: 30/255, blue: 33/255, alpha: 1.0)
-            creditsTableView.backgroundColor = UIColor(red: 28/255, green: 30/255, blue: 33/255, alpha: 1.0)
-        } else {
-            view.backgroundColor = UIColor.secondarySystemBackground
-            creditsTableView.backgroundColor = .secondarySystemBackground
-        }
+        view.setBackgroundColor()
+        creditsTableView.setBackgroundColor()
+        
         title = "Credits"
         view.addSubview(creditsTableView)
         creditsTableView.translatesAutoresizingMaskIntoConstraints = false

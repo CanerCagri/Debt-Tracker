@@ -69,15 +69,10 @@ class AddCreditViewController: UIViewController {
     }
  
     private func configureViewController() {
-        if traitCollection.userInterfaceStyle == .dark {
-            view.backgroundColor = UIColor(red: 28/255, green: 30/255, blue: 33/255, alpha: 1.0)
-            containerView.backgroundColor = UIColor(red: 28/255, green: 30/255, blue: 33/255, alpha: 1.0)
-        } else {
-            view.backgroundColor = UIColor.secondarySystemBackground
-            containerView.backgroundColor = .secondarySystemBackground
-        }
-        title = "Add Credit"
+        view.setBackgroundColor()
+        containerView.setBackgroundColor()
         
+        title = "Add Credit"
         amountTextField.placeholder = "Entry Amount"
         monthlyTextField.placeholder = "Monthly Installment"
         

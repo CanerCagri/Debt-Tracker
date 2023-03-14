@@ -14,7 +14,7 @@ class CreateBankPopupVc: UIViewController {
     let titleLabel = DTTitleLabel(textAlignment: .center, fontSize: 18, textColor: .label, text: "Add Bank")
     let saveButton = DTButton(title: "SAVE", color: .systemPink, systemImageName: "square.and.arrow.down", size: 20)
     let nameTextField = DTTextField(placeholder: "Bank Name", placeHolderSize: 15)
-    let detailTextField = DTTextField(placeholder: "Detail", placeHolderSize: 15)
+    let detailTextField = DTTextField(placeholder: "Credit Details", placeHolderSize: 15)
     private var closeButton = DTCloseButton()
     
     let db = Firestore.firestore()
@@ -37,15 +37,16 @@ class CreateBankPopupVc: UIViewController {
     
     private func configureViewController() {
         if traitCollection.userInterfaceStyle == .dark {
-            view.backgroundColor = UIColor.systemGray.withAlphaComponent(0.5)
+            view.backgroundColor = UIColor.black.withAlphaComponent(0.75)
             containerView.backgroundColor = UIColor(red: 28/255, green: 30/255, blue: 33/255, alpha: 1.0)
         } else {
-            view.backgroundColor = UIColor.systemGray.withAlphaComponent(0.5)
+            view.backgroundColor = UIColor.black.withAlphaComponent(0.75)
             containerView.backgroundColor = .secondarySystemBackground
         }
+
         view.frame = UIScreen.main.bounds
         
-        closeButton.addTarget(self, action: #selector(animateOut), for: .touchUpInside)
+        closeButton.addTarget(self, action: #selector(dismissView), for: .touchUpInside)
         saveButton.addTarget(self, action: #selector(saveButtonTapped), for: .touchUpInside)
         
         let tap = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
@@ -70,7 +71,7 @@ class CreateBankPopupVc: UIViewController {
         FirestoreManager.shared.createBank(name: name, detail: detail) { [weak self] result in
             switch result {
             case .success(_):
-                self?.animateOut()
+                self?.dismissView()
             case .failure(let failure):
                 self?.presentAlert(title: "Warning", message: failure.localizedDescription, buttonTitle: "OK")
             }
@@ -78,17 +79,9 @@ class CreateBankPopupVc: UIViewController {
         }
     }
     
-    @objc func animateOut() {
+    @objc func dismissView() {
         NotificationCenter.default.post(Notification(name: Notification.Name("popupButtonTapped"), userInfo: nil))
-        
-        UIView.animate(withDuration: 0.2, delay: 0, usingSpringWithDamping: 0.7, initialSpringVelocity: 1, options: .curveEaseIn) { [weak self] in
-            self?.containerView.transform = CGAffineTransform(translationX: 0, y: -(self?.view.frame.height)!)
-            self?.view.alpha = 0
-        } completion: { complete in
-            if complete {
-                self.view.removeFromSuperview()
-            }
-        }
+        dismiss(animated: true)
     }
     
     func animateIn() {
