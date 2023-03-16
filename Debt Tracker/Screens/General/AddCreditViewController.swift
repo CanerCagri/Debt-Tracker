@@ -22,7 +22,10 @@ class AddCreditViewController: UIViewController {
             container.font = UIFont(name: "GillSans-SemiBold", size: 20)
             currencyButton.configuration?.attributedTitle = AttributedString(selectedCurrency!.retrieveDetailedInformation(), attributes: container)
             currencySymbol = "\(selectedCurrency!.retriviedCurrencySymbol())"
-            totalPaymentResultLabel.text = "\(selectedCurrency!.retriviedCurrencySymbol())0"
+            entryDebt.text = "\(selectedCurrency!.retriviedCurrencySymbol())0"
+            change.text = "%0"
+            calculated.text = "\(selectedCurrency!.retriviedCurrencySymbol())0"
+            
             locale = selectedCurrency!.locale
             amountTextField.text?.removeAll()
             amountTextField.currency = selectedCurrency
@@ -41,12 +44,18 @@ class AddCreditViewController: UIViewController {
     var monthlyTextField = CurrencyTextField(size: 18)
     let monthlyInstallmentCountLabel = DTTitleLabel(textAlignment: .left, fontSize: 18, text: "Select Number Of Installments:")
     var monthlyInstallmentCountButton = DTButton(title: "12", color: .systemRed)
-    let rateLabel = DTTitleLabel(textAlignment: .left, fontSize: 18, textColor: .systemGray, text: "Interest Rate: ")
-    let rateResultLabel = DTTitleLabel(textAlignment: .left, fontSize: 18, textColor: .systemGray, text: "%0.0")
-    let totalPaymentLabel = DTTitleLabel(textAlignment: .left, fontSize: 18, textColor: .systemGray, text: "Total Payment:")
-    let totalPaymentResultLabel = DTTitleLabel(textAlignment: .left, fontSize: 18, textColor: .systemGray, text: "$0")
     let firstInstallmentLabel = DTTitleLabel(textAlignment: .left, fontSize: 18, text: "Select First Installment:")
     let firstInstallmentDatePicker = UIDatePicker()
+    var entryDebtLabel = DTTitleLabel(textAlignment: .center, fontSize: 16, textColor: .systemGray, text: "Entry Debt")
+    var entryDebt = DTTitleLabel(textAlignment: .center, fontSize: 16, textColor: .label)
+    var changeLabel = DTTitleLabel(textAlignment: .center, fontSize: 16, textColor: .systemGray, text: "Change")
+    var change = DTTitleLabel(textAlignment: .center, fontSize: 16, textColor: .label)
+    var calculatedLabel = DTTitleLabel(textAlignment: .center, fontSize: 16, textColor: .systemGray, text: "Calculated Debt")
+    var calculated = DTTitleLabel(textAlignment: .center, fontSize: 16, textColor: .label)
+    
+    var containerViewOne = UIView()
+    var containerViewTwo = UIView()
+    var containerViewThree = UIView()
     
     let db = Firestore.firestore()
     
@@ -142,7 +151,7 @@ class AddCreditViewController: UIViewController {
             return
         }
         
-        guard let calculatedPayment = totalPaymentResultLabel.text, !calculatedPayment.isEmpty else {
+        guard let calculatedPayment = calculated.text, !calculatedPayment.isEmpty else {
             return
         }
         
@@ -189,25 +198,21 @@ class AddCreditViewController: UIViewController {
         guard let monthly = monthlyTextField.text, !monthly.isEmpty else { return }
         
         if keyboardSaveButton != nil {
-            keyboardSaveButton.backgroundColor = .systemPurple
+            keyboardSaveButton.backgroundColor = .systemPink
         }
         
-        saveButton.configuration?.baseBackgroundColor = .systemPurple
+        saveButton.configuration?.baseBackgroundColor = .systemPink
         
+        entryDebt.text = amount
         let calculatedPayment = Currency.convertToDouble(with: locale, for: monthly) * Double(monthCount)
-        let calculated = String(format: "%.2f", calculatedPayment)
-        totalPaymentResultLabel.text = Currency.currencyInputFormatting(with: locale, for: calculated)
-        
-//        Faiz Oranı = (((Toplam Ödeme / Kredi Tutarı) - 1) / Kredi Vadesi) x 12
-//        Faiz Oranı = (((2.295.000 / 1.320.000) - 1) / 60) x 12 = 0,0203 veya %2,03
+        let calculatedDebt = String(format: "%.2f", calculatedPayment)
+        calculated.text = Currency.currencyInputFormatting(with: locale, for: calculatedDebt)
         
         let cleanedAmount = Currency.convertToDouble(with: locale, for: amount)
         let interestPrice = calculatedPayment - cleanedAmount
-        let rate = (((calculatedPayment / cleanedAmount) - 1) / Double(monthCount)) * 12
-        print(rate)
-        let interestRate = (interestPrice / cleanedAmount) * Double(monthCount)
-        interestRateCalculated = String(format: "%.2f", interestRate)
-        rateResultLabel.text = "%\(interestRateCalculated)"
+        let rate = (interestPrice / cleanedAmount) * 100
+        interestRateCalculated = String(format: "%.2f", rate)
+        change.text = "%\(interestRateCalculated)"
     }
     
     @objc func openCurrencyBottomVc() {
@@ -244,7 +249,14 @@ class AddCreditViewController: UIViewController {
         containerView.pinToEdges(view: scrollView)
         containerView.widthAnchor.constraint(equalTo: scrollView.widthAnchor).isActive = true
         containerView.heightAnchor.constraint(equalTo: scrollView.heightAnchor).isActive = true
-        containerView.addSubviews(saveButton, creditNameLabel, currencyButton, amountTextField, monthlyTextField, monthlyInstallmentCountLabel, monthlyInstallmentCountButton, firstInstallmentLabel, firstInstallmentDatePicker, rateLabel, rateResultLabel, totalPaymentLabel, totalPaymentResultLabel)
+        containerView.addSubviews(saveButton, creditNameLabel, currencyButton, amountTextField, monthlyTextField, monthlyInstallmentCountLabel, monthlyInstallmentCountButton, firstInstallmentLabel, firstInstallmentDatePicker, containerViewOne, containerViewTwo, containerViewThree)
+        
+        containerViewOne.translatesAutoresizingMaskIntoConstraints = false
+        containerViewTwo.translatesAutoresizingMaskIntoConstraints = false
+        containerViewThree.translatesAutoresizingMaskIntoConstraints = false
+        containerViewOne.backgroundColor = .systemGray5
+        containerViewTwo.backgroundColor = .systemGray5
+        containerViewThree.backgroundColor = .systemGray5
         
         let totalWidth = view.frame.width
         let currenyButtonWidth = totalWidth / 2
@@ -283,24 +295,67 @@ class AddCreditViewController: UIViewController {
         firstInstallmentDatePicker.leadingAnchor.constraint(equalTo: firstInstallmentLabel.trailingAnchor, constant: 10).isActive = true
         firstInstallmentDatePicker.trailingAnchor.constraint(equalTo: monthlyInstallmentCountButton.trailingAnchor).isActive = true
         
-        rateLabel.topAnchor.constraint(equalTo: firstInstallmentDatePicker.bottomAnchor, constant: 20).isActive = true
-        rateLabel.leadingAnchor.constraint(equalTo: amountTextField.leadingAnchor).isActive = true
-        
-        rateResultLabel.topAnchor.constraint(equalTo: rateLabel.topAnchor).isActive = true
-        rateResultLabel.trailingAnchor.constraint(equalTo: monthlyTextField.trailingAnchor, constant: -5).isActive = true
-        
-        totalPaymentLabel.topAnchor.constraint(equalTo: rateLabel.bottomAnchor, constant: 15).isActive = true
-        totalPaymentLabel.leadingAnchor.constraint(equalTo: amountTextField.leadingAnchor).isActive = true
-        
-        totalPaymentResultLabel.topAnchor.constraint(equalTo: rateLabel.bottomAnchor, constant: 15).isActive = true
-        totalPaymentResultLabel.trailingAnchor.constraint(equalTo: rateResultLabel.trailingAnchor).isActive = true
+        constraintsOfContainers()
+        constraintsInsideContainers()
         
         let saveButtonTopConstant: CGFloat = DeviceTypes.isiPhoneSE || DeviceTypes.isiPhone8PlusZoomed || DeviceTypes.isiPhone8Standard || DeviceTypes.isiPhone8Zoomed || DeviceTypes.isiPhone8PlusStandard ? 80 : 180
         
-        saveButton.topAnchor.constraint(equalTo: totalPaymentResultLabel.bottomAnchor, constant: saveButtonTopConstant).isActive = true
+        saveButton.topAnchor.constraint(equalTo: calculated.bottomAnchor, constant: saveButtonTopConstant).isActive = true
         saveButton.leadingAnchor.constraint(equalTo: amountTextField.leadingAnchor).isActive = true
         saveButton.trailingAnchor.constraint(equalTo: amountTextField.trailingAnchor).isActive = true
         saveButton.heightAnchor.constraint(equalToConstant: 50).isActive = true
+    }
+    
+    func constraintsOfContainers() {
+        let totalWidth = view.frame.width
+        let labelWidth = totalWidth / 4
+        
+        containerViewTwo.centerXAnchor.constraint(equalTo: containerView.centerXAnchor).isActive = true
+        containerViewTwo.topAnchor.constraint(equalTo: firstInstallmentDatePicker.bottomAnchor, constant: 20).isActive = true
+        containerViewTwo.widthAnchor.constraint(equalToConstant: labelWidth).isActive = true
+        containerViewTwo.heightAnchor.constraint(equalToConstant: 80).isActive = true
+        
+        containerViewOne.trailingAnchor.constraint(equalTo: containerViewTwo.leadingAnchor, constant: -2).isActive = true
+        containerViewOne.topAnchor.constraint(equalTo: firstInstallmentDatePicker.bottomAnchor, constant: 20).isActive = true
+        containerViewOne.leadingAnchor.constraint(equalTo: firstInstallmentLabel.leadingAnchor).isActive = true
+        containerViewOne.heightAnchor.constraint(equalToConstant: 80).isActive = true
+        
+        containerViewThree.leadingAnchor.constraint(equalTo: containerViewTwo.trailingAnchor, constant: 2).isActive = true
+        containerViewThree.topAnchor.constraint(equalTo: firstInstallmentDatePicker.bottomAnchor, constant: 20).isActive = true
+        containerViewThree.trailingAnchor.constraint(equalTo: firstInstallmentDatePicker.trailingAnchor).isActive = true
+        containerViewThree.heightAnchor.constraint(equalToConstant: 80).isActive = true
+    }
+    
+    func constraintsInsideContainers() {
+        containerViewOne.addSubviews(entryDebtLabel, entryDebt)
+        
+        entryDebtLabel.topAnchor.constraint(equalTo: containerViewOne.topAnchor, constant: 5).isActive = true
+        entryDebtLabel.leadingAnchor.constraint(equalTo: containerViewOne.leadingAnchor).isActive = true
+        entryDebtLabel.trailingAnchor.constraint(equalTo: containerViewOne.trailingAnchor).isActive = true
+        
+        entryDebt.topAnchor.constraint(equalTo: entryDebtLabel.bottomAnchor, constant: 15).isActive = true
+        entryDebt.leadingAnchor.constraint(equalTo: containerViewOne.leadingAnchor).isActive = true
+        entryDebt.trailingAnchor.constraint(equalTo: containerViewOne.trailingAnchor).isActive = true
+        
+        containerViewTwo.addSubviews(changeLabel, change)
+        
+        changeLabel.topAnchor.constraint(equalTo: containerViewTwo.topAnchor, constant: 5).isActive = true
+        changeLabel.leadingAnchor.constraint(equalTo: containerViewTwo.leadingAnchor).isActive = true
+        changeLabel.trailingAnchor.constraint(equalTo: containerViewTwo.trailingAnchor).isActive = true
+        
+        change.topAnchor.constraint(equalTo: changeLabel.bottomAnchor, constant: 15).isActive = true
+        change.leadingAnchor.constraint(equalTo: containerViewTwo.leadingAnchor).isActive = true
+        change.trailingAnchor.constraint(equalTo: containerViewTwo.trailingAnchor).isActive = true
+        
+        containerViewThree.addSubviews(calculatedLabel, calculated)
+        
+        calculatedLabel.topAnchor.constraint(equalTo: containerViewThree.topAnchor, constant: 5).isActive = true
+        calculatedLabel.leadingAnchor.constraint(equalTo: containerViewThree.leadingAnchor).isActive = true
+        calculatedLabel.trailingAnchor.constraint(equalTo: containerViewThree.trailingAnchor).isActive = true
+        
+        calculated.topAnchor.constraint(equalTo: calculatedLabel.bottomAnchor, constant: 15).isActive = true
+        calculated.leadingAnchor.constraint(equalTo: containerViewThree.leadingAnchor).isActive = true
+        calculated.trailingAnchor.constraint(equalTo: containerViewThree.trailingAnchor).isActive = true
     }
 }
 

@@ -64,7 +64,7 @@ class CreditsTableViewCell: UITableViewCell {
         formatter.groupingSeparator = "."
         formatter.positiveSuffix = credit.currency
         
-        nameLabel.text = "\(credit.name) - \(credit.detail) - %\(credit.interestRate)"
+        nameLabel.text = "\(credit.name) - \(credit.detail)"
         entryDebt.text = credit.entryDebt
         
         totalInstallmentCount = Int(credit.installmentCount)

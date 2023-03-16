@@ -289,7 +289,6 @@
 			isa = PBXGroup;
 			children = (
 				011E8C7229858BC600F163D4 /* DTAlertViewController.swift */,
-				0129E0AF29A0F322002FBAA0 /* Currency.swift */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -299,6 +298,7 @@
 			children = (
 				011E8C7529858C1900F163D4 /* DTContainerView.swift */,
 				011E8C7B2986A14300F163D4 /* DTEmptyStateView.swift */,
+				0129E0AF29A0F322002FBAA0 /* Currency.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
