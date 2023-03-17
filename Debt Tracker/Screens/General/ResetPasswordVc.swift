@@ -13,7 +13,7 @@ class ForgotPasswordVc: UIViewController {
     private let containerView = DTContainerView()
     let titleLabel = DTTitleLabel(textAlignment: .center, fontSize: 18, textColor: .label, text: "Reset Password")
     let emailTextField = DTTextField(placeholder: "Enter Email", placeHolderSize: 15, cornerRadius: 14)
-    let resetButton = DTButton(title: "RESET PASSWORD", color: .systemPink, systemImageName: "arrow.clockwise", size: 20)
+    let resetButton = DTButton(title: "RESET PASSWORD", color: .systemPink, systemImageName: SFSymbols.resetSymbol, size: 20)
     private var closeButton = DTCloseButton()
     
     
@@ -32,26 +32,14 @@ class ForgotPasswordVc: UIViewController {
     }
     
     private func configureViewController() {
-        if traitCollection.userInterfaceStyle == .dark {
-            view.backgroundColor = UIColor.black.withAlphaComponent(0.75)
-            containerView.backgroundColor = UIColor(red: 28/255, green: 30/255, blue: 33/255, alpha: 1.0)
-        } else {
-            view.backgroundColor = UIColor.black.withAlphaComponent(0.75)
-            containerView.backgroundColor = .secondarySystemBackground
-        }
-        
+        containerView.setBackgroundColor()
+        view.backgroundColor = UIColor.black.withAlphaComponent(0.75)
         view.frame = UIScreen.main.bounds
+        hideKeyboardWheTappedAround()
         
         emailTextField.delegate = self
         closeButton.addTarget(self, action: #selector(dismissVc), for: .touchUpInside)
         resetButton.addTarget(self, action: #selector(resetButtonTapped), for: .touchUpInside)
-        
-        let tap = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
-        view.addGestureRecognizer(tap)
-    }
-    
-    @objc func dismissKeyboard() {
-        containerView.endEditing(true)
     }
     
     @objc func resetButtonTapped() {
@@ -70,7 +58,7 @@ class ForgotPasswordVc: UIViewController {
     }
     
     @objc func dismissVc() {
-        NotificationCenter.default.post(Notification(name: Notification.Name("resetCloseTapped"), userInfo: nil))
+        NotificationCenter.default.post(Notification(name: .resetVcClosed, userInfo: nil))
         dismiss(animated: true)
     }
 

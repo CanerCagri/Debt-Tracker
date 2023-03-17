@@ -54,9 +54,10 @@ class CurrencyTextField: UITextField {
         setup()
     }
     
-    init(size: CGFloat) {
+    init(size: CGFloat, placeHolder: String) {
         super.init(frame: .zero)
         font = UIFont(name: "GillSans-SemiBold", size: size)
+        placeholder = placeHolder
         setup()
     }
     
@@ -123,7 +124,6 @@ class CurrencyTextField: UITextField {
         return end
     }
 }
-
 
 extension CurrencyTextField: UITextFieldDelegate {
     

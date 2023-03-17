@@ -33,7 +33,7 @@ class DTEmptyStateView: UIView {
         messageLabel.numberOfLines = 3
         messageLabel.textColor = .secondaryLabel
         
-        logoImageView.image = UIImage(systemName: "plus.message.fill")
+        logoImageView.image = UIImage(systemName: SFSymbols.emptyStateSymbol)
         logoImageView.translatesAutoresizingMaskIntoConstraints = false
         
         let labelCenterYConstant: CGFloat = DeviceTypes.isiPhoneSE || DeviceTypes.isiPhone8PlusZoomed || DeviceTypes.isiPhone8Standard || DeviceTypes.isiPhone8Zoomed || DeviceTypes.isiPhone8PlusStandard ? -90 : -150

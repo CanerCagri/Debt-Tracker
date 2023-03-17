@@ -9,8 +9,6 @@ import UIKit
 
 class CreditsCollectionViewCell: UICollectionViewCell {
     
-    static let identifier = "CreditsCollectionViewCell"
-    
     var creditNameLabel = DTTitleLabel(textAlignment: .center, fontSize: 18)
     var creditDetailLabel = DTTitleLabel(textAlignment: .center, fontSize: 16)
     var creditButton = DTButton(title: "Create Credit", color: .systemRed, size: 12)

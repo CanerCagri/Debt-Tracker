@@ -74,8 +74,10 @@ enum Section {
     case main
 }
 
-
 extension Notification.Name {
-    static let signOutButton = Notification.Name("signOutButton")
+    static let signOutButtonTapped = Notification.Name("signOutButtonTapped")
+    static let resetVcClosed = Notification.Name("resetCloseButtonTapped")
+    static let createBankVcClosed = Notification.Name("createBankClosed")
+    static let installmentCountSelected = Notification.Name("installmentCountSelected")
 }
 

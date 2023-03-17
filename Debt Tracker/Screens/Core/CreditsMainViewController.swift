@@ -29,18 +29,16 @@ class CreditsMainViewController: UIViewController {
     }
     
     private func configureViewController() {
-        
+        title = "Create Credit"
         view.setBackgroundColor()
         creditsCollectionView.setBackgroundColor()
         
-        title = "Create Credit"
-        
         navigationItem.rightBarButtonItems = [
-            UIBarButtonItem(image: UIImage(systemName: "power"), style: .done, target: self, action: #selector(logoutButtonTapped)),
+            UIBarButtonItem(image: UIImage(systemName: SFSymbols.logoutSymbol), style: .done, target: self, action: #selector(logoutButtonTapped)),
             UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(rightBarButtonTapped))
         ]
         
-        NotificationCenter.default.addObserver(forName: NSNotification.Name("popupButtonTapped"), object: nil, queue: nil) { [weak self] (notification) in
+        NotificationCenter.default.addObserver(forName: .createBankVcClosed, object: nil, queue: nil) { [weak self] (notification) in
             self?.isRightBarButtonTapped = false
         }
         self.tabBarController?.delegate = self
@@ -51,7 +49,7 @@ class CreditsMainViewController: UIViewController {
         view.addSubview(creditsCollectionView)
         creditsCollectionView.delegate = self
         creditsCollectionView.backgroundColor = .systemBackground
-        creditsCollectionView.register(CreditsCollectionViewCell.self, forCellWithReuseIdentifier: CreditsCollectionViewCell.identifier)
+        creditsCollectionView.register(CreditsCollectionViewCell.self, forCellWithReuseIdentifier: K.creditsCollectionViewCellIdentifier)
         
         let longPressGesture = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPress))
         creditsCollectionView.addGestureRecognizer(longPressGesture)
@@ -123,7 +121,7 @@ class CreditsMainViewController: UIViewController {
         do {
             try Auth.auth().signOut()
             FirestoreManager.shared.stopFetchingCredit()
-            NotificationCenter.default.post(name: .signOutButton , object: nil)
+            NotificationCenter.default.post(name: .signOutButtonTapped, object: nil)
             
         } catch let signOutError as NSError {
             print("Error when signing out: %@", signOutError)
@@ -132,7 +130,7 @@ class CreditsMainViewController: UIViewController {
     
     func configureDataSource() {
         dataSource = UICollectionViewDiffableDataSource<Section, BankDetails>(collectionView: creditsCollectionView, cellProvider: { collectionView, indexPath, banks in
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CreditsCollectionViewCell.identifier, for: indexPath) as! CreditsCollectionViewCell
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: K.creditsCollectionViewCellIdentifier, for: indexPath) as! CreditsCollectionViewCell
             cell.set(banks: banks)
             return cell
         })
@@ -151,7 +149,7 @@ extension CreditsMainViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         collectionView.deselectItem(at: indexPath, animated: true)
         view.backgroundColor = .gray
-       
+        
         let addCreditVc = AddCreditViewController()
         addCreditVc.selectedCredit = banks[indexPath.row]
         navigationController?.pushViewController(addCreditVc, animated: true)

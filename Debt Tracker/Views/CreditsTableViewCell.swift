@@ -61,7 +61,7 @@ class CreditsTableViewCell: UITableViewCell {
     func set(credit: CreditDetailModel) {
         let formatter = NumberFormatter()
         formatter.numberStyle = .decimal
-        formatter.groupingSeparator = "."
+        formatter.groupingSeparator = K.numberFormatterGroupingSeparator
         formatter.positiveSuffix = credit.currency
         
         nameLabel.text = "\(credit.name) - \(credit.detail)"

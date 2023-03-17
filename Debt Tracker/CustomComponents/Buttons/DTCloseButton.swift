@@ -21,7 +21,7 @@ class DTCloseButton: UIButton {
     
     private func configure() {
         translatesAutoresizingMaskIntoConstraints = false
-        setImage(UIImage(systemName: "xmark.circle.fill"), for: .normal)
+        setImage(UIImage(systemName: SFSymbols.closeSymbol), for: .normal)
         imageView?.translatesAutoresizingMaskIntoConstraints = false
         imageView?.heightAnchor.constraint(equalToConstant: 44).isActive = true
         imageView?.widthAnchor.constraint(equalToConstant: 44).isActive = true

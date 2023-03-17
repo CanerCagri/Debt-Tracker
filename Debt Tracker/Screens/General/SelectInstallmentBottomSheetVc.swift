@@ -12,7 +12,7 @@ class SelectInstallmentBottomSheetVc: UIViewController {
     var pickerView = UIPickerView()
     let numbers = [3, 6, 9, 12, 18, 24, 30, 36, 42, 48, 54, 60, 66, 72, 78, 84, 90, 96, 102, 108, 114, 120, 126, 132, 138, 144, 150, 156, 162, 168, 174, 180, 186, 192, 198, 204, 210, 216, 222, 228, 234, 240]
     
-    private let nextButton = DTButton(title: "Next", color: .systemPink, systemImageName: "checkmark.circle", size: 15)
+    private let nextButton = DTButton(title: "Next", color: .systemPink, systemImageName: SFSymbols.checkMarkSymbol, size: 15)
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -38,8 +38,8 @@ class SelectInstallmentBottomSheetVc: UIViewController {
         let selectedRow = pickerView.selectedRow(inComponent: 0)
         let selectedValue = numbers[selectedRow]
         
-        let userInfo = ["selectedCount": selectedValue]
-        NotificationCenter.default.post(Notification(name: Notification.Name("selectedCount"), userInfo: userInfo))
+        let userInfo = [Notification.Name.installmentCountSelected: selectedValue]
+        NotificationCenter.default.post(Notification(name: .installmentCountSelected, userInfo: userInfo))
         dismiss(animated: true)
     }
     

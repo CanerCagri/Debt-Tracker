@@ -47,7 +47,6 @@
 		0129E0A7299EF94F002FBAA0 /* FacebookLogin in Frameworks */ = {isa = PBXBuildFile; productRef = 0129E0A6299EF94F002FBAA0 /* FacebookLogin */; };
 		0129E0AA29A0D823002FBAA0 /* CurrencyTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0129E0A929A0D823002FBAA0 /* CurrencyTextField.swift */; };
 		0129E0AC29A0F2C3002FBAA0 /* UITableViewCell+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0129E0AB29A0F2C3002FBAA0 /* UITableViewCell+Ext.swift */; };
-		0129E0AE29A0F2D5002FBAA0 /* String+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0129E0AD29A0F2D5002FBAA0 /* String+Ext.swift */; };
 		0129E0B029A0F322002FBAA0 /* Currency.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0129E0AF29A0F322002FBAA0 /* Currency.swift */; };
 		0129E0B229A0FA24002FBAA0 /* SelectCurrencyCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0129E0B129A0FA24002FBAA0 /* SelectCurrencyCell.swift */; };
 		015D324429A8FEBA008E6FD7 /* SplashScreenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 015D324329A8FEBA008E6FD7 /* SplashScreenViewController.swift */; };
@@ -100,7 +99,6 @@
 		0129E0A8299F0219002FBAA0 /* Debt Tracker.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Debt Tracker.entitlements"; sourceTree = "<group>"; };
 		0129E0A929A0D823002FBAA0 /* CurrencyTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrencyTextField.swift; sourceTree = "<group>"; };
 		0129E0AB29A0F2C3002FBAA0 /* UITableViewCell+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITableViewCell+Ext.swift"; sourceTree = "<group>"; };
-		0129E0AD29A0F2D5002FBAA0 /* String+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Ext.swift"; sourceTree = "<group>"; };
 		0129E0AF29A0F322002FBAA0 /* Currency.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Currency.swift; sourceTree = "<group>"; };
 		0129E0B129A0FA24002FBAA0 /* SelectCurrencyCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectCurrencyCell.swift; sourceTree = "<group>"; };
 		015D324329A8FEBA008E6FD7 /* SplashScreenViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashScreenViewController.swift; sourceTree = "<group>"; };
@@ -213,7 +211,6 @@
 				011E8C7729858CD700F163D4 /* UIViewController+Ext.swift */,
 				0129E0AB29A0F2C3002FBAA0 /* UITableViewCell+Ext.swift */,
 				011E8C6F2984A8C300F163D4 /* Int+Ext.swift */,
-				0129E0AD29A0F2D5002FBAA0 /* String+Ext.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -445,7 +442,6 @@
 				0129E0B229A0FA24002FBAA0 /* SelectCurrencyCell.swift in Sources */,
 				011E8C702984A8C300F163D4 /* Int+Ext.swift in Sources */,
 				011E8C7329858BC600F163D4 /* DTAlertViewController.swift in Sources */,
-				0129E0AE29A0F2D5002FBAA0 /* String+Ext.swift in Sources */,
 				011E8C87298A890300F163D4 /* BankDetails.swift in Sources */,
 				011E8C85298A885D00F163D4 /* UIHelper.swift in Sources */,
 				011E8C82298A84CA00F163D4 /* CreditsCollectionViewCell.swift in Sources */,

@@ -32,7 +32,7 @@ class DTFacebookSigninButton: UIButton {
         configuration = .filled()
         translatesAutoresizingMaskIntoConstraints = false
         
-        configuration?.baseBackgroundColor = K.Colors.facebookBackgroundColor
+        configuration?.baseBackgroundColor = Colors.facebookBackgroundColor
         configuration?.baseForegroundColor = .white
         
         var container = AttributeContainer()
@@ -60,7 +60,7 @@ class DTFacebookSigninButton: UIButton {
         configuration = .filled()
         translatesAutoresizingMaskIntoConstraints = false
         
-        configuration?.baseBackgroundColor = K.Colors.facebookBackgroundColor
+        configuration?.baseBackgroundColor = Colors.facebookBackgroundColor
         configuration?.baseForegroundColor = .white
         
         var container = AttributeContainer()

@@ -44,4 +44,3 @@ class DTTextField: UITextField {
         clearButtonMode = .whileEditing
     }
 }
-

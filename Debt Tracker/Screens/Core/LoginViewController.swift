@@ -38,7 +38,7 @@ class LoginViewController: UIViewController {
     let passwordTextField = DTTextField(placeholder: "Password", placeHolderSize: 15, cornerRadius: 14)
     let containerView = UIView(frame: CGRect(x: 0, y: 0, width: 40, height: 30))
     let showPasswordButton = UIButton(type: .system)
-    let loginButton = DTButton(title: "LOGIN", color: .systemPink, systemImageName: "checkmark.circle", size: 20)
+    let loginButton = DTButton(title: "LOGIN", color: .systemPink, systemImageName: SFSymbols.checkMarkSymbol, size: 20)
     var forgetPasswordLabel = DTTitleLabel(textAlignment: .center, fontSize: 18, textColor: .systemGray2, text: "Forgot Password?")
     let dontHaveAccLabel = DTTitleLabel(textAlignment: .center, fontSize: 16, textColor: .label, text: "Don't have an account?")
     let registerLabel = DTTitleLabel(textAlignment: .center, fontSize: 18, textColor: .systemGray2, text: "REGISTER")
@@ -64,21 +64,21 @@ class LoginViewController: UIViewController {
         isLoginTapped = false
         contentView.endEditing(true)
         
-        #if DEBUG
+#if DEBUG
         emailTextField.text = "1@gmail.com"
         passwordTextField.text = "123456"
-        #endif
+#endif
     }
     
     private func configureViewController() {
         if traitCollection.userInterfaceStyle == .dark {
-            view.backgroundColor = UIColor(red: 28/255, green: 30/255, blue: 33/255, alpha: 1.0)
-            contentView.backgroundColor = UIColor(red: 28/255, green: 30/255, blue: 33/255, alpha: 1.0)
+            view.backgroundColor = Colors.darkModeColor
+            contentView.backgroundColor = Colors.darkModeColor
             forgetPasswordLabel.textColor = .systemGray
             registerLabel.textColor = .systemGray
         } else {
-            view.backgroundColor = UIColor.secondarySystemBackground
-            contentView.backgroundColor = .secondarySystemBackground
+            view.backgroundColor = Colors.lightModeColor
+            contentView.backgroundColor = Colors.lightModeColor
         }
         passwordTextField.isSecureTextEntry = true
         passwordTextField.delegate = self
@@ -88,7 +88,7 @@ class LoginViewController: UIViewController {
         passwordTextField.leftView = leftPaddingView
         passwordTextField.leftViewMode = .always
         
-        showPasswordButton.setImage(UIImage(systemName: "eye.slash"), for: .normal)
+        showPasswordButton.setImage(UIImage(systemName: SFSymbols.hidePasswordSymbol), for: .normal)
         showPasswordButton.frame = CGRect(x: -5, y: 0, width: 30, height: 30)
         showPasswordButton.addTarget(self, action: #selector(togglePasswordVisibility), for: .touchUpInside)
         
@@ -113,9 +113,9 @@ class LoginViewController: UIViewController {
         
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil )
         
-        NotificationCenter.default.addObserver(self, selector: #selector(signOutButton), name: .signOutButton, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(signOutButton), name: .signOutButtonTapped, object: nil)
         
-        NotificationCenter.default.addObserver(forName: NSNotification.Name("resetCloseTapped"), object: nil, queue: nil) { [weak self] (notification) in
+        NotificationCenter.default.addObserver(forName: .resetVcClosed, object: nil, queue: nil) { [weak self] (notification) in
             self?.isForgetPasswordTapped = false
         }
     }
@@ -165,7 +165,7 @@ class LoginViewController: UIViewController {
     }
     
     @objc func signInWithFacebookPressed() {
-        LoginManager().logIn(permissions: ["public_profile", "email"], from: self) { [weak self] result, error in
+        LoginManager().logIn(permissions: [K.facebookPublicProfile, K.facebookEmail], from: self) { [weak self] result, error in
             if error != nil {
                 print(error!.localizedDescription)
                 return
@@ -205,7 +205,7 @@ class LoginViewController: UIViewController {
             
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.2 ) { [weak self] in
                 let popupVc = ForgotPasswordVc()
- 
+                
                 popupVc.modalTransitionStyle = .crossDissolve
                 popupVc.modalPresentationStyle = .overFullScreen
                 self?.present(popupVc, animated: true)
@@ -223,9 +223,9 @@ class LoginViewController: UIViewController {
         passwordTextField.isSecureTextEntry.toggle()
         
         if passwordTextField.isSecureTextEntry {
-            showPasswordButton.setImage(UIImage(systemName: "eye.slash"), for: .normal)
+            showPasswordButton.setImage(UIImage(systemName: SFSymbols.hidePasswordSymbol), for: .normal)
         } else {
-            showPasswordButton.setImage(UIImage(systemName: "eye"), for: .normal)
+            showPasswordButton.setImage(UIImage(systemName: SFSymbols.showPasswordSymbol), for: .normal)
         }
     }
     
@@ -258,13 +258,13 @@ class LoginViewController: UIViewController {
         let underlineAttr = [NSAttributedString.Key.underlineStyle: NSUnderlineStyle.single.rawValue]
         let forgetPasswordLabelString = NSAttributedString(string: "Forgot Password?", attributes: underlineAttr)
         let registerLabelString = NSAttributedString(string: "REGISTER", attributes: underlineAttr)
-
+        
         forgetPasswordLabel.attributedText = forgetPasswordLabelString
         registerLabel.attributedText = registerLabelString
         
         contentView.addSubviews(detailLabel, emailTextField, passwordTextField, loginButton, forgetPasswordLabel, googleSignInButton, facebookLoginButton, dontHaveAccLabel, registerLabel)
         containerView.addSubview(showPasswordButton)
-
+        
         detailLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor).isActive = true
         detailLabel.topAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.topAnchor, constant: 50).isActive = true
         

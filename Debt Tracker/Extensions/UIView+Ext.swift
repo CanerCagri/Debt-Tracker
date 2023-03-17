@@ -37,7 +37,7 @@ extension UIView {
     
     func setBackgroundColor() {
         if #available(iOS 13.0, *) {
-            let setColor = traitCollection.userInterfaceStyle == .dark ? UIColor(red: 28/255, green: 30/255, blue: 33/255, alpha: 1.0) : UIColor.secondarySystemBackground
+            let setColor = traitCollection.userInterfaceStyle == .dark ? Colors.darkModeColor : Colors.lightModeColor
             backgroundColor = setColor
         } else {
             backgroundColor = UIColor.secondarySystemBackground

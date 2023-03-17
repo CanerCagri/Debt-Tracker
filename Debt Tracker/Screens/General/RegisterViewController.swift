@@ -18,7 +18,7 @@ class RegisterViewController: UIViewController {
     let passwordTextField = DTTextField(placeholder: "Password", placeHolderSize: 15, cornerRadius: 14)
     let containerView = UIView(frame: CGRect(x: 0, y: 0, width: 40, height: 30))
     let showPasswordButton = UIButton(type: .system)
-    let registerButton = DTButton(title: "REGISTER", color: .systemPink, systemImageName: "checkmark.circle", size: 20)
+    let registerButton = DTButton(title: "REGISTER", color: .systemPink, systemImageName: SFSymbols.checkMarkSymbol, size: 20)
     private let appleSignInButton: ASAuthorizationAppleIDButton = ASAuthorizationAppleIDButton(
         authorizationButtonType: .continue,
         authorizationButtonStyle: UITraitCollection.current.userInterfaceStyle == .dark ? .white : .black
@@ -45,6 +45,7 @@ class RegisterViewController: UIViewController {
     
     private func configureViewController() {
         view.setBackgroundColor()
+        hideKeyboardWheTappedAround()
         
         let leftPaddingView = UIView(frame: CGRect(x: 0, y: 0, width: 40, height: 30))
         passwordTextField.leftView = leftPaddingView
@@ -54,7 +55,7 @@ class RegisterViewController: UIViewController {
         passwordTextField.isSecureTextEntry = true
         passwordTextField.delegate = self
         
-        showPasswordButton.setImage(UIImage(systemName: "eye.slash"), for: .normal)
+        showPasswordButton.setImage(UIImage(systemName: SFSymbols.hidePasswordSymbol), for: .normal)
         showPasswordButton.frame = CGRect(x: -5, y: 0, width: 30, height: 30)
         showPasswordButton.addTarget(self, action: #selector(togglePasswordVisibility), for: .touchUpInside)
         
@@ -62,28 +63,14 @@ class RegisterViewController: UIViewController {
         appleSignInButton.addTarget(self, action: #selector(didTapSignInWithApple), for: .touchUpInside)
         facebookSignInButton.addTarget(self, action: #selector(signInWithFacebookPressed), for: .touchUpInside)
         
-        let tap = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
-        view.addGestureRecognizer(tap)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
         
-        NotificationCenter.default.addObserver(
-           self,
-           selector: #selector(keyboardWillShow),
-           name: UIResponder.keyboardWillShowNotification,
-           object: nil
-        )
-        
-        NotificationCenter.default.addObserver(
-           self,
-           selector: #selector(keyboardWillHide),
-           name: UIResponder.keyboardWillHideNotification,
-           object: nil
-        )
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
     }
     
     @objc func keyboardWillShow(notification: NSNotification) {
         let appleButtonTopAnchor: CGFloat = DeviceTypes.isiPhoneSE || DeviceTypes.isiPhone8PlusZoomed || DeviceTypes.isiPhone8Standard || DeviceTypes.isiPhone8Zoomed || DeviceTypes.isiPhone8PlusStandard ? 10 : 50
 
-        
         UIView.animate(withDuration: 0.3) {
             self.appleButtonTopConstraint.constant = appleButtonTopAnchor
             self.view.layoutIfNeeded()
@@ -98,11 +85,7 @@ class RegisterViewController: UIViewController {
             self.view.layoutIfNeeded()
         }
     }
-    
-    @objc func dismissKeyboard() {
-        view.endEditing(true)
-    }
-    
+
     @objc func didTapSignInWithApple() {
         let nonce = UIHelper.randomNonceString()
         currentNonce = nonce
@@ -118,7 +101,7 @@ class RegisterViewController: UIViewController {
     }
     
     @objc func signInWithFacebookPressed() {
-        LoginManager().logIn(permissions: ["public_profile", "email"], from: self) { [weak self] result, error in
+        LoginManager().logIn(permissions: [K.facebookPublicProfile, K.facebookEmail], from: self) { [weak self] result, error in
             if error != nil {
                 print(error!.localizedDescription)
                 return
@@ -147,7 +130,7 @@ class RegisterViewController: UIViewController {
                 switch result {
                 case .success(_):
                     self?.presentAlert(title: "Welcome", message: "Account Succesfully Created", buttonTitle: "OK")
-                    NotificationCenter.default.post(name: .signOutButton , object: nil)
+                    NotificationCenter.default.post(name: .signOutButtonTapped , object: nil)
                 case .failure(let failure):
                     self?.presentAlert(title: "Warning", message: failure.localizedDescription, buttonTitle: "OK")
                 }
@@ -160,9 +143,9 @@ class RegisterViewController: UIViewController {
         passwordTextField.isSecureTextEntry.toggle()
         
         if passwordTextField.isSecureTextEntry {
-            showPasswordButton.setImage(UIImage(systemName: "eye.slash"), for: .normal)
+            showPasswordButton.setImage(UIImage(systemName: SFSymbols.hidePasswordSymbol), for: .normal)
         } else {
-            showPasswordButton.setImage(UIImage(systemName: "eye"), for: .normal)
+            showPasswordButton.setImage(UIImage(systemName: SFSymbols.showPasswordSymbol), for: .normal)
         }
     }
 
@@ -229,7 +212,7 @@ extension RegisterViewController: ASAuthorizationControllerDelegate {
                 print("Unable to serialize token string from data: \(appleIDToken.debugDescription)")
                 return
             }
-            let credential = OAuthProvider.credential(withProviderID: "apple.com",
+            let credential = OAuthProvider.credential(withProviderID: K.appleProviderID,
                                                       idToken: idTokenString,
                                                       rawNonce: nonce)
             

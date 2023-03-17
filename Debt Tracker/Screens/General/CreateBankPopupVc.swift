@@ -12,7 +12,7 @@ class CreateBankPopupVc: UIViewController {
     
     private let containerView = DTContainerView()
     let titleLabel = DTTitleLabel(textAlignment: .center, fontSize: 18, textColor: .label, text: "Add Bank")
-    let saveButton = DTButton(title: "SAVE", color: .systemPink, systemImageName: "square.and.arrow.down", size: 20)
+    let saveButton = DTButton(title: "SAVE", color: .systemPink, systemImageName: SFSymbols.saveSymbol, size: 20)
     let nameTextField = DTTextField(placeholder: "Bank Name", placeHolderSize: 15)
     let detailTextField = DTTextField(placeholder: "Credit Details", placeHolderSize: 15)
     private var closeButton = DTCloseButton()
@@ -36,27 +36,15 @@ class CreateBankPopupVc: UIViewController {
     }
     
     private func configureViewController() {
-        if traitCollection.userInterfaceStyle == .dark {
-            view.backgroundColor = UIColor.black.withAlphaComponent(0.75)
-            containerView.backgroundColor = UIColor(red: 28/255, green: 30/255, blue: 33/255, alpha: 1.0)
-        } else {
-            view.backgroundColor = UIColor.black.withAlphaComponent(0.75)
-            containerView.backgroundColor = .secondarySystemBackground
-        }
-
+        containerView.setBackgroundColor()
+        view.backgroundColor = UIColor.black.withAlphaComponent(0.75)
         view.frame = UIScreen.main.bounds
+        hideKeyboardWheTappedAround()
         
         closeButton.addTarget(self, action: #selector(dismissView), for: .touchUpInside)
         saveButton.addTarget(self, action: #selector(saveButtonTapped), for: .touchUpInside)
-        
-        let tap = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
-        view.addGestureRecognizer(tap)
     }
-    
-    @objc func dismissKeyboard() {
-        view.endEditing(true)
-    }
-    
+
     @objc func saveButtonTapped() {
         guard let name = nameTextField.text, !name.isEmpty else {
             presentAlert(title: "Warning", message: "Please enter a Name", buttonTitle: "Ok")
@@ -80,7 +68,7 @@ class CreateBankPopupVc: UIViewController {
     }
     
     @objc func dismissView() {
-        NotificationCenter.default.post(Notification(name: Notification.Name("popupButtonTapped"), userInfo: nil))
+        NotificationCenter.default.post(Notification(name: .createBankVcClosed, userInfo: nil))
         dismiss(animated: true)
     }
     

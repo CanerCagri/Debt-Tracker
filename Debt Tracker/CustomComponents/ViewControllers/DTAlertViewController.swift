@@ -12,7 +12,7 @@ class DTAlertViewController: UIViewController {
     let containerView = DTContainerView()
     let titleLabel = DTTitleLabel(textAlignment: .center, fontSize: 20)
     let bodyLabel = DTBodyLabel(textAlignment: .center, fontSize: 15)
-    let actionButton = DTButton(title: "Ok", color: .systemPink, systemImageName: "checkmark.circle", size: 20)
+    let actionButton = DTButton(title: "Ok", color: .systemPink, systemImageName: SFSymbols.checkMarkSymbol, size: 20)
     
     var alertTitle: String?
     var message: String?
@@ -88,7 +88,6 @@ class DTAlertViewController: UIViewController {
             bodyLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: padding),
             bodyLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -padding),
             bodyLabel.bottomAnchor.constraint(equalTo: actionButton.topAnchor, constant: -12)
-            
         ])
     }
     
