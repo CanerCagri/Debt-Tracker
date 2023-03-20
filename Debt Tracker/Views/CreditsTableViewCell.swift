@@ -14,7 +14,7 @@ class CreditsTableViewCell: UITableViewCell {
     var containerViewThree = UIView()
     
     var nameLabel = DTTitleLabel(textAlignment: .left, fontSize: 14)
-    var entryDebt = DTTitleLabel(textAlignment: .left, fontSize: 17)
+    var entryDebt = DTTitleLabel(textAlignment: .left, fontSize: 19)
     var paidCount = DTTitleLabel(textAlignment: .left, fontSize: 12, textColor: .label)
     var remainingCount = DTTitleLabel(textAlignment: .left, fontSize: 12, textColor: .label)
     var monthlyDepth = DTTitleLabel(textAlignment: .left, fontSize: 12, textColor: .label)
@@ -36,7 +36,12 @@ class CreditsTableViewCell: UITableViewCell {
             if count == totalInstallmentCount{
                 backgroundColor = .systemGreen
             } else {
-                backgroundColor = .systemGray2
+                if traitCollection.userInterfaceStyle == .dark {
+                    backgroundColor =  Colors.darkModeColor
+                    
+                } else {
+                    backgroundColor =  Colors.lightModeColor
+                }
             }
         }
     }

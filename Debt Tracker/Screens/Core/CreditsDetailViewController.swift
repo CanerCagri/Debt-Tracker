@@ -33,7 +33,6 @@ class CreditsDetailViewController: UIViewController {
             totalPaidDebtLabel.text = "Paid: \(creditModel.paidDebt)"
             totalPaidMonthLabel.text = "\(String(creditModel.paidCount))/\(String(creditModel.installmentCount)) paid"
             
-            
             dateFormatter.dateFormat = K.creditsDetailVcDateFormat
             date = dateFormatter.date(from: creditModel.firstInstallmentDate)!
             
@@ -69,7 +68,7 @@ class CreditsDetailViewController: UIViewController {
         detailTableView.backgroundColor = .systemBackground
         detailTableView.layer.cornerRadius = 16
         detailTableView.layer.borderWidth = 2
-        detailTableView.layer.borderColor = UIColor.label.cgColor
+        detailTableView.layer.borderColor = UIColor.systemBlue.cgColor
         detailTableView.rowHeight = 40
         detailTableView.layer.cornerRadius = 14
         detailTableView.register(CreditsDetailTableViewCell.self, forCellReuseIdentifier:CreditsDetailTableViewCell.identifier)
@@ -163,9 +162,9 @@ extension CreditsDetailViewController: UITableViewDelegate, UITableViewDataSourc
         let isLastRow = indexPath.row + 1 == creditModel.installmentCount
         
         let selectedIndexPath = isLastRow ? indexPath : IndexPath(row: indexPath.row + 1, section: indexPath.section)
-        let selectedCell = tableView.cellForRow(at: selectedIndexPath) as! CreditsDetailTableViewCell
+        let selectedCell = tableView.cellForRow(at: selectedIndexPath) as? CreditsDetailTableViewCell
         
-        date = dateFormatter.date(from: selectedCell.dateLabel.text!)!
+        date = dateFormatter.date(from: selectedCell?.dateLabel.text! ?? "Error")!
         let selectedDateComponents = Calendar.current.dateComponents([.day, .month, .year], from: date)
         let dayString = String(format: K.dateFormatter02dFormat, selectedDateComponents.day!)
         let monthString = String(format: K.dateFormatter02dFormat, selectedDateComponents.month!)

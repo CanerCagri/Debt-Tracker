@@ -34,7 +34,7 @@ class CreditsViewController: UIViewController {
     
     private func configureViewController() {
         view.setBackgroundColor()
-        creditsTableView.setBackgroundColor()
+        creditsTableView.backgroundColor = .systemGray5
         
         title = "Credits"
         view.addSubview(creditsTableView)
@@ -114,5 +114,16 @@ extension CreditsViewController: UITableViewDelegate, UITableViewDataSource {
         default:
             break
         }
+    }
+    
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath)
+    {
+        let verticalPadding: CGFloat = 15
+
+        let maskLayer = CALayer()
+//        maskLayer.cornerRadius = 10    //for round edges
+        maskLayer.backgroundColor = UIColor.black.cgColor
+        maskLayer.frame = CGRect(x: cell.bounds.origin.x, y: cell.bounds.origin.y, width: cell.bounds.width, height: cell.bounds.height).insetBy(dx: 0, dy: verticalPadding/2)
+        cell.layer.mask = maskLayer
     }
 }
