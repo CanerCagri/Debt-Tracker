@@ -31,7 +31,7 @@ class CreditsMainViewController: UIViewController {
     private func configureViewController() {
         title = "Create Credit"
         view.setBackgroundColor()
-        creditsCollectionView.setBackgroundColor()
+        creditsCollectionView.backgroundColor = .systemGray5
         
         navigationItem.rightBarButtonItems = [
             UIBarButtonItem(image: UIImage(systemName: SFSymbols.logoutSymbol), style: .done, target: self, action: #selector(logoutButtonTapped)),

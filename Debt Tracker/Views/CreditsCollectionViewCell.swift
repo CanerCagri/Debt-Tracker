@@ -34,7 +34,13 @@ class CreditsCollectionViewCell: UICollectionViewCell {
         creditNameLabel.numberOfLines = 2
         creditDetailLabel.numberOfLines = 2
         creditButton.isUserInteractionEnabled = false
-        self.backgroundColor = .systemGray3
+        if traitCollection.userInterfaceStyle == .dark {
+            backgroundColor = Colors.darkModeColor
+            
+        } else {
+            backgroundColor = Colors.lightModeColor
+        }
+        
         self.layer.cornerRadius = 14
         
         addSubviews(creditNameLabel, creditDetailLabel, creditButton)

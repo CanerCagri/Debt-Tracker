@@ -59,6 +59,10 @@ class LoginViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
+        if Auth.auth().currentUser != nil {
+            openMainTabBarVc()
+        }
+        
         emailTextField.text = ""
         passwordTextField.text = ""
         isLoginTapped = false
