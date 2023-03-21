@@ -34,7 +34,7 @@ class CreditsViewController: UIViewController {
     
     private func configureViewController() {
         view.setBackgroundColor()
-        creditsTableView.backgroundColor = .systemGray5
+        creditsTableView.backgroundColor = .systemGray4
         
         title = "Credits"
         view.addSubview(creditsTableView)
@@ -121,7 +121,7 @@ extension CreditsViewController: UITableViewDelegate, UITableViewDataSource {
         let verticalPadding: CGFloat = 15
 
         let maskLayer = CALayer()
-//        maskLayer.cornerRadius = 10    //for round edges
+//        maskLayer.cornerRadius = 10    //if you want round edges
         maskLayer.backgroundColor = UIColor.black.cgColor
         maskLayer.frame = CGRect(x: cell.bounds.origin.x, y: cell.bounds.origin.y, width: cell.bounds.width, height: cell.bounds.height).insetBy(dx: 0, dy: verticalPadding/2)
         cell.layer.mask = maskLayer

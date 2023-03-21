@@ -60,7 +60,11 @@ class LoginViewController: UIViewController {
         super.viewWillAppear(animated)
         
         if Auth.auth().currentUser != nil {
-            openMainTabBarVc()
+            showLoading()
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.5 ) { [weak self] in
+                self?.openMainTabBarVc()
+                self?.dismissLoading()
+            }
         }
         
         emailTextField.text = ""

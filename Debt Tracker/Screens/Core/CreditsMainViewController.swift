@@ -22,8 +22,8 @@ class CreditsMainViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        configureCollectionView()
         configureViewController()
+        configureCollectionView()
         configureDataSource()
         fetchFromFirestore()
     }
@@ -31,7 +31,6 @@ class CreditsMainViewController: UIViewController {
     private func configureViewController() {
         title = "Create Credit"
         view.setBackgroundColor()
-        creditsCollectionView.backgroundColor = .systemGray5
         
         navigationItem.rightBarButtonItems = [
             UIBarButtonItem(image: UIImage(systemName: SFSymbols.logoutSymbol), style: .done, target: self, action: #selector(logoutButtonTapped)),
@@ -45,10 +44,15 @@ class CreditsMainViewController: UIViewController {
     }
     
     func configureCollectionView() {
-        creditsCollectionView = UICollectionView(frame: view.bounds, collectionViewLayout: UIHelper.createThreeColumnFlowLayout(view: view))
+        creditsCollectionView = UICollectionView(frame: .zero, collectionViewLayout: UIHelper.createThreeColumnFlowLayout(view: view))
         view.addSubview(creditsCollectionView)
+        creditsCollectionView.translatesAutoresizingMaskIntoConstraints = false
+        creditsCollectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
+        creditsCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
+        creditsCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
+        creditsCollectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor).isActive = true
         creditsCollectionView.delegate = self
-        creditsCollectionView.backgroundColor = .systemBackground
+        creditsCollectionView.backgroundColor = .systemGray4
         creditsCollectionView.register(CreditsCollectionViewCell.self, forCellWithReuseIdentifier: K.creditsCollectionViewCellIdentifier)
         
         let longPressGesture = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPress))
@@ -148,7 +152,6 @@ class CreditsMainViewController: UIViewController {
 extension CreditsMainViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         collectionView.deselectItem(at: indexPath, animated: true)
-        view.backgroundColor = .gray
         
         let addCreditVc = AddCreditViewController()
         addCreditVc.selectedCredit = banks[indexPath.row]

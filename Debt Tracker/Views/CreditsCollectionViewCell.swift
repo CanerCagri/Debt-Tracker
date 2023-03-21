@@ -10,7 +10,7 @@ import UIKit
 class CreditsCollectionViewCell: UICollectionViewCell {
     
     var creditNameLabel = DTTitleLabel(textAlignment: .center, fontSize: 18)
-    var creditDetailLabel = DTTitleLabel(textAlignment: .center, fontSize: 16)
+    var creditDetailLabel = DTTitleLabel(textAlignment: .center, fontSize: 14)
     var creditButton = DTButton(title: "Create Credit", color: .systemRed, size: 12)
     
     
@@ -38,7 +38,7 @@ class CreditsCollectionViewCell: UICollectionViewCell {
             backgroundColor = Colors.darkModeColor
             
         } else {
-            backgroundColor = Colors.lightModeColor
+            backgroundColor = .systemGray5
         }
         
         self.layer.cornerRadius = 14

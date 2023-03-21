@@ -40,7 +40,7 @@ class CreditsTableViewCell: UITableViewCell {
                     backgroundColor = Colors.darkModeColor
                     
                 } else {
-                    backgroundColor = Colors.lightModeColor
+                    backgroundColor = .systemGray5
                 }
             }
         }
@@ -90,9 +90,9 @@ class CreditsTableViewCell: UITableViewCell {
         containerViewOne.translatesAutoresizingMaskIntoConstraints = false
         containerViewTwo.translatesAutoresizingMaskIntoConstraints = false
         containerViewThree.translatesAutoresizingMaskIntoConstraints = false
-        containerViewOne.backgroundColor = .systemGray5
-        containerViewTwo.backgroundColor = .systemGray5
-        containerViewThree.backgroundColor = .systemGray5
+        containerViewOne.backgroundColor = .systemGray4
+        containerViewTwo.backgroundColor = .systemGray4
+        containerViewThree.backgroundColor = .systemGray4
         accessoryType = .disclosureIndicator
         
         nameLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: 10).isActive = true

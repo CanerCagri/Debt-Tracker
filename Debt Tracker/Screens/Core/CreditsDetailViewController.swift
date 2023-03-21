@@ -27,7 +27,7 @@ class CreditsDetailViewController: UIViewController {
     var creditModel: CreditDetailModel! {
         didSet
         {
-            detailLabel.text = "\(creditModel.detail) - \(creditModel.detail)"
+            detailLabel.text = "\(creditModel.name) - \(creditModel.detail)"
             totalDebtLabel.text = "Total Debt: \(creditModel.totalDebt)"
             remainingDebtLabel.text = "Remaining: \(creditModel.remainingDebt)"
             totalPaidDebtLabel.text = "Paid: \(creditModel.paidDebt)"

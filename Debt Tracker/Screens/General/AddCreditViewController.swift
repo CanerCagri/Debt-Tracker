@@ -38,19 +38,19 @@ class AddCreditViewController: UIViewController {
     let scrollView = UIScrollView()
     let containerView = UIView()
     let saveButton = DTButton(title: "SAVE", color: .systemGray2, systemImageName: SFSymbols.saveSymbol, size: 20)
-    let creditNameLabel = DTTitleLabel(textAlignment: .left, fontSize: 25)
+    let creditNameLabel = DTTitleLabel(textAlignment: .left, fontSize: 22)
     var currencyButton = DTButton(title: "Select Currency", color: .systemRed, size: 20)
-    var amountTextField = CurrencyTextField(size: 18, placeHolder: "Entry Amount")
+    var amountTextField = CurrencyTextField(size: 18, placeHolder: "Credit Amount Received")
     var monthlyTextField = CurrencyTextField(size: 18, placeHolder: "Monthly Installment")
     let monthlyInstallmentCountLabel = DTTitleLabel(textAlignment: .left, fontSize: 18, text: "Number Of Installments:")
     var monthlyInstallmentCountButton = DTButton(title: "12", color: .systemRed)
-    let firstInstallmentLabel = DTTitleLabel(textAlignment: .left, fontSize: 18, text: "First Installment Date:")
+    let firstInstallmentLabel = DTTitleLabel(textAlignment: .left, fontSize: 18, text: "First Installment:")
     let firstInstallmentDatePicker = UIDatePicker()
-    var entryDebtLabel = DTTitleLabel(textAlignment: .center, fontSize: 16, textColor: .systemGray, text: "Entry Debt")
-    var entryDebt = DTTitleLabel(textAlignment: .center, fontSize: 16, textColor: .label)
+    var entryDebtLabel = DTTitleLabel(textAlignment: .center, fontSize: 16, textColor: .systemGray, text: "Credit Debt")
+    var entryDebt = DTTitleLabel(textAlignment: .center, fontSize: 16, textColor: .systemGreen)
     var changeLabel = DTTitleLabel(textAlignment: .center, fontSize: 16, textColor: .systemGray, text: "Change")
-    var change = DTTitleLabel(textAlignment: .center, fontSize: 16, textColor: .label)
-    var calculatedLabel = DTTitleLabel(textAlignment: .center, fontSize: 16, textColor: .systemGray, text: "Calculated Debt")
+    var change = DTTitleLabel(textAlignment: .center, fontSize: 16, textColor: .systemRed)
+    var calculatedLabel = DTTitleLabel(textAlignment: .center, fontSize: 16, textColor: .systemGray, text: "Total Debt")
     var calculated = DTTitleLabel(textAlignment: .center, fontSize: 16, textColor: .label)
     
     var containerViewOne = UIView()
@@ -280,7 +280,7 @@ class AddCreditViewController: UIViewController {
         constraintsOfContainers()
         setupSubviewsConstraints()
         
-        let saveButtonTopConstant: CGFloat = DeviceTypes.isiPhoneSE || DeviceTypes.isiPhone8PlusZoomed || DeviceTypes.isiPhone8Standard || DeviceTypes.isiPhone8Zoomed || DeviceTypes.isiPhone8PlusStandard ? 70 : 180
+        let saveButtonTopConstant: CGFloat = DeviceTypes.isiPhoneSE || DeviceTypes.isiPhone8PlusZoomed || DeviceTypes.isiPhone8Standard || DeviceTypes.isiPhone8Zoomed || DeviceTypes.isiPhone8PlusStandard ? 70 : 160
         
         saveButton.topAnchor.constraint(equalTo: calculated.bottomAnchor, constant: saveButtonTopConstant).isActive = true
         saveButton.leadingAnchor.constraint(equalTo: amountTextField.leadingAnchor).isActive = true
