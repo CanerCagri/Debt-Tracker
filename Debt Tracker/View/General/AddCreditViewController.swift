@@ -66,7 +66,7 @@ class AddCreditViewController: UIViewController {
     var interestRateCalculated = ""
     var locale = "en_EN"
     var keyboardSaveButton: UIButton!
-    
+    var viewModel = AddCreditViewModel()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -80,6 +80,7 @@ class AddCreditViewController: UIViewController {
         title = "Add Credit"
         view.setBackgroundColor()
         containerView.setBackgroundColor()
+        viewModel.delegate = self
         
         firstInstallmentDatePicker.datePickerMode = .date
         firstInstallmentDatePicker.addTarget(self, action: #selector(datePickerValueChanged), for: .valueChanged)
@@ -151,18 +152,7 @@ class AddCreditViewController: UIViewController {
         
         let creditModel = CreditDetailModel(name: selectedCredit?.name ?? "Error", detail: selectedCredit?.detail ?? "Error", entryDebt: amount, installmentCount: monthCount, paidCount: 0, monthlyInstallment: monthly, firstInstallmentDate: firstInstallmentDate, currentInstallmentDate: firstInstallmentDate, totalDebt: calculatedPayment, interestRate: Double(interestRateCalculated)!, remainingDebt: calculatedPayment, paidDebt: "\(currencySymbol)0", email: userEmail, currency: currencySymbol, locale: locale)
         
-        FirestoreManager.shared.createCredit(creditModel: creditModel) { [weak self] result in
-            switch result {
-            case .success(_):
-                if let tabBarController = self?.tabBarController {
-                    tabBarController.selectedIndex = 1
-                }
-                self?.dismiss(animated: true)
-            case .failure(let failure):
-                self?.presentAlert(title: "Warning", message: failure.localizedDescription, buttonTitle: "OK")
-            }
-            self?.dismissLoading()
-        }
+        viewModel.addCredit(creditModel: creditModel)
     }
     
     @objc func datePickerValueChanged(sender: UIDatePicker){
@@ -344,5 +334,20 @@ class AddCreditViewController: UIViewController {
 extension AddCreditViewController: PassCurrencyDelegate {
     func pass(_ currency: Currency) {
         selectedCurrency = currency
+    }
+}
+
+extension AddCreditViewController: AddCreditViewlModelDelegate {
+    func handleViewModelOutput(_ result: Result<Void, Error>) {
+        switch result {
+        case .success(_):
+            if let tabBarController = tabBarController {
+                tabBarController.selectedIndex = 1
+            }
+            dismiss(animated: true)
+        case .failure(let failure):
+            presentAlert(title: "Warning", message: failure.localizedDescription, buttonTitle: "OK")
+        }
+        dismissLoading()
     }
 }

@@ -134,7 +134,7 @@ class FirestoreManager {
         }
     }
     
-    func stopFetchingCredit() {
+    func stopFetchingBank() {
         banksListener?.remove()
     }
     

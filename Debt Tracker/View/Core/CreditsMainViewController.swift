@@ -11,9 +11,8 @@ import Firebase
 class CreditsMainViewController: UIViewController {
     
     let db = Firestore.firestore()
-    var documentIds: [String] = []
-    private var banks: [BankDetails] = []
     var emptyState: DTEmptyStateView?
+    var viewModel = CreditsMainViewModel()
     
     var creditsCollectionView: UICollectionView!
     var dataSource: UICollectionViewDiffableDataSource <Section, BankDetails>!
@@ -25,12 +24,13 @@ class CreditsMainViewController: UIViewController {
         configureViewController()
         configureCollectionView()
         configureDataSource()
-        fetchFromFirestore()
+        viewModel.fetchBanks()
     }
     
     private func configureViewController() {
         title = "Create Credit"
         view.setBackgroundColor()
+        viewModel.delegate = self
         
         navigationItem.rightBarButtonItems = [
             UIBarButtonItem(image: UIImage(systemName: SFSymbols.logoutSymbol), style: .done, target: self, action: #selector(logoutButtonTapped)),
@@ -59,33 +59,6 @@ class CreditsMainViewController: UIViewController {
         creditsCollectionView.addGestureRecognizer(longPressGesture)
     }
     
-    private func fetchFromFirestore() {
-        FirestoreManager.shared.fetchBanks { [weak self] result in
-            switch result {
-            case .success(let success):
-                self?.banks = success.bankDetails
-                self?.documentIds = success.stringArray
-                
-                if self!.banks.isEmpty {
-                    self?.emptyState = DTEmptyStateView(message: "Currently don't have Bank\nAdd from (+)")
-                    self?.emptyState?.frame = (self?.view.bounds)!
-                    self?.view.addSubview((self?.emptyState!)!)
-                    
-                } else {
-                    self?.emptyState?.removeFromSuperview()
-                }
-                DispatchQueue.main.async {
-                    self?.creditsCollectionView.reloadData()
-                }
-                
-                self?.updateData(banks: self!.banks)
-                
-            case .failure(let failure):
-                print("Önemsiz bir uyarı: \(failure.localizedDescription)")
-            }
-        }
-    }
-    
     @objc func handleLongPress(_ gesture: UILongPressGestureRecognizer) {
         switch gesture.state {
         case .began:
@@ -93,9 +66,9 @@ class CreditsMainViewController: UIViewController {
             let alertController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
             let deleteAction = UIAlertAction(title: "Delete", style: .destructive) { [weak self] _ in
                 self?.showLoading()
-                FirestoreManager.shared.deleteBank(documentId: (self?.documentIds[selectedIndexPath.row])!)
-                self?.banks.remove(at: selectedIndexPath.row)
-                self?.documentIds.remove(at: selectedIndexPath.row)
+                self?.viewModel.removeBank(documentId: (self?.viewModel.documentIds[selectedIndexPath.row])!)
+                self?.viewModel.banks.remove(at: selectedIndexPath.row)
+                self?.viewModel.documentIds.remove(at: selectedIndexPath.row)
                 self?.dismissLoading()
             }
             let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
@@ -122,14 +95,7 @@ class CreditsMainViewController: UIViewController {
     }
     
     @objc func logoutButtonTapped() {
-        do {
-            try Auth.auth().signOut()
-            FirestoreManager.shared.stopFetchingCredit()
-            NotificationCenter.default.post(name: .signOutButtonTapped, object: nil)
-            
-        } catch let signOutError as NSError {
-            print("Error when signing out: %@", signOutError)
-        }
+        viewModel.userSignout()
     }
     
     func configureDataSource() {
@@ -154,7 +120,7 @@ extension CreditsMainViewController: UICollectionViewDelegate {
         collectionView.deselectItem(at: indexPath, animated: true)
         
         let addCreditVc = AddCreditViewController()
-        addCreditVc.selectedCredit = banks[indexPath.row]
+        addCreditVc.selectedCredit = viewModel.banks[indexPath.row]
         navigationController?.pushViewController(addCreditVc, animated: true)
     }
 }
@@ -163,6 +129,34 @@ extension CreditsMainViewController: UITabBarControllerDelegate {
     func tabBarController(_ tabBarController: UITabBarController, didSelect viewController: UIViewController) {
         if let navigationController = viewController as? UINavigationController {
             navigationController.popToRootViewController(animated: false)
+        }
+    }
+}
+
+extension CreditsMainViewController: CreditsMainViewModelDelegate {
+    func handleViewModelOutput(_ result: Result<BankData, Error>) {
+        switch result {
+        case .success(let success):
+            viewModel.banks = success.bankDetails
+            viewModel.documentIds = success.stringArray
+            
+            if viewModel.banks.isEmpty {
+                emptyState = DTEmptyStateView(message: "Currently don't have Bank\nAdd from (+)")
+                emptyState?.frame = view.bounds
+                view.addSubview(emptyState!)
+                
+            } else {
+                emptyState?.removeFromSuperview()
+            }
+            DispatchQueue.main.async { [weak self] in
+                guard let self = self else { return }
+                self.creditsCollectionView.reloadData()
+            }
+            
+            updateData(banks: viewModel.banks)
+            
+        case .failure(let failure):
+            print("Önemsiz bir uyarı: \(failure.localizedDescription)")
         }
     }
 }

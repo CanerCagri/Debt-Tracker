@@ -26,8 +26,8 @@ class RegisterViewController: UIViewController {
     private let facebookSignInButton = DTFacebookSigninButton(iconCentered: true)
     
     fileprivate var currentNonce: String?
-    var isLoginTapped = false
     var appleButtonTopConstraint: NSLayoutConstraint!
+    let viewModel = RegisterViewModel()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -46,6 +46,7 @@ class RegisterViewController: UIViewController {
     private func configureViewController() {
         view.setBackgroundColor()
         hideKeyboardWheTappedAround()
+        viewModel.delegate = self
         
         let leftPaddingView = UIView(frame: CGRect(x: 0, y: 0, width: 40, height: 30))
         passwordTextField.leftView = leftPaddingView
@@ -70,7 +71,7 @@ class RegisterViewController: UIViewController {
     
     @objc func keyboardWillShow(notification: NSNotification) {
         let appleButtonTopAnchor: CGFloat = DeviceTypes.isiPhoneSE || DeviceTypes.isiPhone8PlusZoomed || DeviceTypes.isiPhone8Standard || DeviceTypes.isiPhone8Zoomed || DeviceTypes.isiPhone8PlusStandard ? 10 : 50
-
+        
         UIView.animate(withDuration: 0.3) {
             self.appleButtonTopConstraint.constant = appleButtonTopAnchor
             self.view.layoutIfNeeded()
@@ -85,7 +86,7 @@ class RegisterViewController: UIViewController {
             self.view.layoutIfNeeded()
         }
     }
-
+    
     @objc func didTapSignInWithApple() {
         let nonce = UIHelper.randomNonceString()
         currentNonce = nonce
@@ -109,33 +110,16 @@ class RegisterViewController: UIViewController {
             
             guard let resultTokenString = result?.token?.tokenString else { return }
             let credential = FacebookAuthProvider.credential(withAccessToken: resultTokenString)
-            self?.showLoading()
             
-            AuthManager.shared.signInUserWith(with: credential) { [weak self] result in
-                switch result {
-                case .success(_):
-                    self?.openMainTabBarVc()
-                case .failure(let failure):
-                    self?.presentAlert(title: "Warning", message: failure.localizedDescription, buttonTitle: "OK")
-                }
-                self?.dismissLoading()
-            }
+            self?.showLoading()
+            self?.viewModel.signInUserWith(with: credential)
         }
     }
     
     @objc func registerButtonTapped() {
         if let email = emailTextField.text, let password = passwordTextField.text {
             showLoading()
-            AuthManager.shared.createUser(email: email, password: password) { [weak self] result in
-                switch result {
-                case .success(_):
-                    self?.presentAlert(title: "Welcome", message: "Account Succesfully Created", buttonTitle: "OK")
-                    NotificationCenter.default.post(name: .signOutButtonTapped , object: nil)
-                case .failure(let failure):
-                    self?.presentAlert(title: "Warning", message: failure.localizedDescription, buttonTitle: "OK")
-                }
-                self?.dismissLoading()
-            }
+            viewModel.createUser(email: email, password: password)
         }
     }
     
@@ -148,14 +132,12 @@ class RegisterViewController: UIViewController {
             showPasswordButton.setImage(UIImage(systemName: SFSymbols.showPasswordSymbol), for: .normal)
         }
     }
-
+    
     func openMainTabBarVc() {
-        if !isLoginTapped {
-            let tabBarVC = MainTabBarViewController()
-            tabBarVC.navigationItem.hidesBackButton = true
-            navigationController?.pushViewController(tabBarVC, animated: true)
-            isLoginTapped = true
-        }
+        let tabBarVC = MainTabBarViewController()
+        tabBarVC.navigationItem.hidesBackButton = true
+        navigationController?.pushViewController(tabBarVC, animated: true)
+        
     }
     
     private func applyConstraints() {
@@ -195,6 +177,7 @@ class RegisterViewController: UIViewController {
 }
 
 extension RegisterViewController: ASAuthorizationControllerDelegate {
+    
     func authorizationController(controller: ASAuthorizationController, didCompleteWithError error: Error) {
         presentAlert(title: "Warning", message: error.localizedDescription, buttonTitle: "OK")
     }
@@ -215,15 +198,8 @@ extension RegisterViewController: ASAuthorizationControllerDelegate {
             let credential = OAuthProvider.credential(withProviderID: K.appleProviderID,
                                                       idToken: idTokenString,
                                                       rawNonce: nonce)
-            
-            AuthManager.shared.signInUserWith(with: credential) { [weak self] result in
-                switch result {
-                case .success(_):
-                    self?.openMainTabBarVc()
-                case .failure(let failure):
-                    self?.presentAlert(title: "Warning", message: failure.localizedDescription, buttonTitle: "OK")
-                }
-            }
+            showLoading()
+            viewModel.signInUserWith(with: credential)
         }
     }
 }
@@ -238,5 +214,32 @@ extension RegisterViewController: UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         registerButtonTapped()
         return true
+    }
+}
+
+extension RegisterViewController: RegisterViewModelDelegate {
+    func handleCreateUserOutput(_ result: Result<Void, Error>) {
+        
+        switch result {
+        case .success(_):
+            presentAlert(title: "Welcome", message: "Account Succesfully Created", buttonTitle: "OK")
+            viewModel.userCreated()
+            
+        case .failure(let failure):
+            presentAlert(title: "Warning", message: failure.localizedDescription, buttonTitle: "OK")
+        }
+        
+        dismissLoading()
+    }
+    
+    func handleViewModelOutput(_ result: Result<Void, Error>) {
+        switch result {
+        case .success(_):
+            openMainTabBarVc()
+        case .failure(let failure):
+            presentAlert(title: "Warning", message: failure.localizedDescription, buttonTitle: "OK")
+        }
+        
+        dismissLoading()
     }
 }

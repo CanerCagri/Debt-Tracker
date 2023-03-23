@@ -57,6 +57,17 @@
 		01D8F50D29944D9A00369895 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 01D8F50C29944D9A00369895 /* FirebaseFirestore */; };
 		01D8F50F29944D9A00369895 /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = 01D8F50E29944D9A00369895 /* FirebaseStorage */; };
 		01D8F51129953F3000369895 /* RegisterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01D8F51029953F3000369895 /* RegisterViewController.swift */; };
+		01F249DD29CBA5910052BC52 /* CreditsMainViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01F249DC29CBA5910052BC52 /* CreditsMainViewModel.swift */; };
+		01F249DF29CBA5BE0052BC52 /* BankProtocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01F249DE29CBA5BE0052BC52 /* BankProtocols.swift */; };
+		01F249E129CBAFBE0052BC52 /* CreateBankViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01F249E029CBAFBE0052BC52 /* CreateBankViewModel.swift */; };
+		01F249E329CBB78F0052BC52 /* CreditProtocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01F249E229CBB78F0052BC52 /* CreditProtocols.swift */; };
+		01F249E529CBB91B0052BC52 /* CreditsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01F249E429CBB91B0052BC52 /* CreditsViewModel.swift */; };
+		01F249E729CBBE200052BC52 /* AddCreditViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01F249E629CBBE200052BC52 /* AddCreditViewModel.swift */; };
+		01F249EA29CC8E000052BC52 /* CreditsDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01F249E929CC8E000052BC52 /* CreditsDetailViewModel.swift */; };
+		01F249EC29CC94610052BC52 /* LoginProtocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01F249EB29CC94610052BC52 /* LoginProtocols.swift */; };
+		01F249EE29CC95390052BC52 /* LoginViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01F249ED29CC95390052BC52 /* LoginViewModel.swift */; };
+		01F249F029CCB5DF0052BC52 /* RegisterViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01F249EF29CCB5DF0052BC52 /* RegisterViewModel.swift */; };
+		01F249F229CCCD390052BC52 /* ResetPasswordViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01F249F129CCCD390052BC52 /* ResetPasswordViewModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -106,6 +117,17 @@
 		017EDC3A29A68B7E00AD87D7 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		01D8F50729944D1C00369895 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		01D8F51029953F3000369895 /* RegisterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterViewController.swift; sourceTree = "<group>"; };
+		01F249DC29CBA5910052BC52 /* CreditsMainViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreditsMainViewModel.swift; sourceTree = "<group>"; };
+		01F249DE29CBA5BE0052BC52 /* BankProtocols.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BankProtocols.swift; sourceTree = "<group>"; };
+		01F249E029CBAFBE0052BC52 /* CreateBankViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateBankViewModel.swift; sourceTree = "<group>"; };
+		01F249E229CBB78F0052BC52 /* CreditProtocols.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreditProtocols.swift; sourceTree = "<group>"; };
+		01F249E429CBB91B0052BC52 /* CreditsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreditsViewModel.swift; sourceTree = "<group>"; };
+		01F249E629CBBE200052BC52 /* AddCreditViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddCreditViewModel.swift; sourceTree = "<group>"; };
+		01F249E929CC8E000052BC52 /* CreditsDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreditsDetailViewModel.swift; sourceTree = "<group>"; };
+		01F249EB29CC94610052BC52 /* LoginProtocols.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginProtocols.swift; sourceTree = "<group>"; };
+		01F249ED29CC95390052BC52 /* LoginViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewModel.swift; sourceTree = "<group>"; };
+		01F249EF29CCB5DF0052BC52 /* RegisterViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterViewModel.swift; sourceTree = "<group>"; };
+		01F249F129CCCD390052BC52 /* ResetPasswordViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResetPasswordViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -147,37 +169,27 @@
 			children = (
 				0129E0A8299F0219002FBAA0 /* Debt Tracker.entitlements */,
 				011E8C83298A884500F163D4 /* Utilities */,
-				011E8C4E2983534500F163D4 /* Models */,
+				011E8C4E2983534500F163D4 /* Model */,
 				011E8C4B298352B900F163D4 /* Extensions */,
 				011E8C4329834C8400F163D4 /* SupportingFiles */,
 				011E8C5B298400CC00F163D4 /* Manager */,
 				011E8C4429834CAC00F163D4 /* CustomComponents */,
-				011E8C3F29834BE400F163D4 /* Screens */,
-				011E8C4229834C6600F163D4 /* Views */,
+				01F249DB29CBA5020052BC52 /* ViewModel */,
+				011E8C3F29834BE400F163D4 /* View */,
 				011E8C35298346BF00F163D4 /* Info.plist */,
 				01D8F50729944D1C00369895 /* GoogleService-Info.plist */,
 			);
 			path = "Debt Tracker";
 			sourceTree = "<group>";
 		};
-		011E8C3F29834BE400F163D4 /* Screens */ = {
+		011E8C3F29834BE400F163D4 /* View */ = {
 			isa = PBXGroup;
 			children = (
 				011E8C6829849B6700F163D4 /* Core */,
 				011E8C8B298A922E00F163D4 /* General */,
+				01F249E829CBBF630052BC52 /* Cells */,
 			);
-			path = Screens;
-			sourceTree = "<group>";
-		};
-		011E8C4229834C6600F163D4 /* Views */ = {
-			isa = PBXGroup;
-			children = (
-				011E8C3D29834A1800F163D4 /* CreditsTableViewCell.swift */,
-				011E8C792985C92300F163D4 /* CreditsDetailTableViewCell.swift */,
-				011E8C81298A84CA00F163D4 /* CreditsCollectionViewCell.swift */,
-				0129E0B129A0FA24002FBAA0 /* SelectCurrencyCell.swift */,
-			);
-			path = Views;
+			path = View;
 			sourceTree = "<group>";
 		};
 		011E8C4329834C8400F163D4 /* SupportingFiles */ = {
@@ -215,13 +227,16 @@
 			path = Extensions;
 			sourceTree = "<group>";
 		};
-		011E8C4E2983534500F163D4 /* Models */ = {
+		011E8C4E2983534500F163D4 /* Model */ = {
 			isa = PBXGroup;
 			children = (
 				011E8C86298A890300F163D4 /* BankDetails.swift */,
 				011E8C90298BF6AA00F163D4 /* CreditDetailModel.swift */,
+				01F249EB29CC94610052BC52 /* LoginProtocols.swift */,
+				01F249DE29CBA5BE0052BC52 /* BankProtocols.swift */,
+				01F249E229CBB78F0052BC52 /* CreditProtocols.swift */,
 			);
-			path = Models;
+			path = Model;
 			sourceTree = "<group>";
 		};
 		011E8C5B298400CC00F163D4 /* Manager */ = {
@@ -322,6 +337,32 @@
 			path = General;
 			sourceTree = "<group>";
 		};
+		01F249DB29CBA5020052BC52 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				01F249ED29CC95390052BC52 /* LoginViewModel.swift */,
+				01F249EF29CCB5DF0052BC52 /* RegisterViewModel.swift */,
+				01F249F129CCCD390052BC52 /* ResetPasswordViewModel.swift */,
+				01F249DC29CBA5910052BC52 /* CreditsMainViewModel.swift */,
+				01F249E029CBAFBE0052BC52 /* CreateBankViewModel.swift */,
+				01F249E429CBB91B0052BC52 /* CreditsViewModel.swift */,
+				01F249E629CBBE200052BC52 /* AddCreditViewModel.swift */,
+				01F249E929CC8E000052BC52 /* CreditsDetailViewModel.swift */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		01F249E829CBBF630052BC52 /* Cells */ = {
+			isa = PBXGroup;
+			children = (
+				011E8C3D29834A1800F163D4 /* CreditsTableViewCell.swift */,
+				011E8C792985C92300F163D4 /* CreditsDetailTableViewCell.swift */,
+				011E8C81298A84CA00F163D4 /* CreditsCollectionViewCell.swift */,
+				0129E0B129A0FA24002FBAA0 /* SelectCurrencyCell.swift */,
+			);
+			path = Cells;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -408,19 +449,24 @@
 			buildActionMask = 2147483647;
 			files = (
 				011E8C7829858CD700F163D4 /* UIViewController+Ext.swift in Sources */,
+				01F249F029CCB5DF0052BC52 /* RegisterViewModel.swift in Sources */,
 				011E8C6E29849F5F00F163D4 /* DTDatePicker.swift in Sources */,
 				011E8C7E298A801200F163D4 /* MainTabBarViewController.swift in Sources */,
 				011E8C3E29834A1800F163D4 /* CreditsTableViewCell.swift in Sources */,
 				011E8C4D298352C700F163D4 /* UIView+Ext.swift in Sources */,
+				01F249DD29CBA5910052BC52 /* CreditsMainViewModel.swift in Sources */,
 				0129E0AA29A0D823002FBAA0 /* CurrencyTextField.swift in Sources */,
 				011E8C8F298B2D0700F163D4 /* SelectInstallmentBottomSheetVc.swift in Sources */,
 				011E8C7C2986A14300F163D4 /* DTEmptyStateView.swift in Sources */,
 				011E8C80298A808300F163D4 /* CreditsMainViewController.swift in Sources */,
 				011E8C4829834D1F00F163D4 /* DTBodyLabel.swift in Sources */,
+				01F249DF29CBA5BE0052BC52 /* BankProtocols.swift in Sources */,
+				01F249E329CBB78F0052BC52 /* CreditProtocols.swift in Sources */,
 				011E8C91298BF6AA00F163D4 /* CreditDetailModel.swift in Sources */,
 				011E8C4629834CDD00F163D4 /* DTTitleLabel.swift in Sources */,
 				011E8C6429848B6200F163D4 /* DTTextField.swift in Sources */,
 				0129E0AC29A0F2C3002FBAA0 /* UITableViewCell+Ext.swift in Sources */,
+				01F249EA29CC8E000052BC52 /* CreditsDetailViewModel.swift in Sources */,
 				011E8C93298C6A6000F163D4 /* CreateBankPopupVc.swift in Sources */,
 				011E8C5D2984014200F163D4 /* FirestoreManager.swift in Sources */,
 				015D324729A901DD008E6FD7 /* DTFacebookSigninButton.swift in Sources */,
@@ -431,20 +477,26 @@
 				011E8C7629858C1900F163D4 /* DTContainerView.swift in Sources */,
 				017EDC3B29A68B7E00AD87D7 /* Constants.swift in Sources */,
 				0129E0B029A0F322002FBAA0 /* Currency.swift in Sources */,
+				01F249E129CBAFBE0052BC52 /* CreateBankViewModel.swift in Sources */,
 				0129E075299558FC002FBAA0 /* LoginViewController.swift in Sources */,
 				0129E07729995E2B002FBAA0 /* AuthManager.swift in Sources */,
 				011E8C2C298346BE00F163D4 /* CreditsViewController.swift in Sources */,
 				011E8C28298346BE00F163D4 /* AppDelegate.swift in Sources */,
 				011E8C2A298346BE00F163D4 /* SceneDelegate.swift in Sources */,
+				01F249EE29CC95390052BC52 /* LoginViewModel.swift in Sources */,
+				01F249E529CBB91B0052BC52 /* CreditsViewModel.swift in Sources */,
 				0129E07D299A8B1D002FBAA0 /* SelectCurrencyBottomVc.swift in Sources */,
 				0129E079299985F8002FBAA0 /* ResetPasswordVc.swift in Sources */,
 				0129E07B299A8454002FBAA0 /* DTCloseButton.swift in Sources */,
 				0129E0B229A0FA24002FBAA0 /* SelectCurrencyCell.swift in Sources */,
+				01F249F229CCCD390052BC52 /* ResetPasswordViewModel.swift in Sources */,
 				011E8C702984A8C300F163D4 /* Int+Ext.swift in Sources */,
 				011E8C7329858BC600F163D4 /* DTAlertViewController.swift in Sources */,
 				011E8C87298A890300F163D4 /* BankDetails.swift in Sources */,
+				01F249E729CBBE200052BC52 /* AddCreditViewModel.swift in Sources */,
 				011E8C85298A885D00F163D4 /* UIHelper.swift in Sources */,
 				011E8C82298A84CA00F163D4 /* CreditsCollectionViewCell.swift in Sources */,
+				01F249EC29CC94610052BC52 /* LoginProtocols.swift in Sources */,
 				011E8C89298A911A00F163D4 /* AddCreditViewController.swift in Sources */,
 				01D8F51129953F3000369895 /* RegisterViewController.swift in Sources */,
 			);

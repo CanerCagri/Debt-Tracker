@@ -11,11 +11,10 @@ import Firebase
 class CreditsViewController: UIViewController {
     
     let db = Firestore.firestore()
-    var documentIds: [String] = []
     let creditsTableView = UITableView()
     let contentView = UIView()
     var emptyState: DTEmptyStateView?
-    private var credits: [CreditDetailModel] = []
+    let viewModel = CreditsViewModel()
     
     
     override func viewDidLoad() {
@@ -23,7 +22,8 @@ class CreditsViewController: UIViewController {
         
         configureViewController()
         configureTableView()
-        fetchFromFirebase()
+        viewModel.delegate = self
+        viewModel.fetchCredits()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -51,44 +51,18 @@ class CreditsViewController: UIViewController {
         creditsTableView.rowHeight = 200
         creditsTableView.register(CreditsTableViewCell.self, forCellReuseIdentifier:CreditsTableViewCell.identifier)
     }
-    
-    private func fetchFromFirebase() {
-        FirestoreManager.shared.fetchCredit { [weak self] result in
-            switch result {
-            case .success(let success):
-                self?.credits = success.creditDetails
-                self?.documentIds = success.stringArray
-                
-                guard let credits = self?.credits.isEmpty else { return }
-                if credits {
-                    self?.emptyState = DTEmptyStateView(message: "Currently don't have Credit\nAdd from Create Credit Page.")
-                    self?.emptyState?.frame = (self?.view.bounds)!
-                    self?.view.addSubview((self?.emptyState!)!)
-                    
-                } else {
-                    self?.emptyState?.removeFromSuperview()
-                }
-                
-                DispatchQueue.main.async {
-                    self?.creditsTableView.reloadData()
-                }
-            case .failure(let failure):
-                self?.presentAlert(title: "Warning", message: failure.localizedDescription, buttonTitle: "OK")
-            }
-        }
-    }
 }
 
 extension CreditsViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return credits.count
+        return viewModel.numberOfRowsInSection()
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: CreditsTableViewCell.identifier) as! CreditsTableViewCell
         cell.applyShadow(cornerRadius: 8)
-        cell.set(credit: credits[indexPath.row])
+        cell.set(credit: viewModel.credits[indexPath.row])
         return cell
     }
     
@@ -96,9 +70,9 @@ extension CreditsViewController: UITableViewDelegate, UITableViewDataSource {
         
         tableView.deselectRow(at: indexPath, animated: true)
         
-        let selectedCredit = credits[indexPath.row]
+        let selectedCredit = viewModel.credits[indexPath.row]
         let detailVc = CreditsDetailViewController()
-        detailVc.documentId = documentIds[indexPath.row]
+        detailVc.documentId = viewModel.documentIds[indexPath.row]
         detailVc.creditModel = selectedCredit
         let navigationController = UINavigationController(rootViewController: detailVc)
         present(navigationController, animated: true)
@@ -108,9 +82,10 @@ extension CreditsViewController: UITableViewDelegate, UITableViewDataSource {
         
         switch editingStyle {
         case .delete:
-            FirestoreManager.shared.deleteCredit(documentId: documentIds[indexPath.row])
-            documentIds.remove(at: indexPath.row)
-            credits.remove(at: indexPath.row)
+            viewModel.removeCredits(documentId: viewModel.documentIds[indexPath.row])
+            viewModel.documentIds.remove(at: indexPath.row)
+            viewModel.credits.remove(at: indexPath.row)
+            
         default:
             break
         }
@@ -119,11 +94,39 @@ extension CreditsViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath)
     {
         let verticalPadding: CGFloat = 15
-
+        
         let maskLayer = CALayer()
-//        maskLayer.cornerRadius = 10    //if you want round edges
         maskLayer.backgroundColor = UIColor.black.cgColor
         maskLayer.frame = CGRect(x: cell.bounds.origin.x, y: cell.bounds.origin.y, width: cell.bounds.width, height: cell.bounds.height).insetBy(dx: 0, dy: verticalPadding/2)
         cell.layer.mask = maskLayer
+    }
+}
+
+extension CreditsViewController: CreditsViewModelDelegate {
+    
+    func handleViewModelOutput(_ result: Result<CreditData, Error>) {
+    
+        switch result {
+        case .success(let success):
+            viewModel.credits = success.creditDetails
+            viewModel.documentIds = success.stringArray
+            
+            if viewModel.credits.isEmpty {
+                emptyState = DTEmptyStateView(message: "Currently don't have Credit\nAdd from Create Credit Page.")
+                emptyState?.frame = view.bounds
+                view.addSubview(emptyState!)
+                
+            } else {
+                emptyState?.removeFromSuperview()
+            }
+            
+            DispatchQueue.main.async { [weak self] in
+                guard let self = self else { return }
+                self.creditsTableView.reloadData()
+            }
+            
+        case .failure(let failure):
+            presentAlert(title: "Warning", message: failure.localizedDescription, buttonTitle: "OK")
+        }
     }
 }

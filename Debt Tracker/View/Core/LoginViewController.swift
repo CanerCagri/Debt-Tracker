@@ -44,6 +44,7 @@ class LoginViewController: UIViewController {
     let registerLabel = DTTitleLabel(textAlignment: .center, fontSize: 18, textColor: .systemGray2, text: "REGISTER")
     var googleSignInButton = GIDSignInButton()
     var facebookLoginButton = DTFacebookSigninButton(iconCentered: false)
+    let viewModel = LoginViewModel()
     
     var isLoginTapped = false
     var isForgetPasswordTapped = false
@@ -61,7 +62,7 @@ class LoginViewController: UIViewController {
         
         if Auth.auth().currentUser != nil {
             showLoading()
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1.5 ) { [weak self] in
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1 ) { [weak self] in
                 self?.openMainTabBarVc()
                 self?.dismissLoading()
             }
@@ -91,6 +92,7 @@ class LoginViewController: UIViewController {
         passwordTextField.isSecureTextEntry = true
         passwordTextField.delegate = self
         emailTextField.delegate = self
+        viewModel.delegate = self
         
         let leftPaddingView = UIView(frame: CGRect(x: 0, y: 0, width: 40, height: 30))
         passwordTextField.leftView = leftPaddingView
@@ -133,15 +135,7 @@ class LoginViewController: UIViewController {
             
             if isLoginTapped != true {
                 showLoading()
-                AuthManager.shared.signInUser(email: email, password: password) { [weak self] result in
-                    switch result {
-                    case .success(_):
-                        self?.openMainTabBarVc()
-                    case .failure(let failure):
-                        self?.presentAlert(title: "Warning", message: failure.localizedDescription, buttonTitle: "OK")
-                    }
-                    self?.dismissLoading()
-                }
+                viewModel.signInUser(email: email, password: password)
             }
         }
     }
@@ -159,16 +153,7 @@ class LoginViewController: UIViewController {
             let credential = GoogleAuthProvider.credential(withIDToken: idToken,
                                                            accessToken: authentication.accessToken.tokenString)
             self?.showLoading()
-            
-            AuthManager.shared.signInUserWith(with: credential) { [weak self] result in
-                switch result {
-                case .success(_):
-                    self?.openMainTabBarVc()
-                case .failure(let failure):
-                    self?.presentAlert(title: "Warning", message: failure.localizedDescription, buttonTitle: "OK")
-                }
-                self?.dismissLoading()
-            }
+            self?.viewModel.signInUserWith(with: credential)
         }
     }
     
@@ -182,16 +167,7 @@ class LoginViewController: UIViewController {
             guard let resultTokenString = result?.token?.tokenString else { return }
             let credential = FacebookAuthProvider.credential(withAccessToken: resultTokenString)
             self?.showLoading()
-            
-            AuthManager.shared.signInUserWith(with: credential) { [weak self] result in
-                switch result {
-                case .success(_):
-                    self?.openMainTabBarVc()
-                case .failure(let failure):
-                    self?.presentAlert(title: "Warning", message: failure.localizedDescription, buttonTitle: "OK")
-                }
-                self?.dismissLoading()
-            }
+            self?.viewModel.signInUserWith(with: credential)
         }
     }
     
@@ -200,12 +176,10 @@ class LoginViewController: UIViewController {
     }
     
     func openMainTabBarVc() {
-        if !isLoginTapped {
-            let tabBarVC = MainTabBarViewController()
-            tabBarVC.navigationItem.hidesBackButton = true
-            navigationController?.pushViewController(tabBarVC, animated: true)
-            isLoginTapped = true
-        }
+        let tabBarVC = MainTabBarViewController()
+        tabBarVC.navigationItem.hidesBackButton = true
+        navigationController?.pushViewController(tabBarVC, animated: true)
+        isLoginTapped = true
     }
     
     @objc func showForgetPasswordPopup() {
@@ -318,5 +292,18 @@ extension LoginViewController: UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         loginButtonTapped()
         return true
+    }
+}
+
+extension LoginViewController: LoginViewModelDelegate {
+    func handleViewModelOutput(_ result: Result<Void, Error>) {
+        switch result {
+        case .success(_):
+            openMainTabBarVc()
+        case .failure(let failure):
+            presentAlert(title: "Warning", message: failure.localizedDescription, buttonTitle: "OK")
+        }
+        
+        dismissLoading()
     }
 }

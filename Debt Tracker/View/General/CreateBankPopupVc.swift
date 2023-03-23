@@ -18,6 +18,7 @@ class CreateBankPopupVc: UIViewController {
     private var closeButton = DTCloseButton()
     
     let db = Firestore.firestore()
+    let viewModel = CreateBankViewModel()
     
     
     override func viewDidLoad() {
@@ -40,6 +41,7 @@ class CreateBankPopupVc: UIViewController {
         view.backgroundColor = UIColor.black.withAlphaComponent(0.75)
         view.frame = UIScreen.main.bounds
         hideKeyboardWheTappedAround()
+        viewModel.delegate = self
         
         closeButton.addTarget(self, action: #selector(dismissView), for: .touchUpInside)
         saveButton.addTarget(self, action: #selector(saveButtonTapped), for: .touchUpInside)
@@ -54,17 +56,8 @@ class CreateBankPopupVc: UIViewController {
             presentAlert(title: "Warning", message: "Please enter Detail", buttonTitle: "Ok")
             return
         }
-        showLoading()
         
-        FirestoreManager.shared.createBank(name: name, detail: detail) { [weak self] result in
-            switch result {
-            case .success(_):
-                self?.dismissView()
-            case .failure(let failure):
-                self?.presentAlert(title: "Warning", message: failure.localizedDescription, buttonTitle: "OK")
-            }
-            self?.dismissLoading()
-        }
+        viewModel.addBank(name: name, detail: detail)
     }
     
     @objc func dismissView() {
@@ -124,4 +117,16 @@ class CreateBankPopupVc: UIViewController {
         saveButton.heightAnchor.constraint(equalToConstant: 40).isActive = true
     }
     
+}
+
+extension CreateBankPopupVc: CreateBankViewModelDelegate {
+    func handleViewModelOutput(_ result: Result<Void, Error>) {
+        switch result {
+        case .success(_):
+            dismissView()
+            
+        case .failure(let failure):
+            presentAlert(title: "Warning", message: failure.localizedDescription, buttonTitle: "OK")
+        }
+    }
 }

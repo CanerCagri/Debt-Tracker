@@ -23,6 +23,7 @@ class CreditsDetailViewController: UIViewController {
     let dateFormatter = DateFormatter()
     var date = Date()
     var documentId: String!
+    var viewModel = CreditsDetailViewModel()
     
     var creditModel: CreditDetailModel! {
         didSet
@@ -57,6 +58,7 @@ class CreditsDetailViewController: UIViewController {
     private func configureViewController() {
         title = "Credit Detail"
         view.setBackgroundColor()
+        viewModel.delegate = self
         
         let doneButton = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(dismissVC))
         navigationItem.rightBarButtonItem = doneButton
@@ -74,9 +76,7 @@ class CreditsDetailViewController: UIViewController {
         detailTableView.register(CreditsDetailTableViewCell.self, forCellReuseIdentifier:CreditsDetailTableViewCell.identifier)
     }
     
-    @objc func dismissVC() {
-        dismiss(animated: true)
-    }
+    @objc func dismissVC() { dismiss(animated: true) }
     
     func applyConstraints() {
         detailLabel.numberOfLines = 2
@@ -185,22 +185,7 @@ extension CreditsDetailViewController: UITableViewDelegate, UITableViewDataSourc
         
         let yesAction = UIAlertAction(title: "Yes, I did pay selected Installment.", style: .default) { [weak self] (action) in
             self?.showLoading()
-            FirestoreManager.shared.editCredit(documentId: self?.documentId ?? "", viewModel: viewModel) { result in
-                self?.dismissLoading()
-                switch result {
-                case .success(_):
-                    let alertController = UIAlertController(title: "Payment Successful", message: nil, preferredStyle: .alert)
-                    
-                    let deleteButton = UIAlertAction(title: "OK", style: .default) { [weak self] _ in
-                        self?.dismissVC()
-                    }
-                    
-                    alertController.addAction(deleteButton)
-                    self?.present(alertController, animated: true)
-                case .failure(let failure):
-                    self?.presentAlert(title: "Warning", message: failure.localizedDescription, buttonTitle: "OK")
-                }
-            }
+            self?.viewModel.editCredit(documentId: self?.documentId ?? "", viewModel: viewModel)
         }
         
         let noAction = UIAlertAction(title: "No, I didn't pay yet.", style: .cancel) { (action) in
@@ -210,5 +195,24 @@ extension CreditsDetailViewController: UITableViewDelegate, UITableViewDataSourc
         alert.addAction(noAction)
         
         present(alert, animated: true)
+    }
+}
+
+extension CreditsDetailViewController: CreditsDetailViewlModelDelegate {
+    func handleViewModelOutput(_ result: Result<Void, Error>) {
+        switch result {
+        case .success(_):
+            let alertController = UIAlertController(title: "Payment Successful", message: nil, preferredStyle: .alert)
+            
+            let deleteButton = UIAlertAction(title: "OK", style: .default) { [weak self] _ in
+                self?.dismissLoading()
+                self?.dismissVC()
+            }
+            
+            alertController.addAction(deleteButton)
+            present(alertController, animated: true)
+        case .failure(let failure):
+            presentAlert(title: "Warning", message: failure.localizedDescription, buttonTitle: "OK")
+        }
     }
 }

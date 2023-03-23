@@ -15,6 +15,7 @@ class ForgotPasswordVc: UIViewController {
     let emailTextField = DTTextField(placeholder: "Enter Email", placeHolderSize: 15, cornerRadius: 14)
     let resetButton = DTButton(title: "RESET PASSWORD", color: .systemPink, systemImageName: SFSymbols.resetSymbol, size: 20)
     private var closeButton = DTCloseButton()
+    let viewModel = ResetPasswordViewModel()
     
     
     override func viewDidLoad() {
@@ -36,6 +37,7 @@ class ForgotPasswordVc: UIViewController {
         view.backgroundColor = UIColor.black.withAlphaComponent(0.75)
         view.frame = UIScreen.main.bounds
         hideKeyboardWheTappedAround()
+        viewModel.delegate = self
         
         emailTextField.delegate = self
         closeButton.addTarget(self, action: #selector(dismissVc), for: .touchUpInside)
@@ -45,15 +47,7 @@ class ForgotPasswordVc: UIViewController {
     @objc func resetButtonTapped() {
         if let email = emailTextField.text {
             showLoading()
-            AuthManager.shared.resetPassword(email: email) { [weak self] result in
-                switch result {
-                case .success(_):
-                    self?.presentAlert(title: "Mail Sended", message: "Password Reset Mail Succesfully Sended.", buttonTitle: "OK")
-                case .failure(let failure):
-                    self?.presentAlert(title: "Warning", message: failure.localizedDescription, buttonTitle: "OK")
-                }
-                self?.dismissLoading()
-            }
+            viewModel.resetPassword(email: email)
         }
     }
     
@@ -111,5 +105,17 @@ extension ForgotPasswordVc: UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         resetButtonTapped()
         return true
+    }
+}
+
+extension ForgotPasswordVc: ResetPasswordViewModelDelegate {
+    func handleViewModelOutput(_ result: Result<Void, Error>) {
+        switch result {
+        case .success(_):
+            presentAlert(title: "Mail Sended", message: "Password Reset Mail Succesfully Sended.", buttonTitle: "OK")
+        case .failure(let failure):
+            presentAlert(title: "Warning", message: failure.localizedDescription, buttonTitle: "OK")
+        }
+        dismissLoading()
     }
 }
