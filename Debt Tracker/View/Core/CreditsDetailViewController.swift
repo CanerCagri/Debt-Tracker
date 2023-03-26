@@ -14,10 +14,11 @@ class CreditsDetailViewController: UIViewController {
     var paymentTitleLabel = DTTitleLabel(textAlignment: .left, fontSize: 18, text: "All Installments")
     var startAndEndTitleLabel = DTTitleLabel(textAlignment: .left, fontSize: 15)
     var detailTableView = UITableView()
-    var totalDebtLabel = DTTitleLabel(textAlignment: .center, fontSize: 18)
-    var remainingDebtLabel = DTTitleLabel(textAlignment: .center, fontSize: 18)
-    var totalPaidDebtLabel = DTTitleLabel(textAlignment: .center, fontSize: 18)
-    var totalPaidMonthLabel = DTTitleLabel(textAlignment: .center, fontSize: 18)
+    var totalDebtLabel = DTTitleLabel(textAlignment: .center, fontSize: 18, textColor: .black)
+    var remainingDebtLabel = DTTitleLabel(textAlignment: .center, fontSize: 18, textColor: .black)
+    var totalPaidDebtLabel = DTTitleLabel(textAlignment: .center, fontSize: 18, textColor: .black)
+    var totalPaidMonthLabel = DTTitleLabel(textAlignment: .center, fontSize: 18, textColor: .black)
+    var containerView = UIView()
     
     let db = Firestore.firestore()
     let dateFormatter = DateFormatter()
@@ -29,10 +30,10 @@ class CreditsDetailViewController: UIViewController {
         didSet
         {
             detailLabel.text = "\(creditModel.name) - \(creditModel.detail)"
-            totalDebtLabel.text = "Total Debt: \(creditModel.totalDebt)"
-            remainingDebtLabel.text = "Remaining: \(creditModel.remainingDebt)"
-            totalPaidDebtLabel.text = "Paid: \(creditModel.paidDebt)"
-            totalPaidMonthLabel.text = "\(String(creditModel.paidCount))/\(String(creditModel.installmentCount)) paid"
+            totalDebtLabel.addIcon(icon: UIImage(systemName: "creditcard.circle.fill")!, text: "Total Debt: \(creditModel.totalDebt)", iconSize: CGSize(width: 20, height: 20), xOffset: -2, yOffset: -2)
+            totalPaidDebtLabel.addIcon(icon: UIImage(systemName: "checkmark.circle.fill")!, text: "Paid: \(creditModel.paidDebt)", iconSize: CGSize(width: 20, height: 20), xOffset: -2, yOffset: -2)
+            remainingDebtLabel.addIcon(icon: UIImage(systemName: "dollarsign.square.fill")!, text: "Remaining: \(creditModel.remainingDebt)", iconSize: CGSize(width: 20, height: 20), xOffset: -2, yOffset: -2)
+            totalPaidMonthLabel.addIcon(icon: UIImage(systemName: "hands.clap.fill")!, text: "\(String(creditModel.paidCount))/\(String(creditModel.installmentCount)) paid", iconSize: CGSize(width: 20, height: 20), xOffset: -2, yOffset: -2)
             
             dateFormatter.dateFormat = K.creditsDetailVcDateFormat
             date = dateFormatter.date(from: creditModel.firstInstallmentDate)!
@@ -60,7 +61,12 @@ class CreditsDetailViewController: UIViewController {
         view.setBackgroundColor()
         viewModel.delegate = self
         
+        containerView.translatesAutoresizingMaskIntoConstraints = false
+        containerView.backgroundColor = UIColor(red: 255/255, green: 255/255, blue: 178/255, alpha: 1.0)
+        containerView.layer.cornerRadius = 16
+        
         let doneButton = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(dismissVC))
+        
         navigationItem.rightBarButtonItem = doneButton
     }
     
@@ -70,7 +76,7 @@ class CreditsDetailViewController: UIViewController {
         detailTableView.backgroundColor = .systemBackground
         detailTableView.layer.cornerRadius = 16
         detailTableView.layer.borderWidth = 2
-        detailTableView.layer.borderColor = UIColor.systemBlue.cgColor
+        detailTableView.layer.borderColor = UIColor(red: 179/255, green: 229/255, blue: 252/255, alpha: 1.0).cgColor
         detailTableView.rowHeight = 40
         detailTableView.layer.cornerRadius = 14
         detailTableView.register(CreditsDetailTableViewCell.self, forCellReuseIdentifier:CreditsDetailTableViewCell.identifier)
@@ -81,7 +87,7 @@ class CreditsDetailViewController: UIViewController {
     func applyConstraints() {
         detailLabel.numberOfLines = 2
         
-        view.addSubviews(detailLabel, paymentTitleLabel, startAndEndTitleLabel, detailTableView, totalDebtLabel, remainingDebtLabel, totalPaidDebtLabel, totalPaidMonthLabel)
+        view.addSubviews(containerView, detailLabel, paymentTitleLabel, startAndEndTitleLabel, detailTableView, totalDebtLabel, remainingDebtLabel, totalPaidDebtLabel, totalPaidMonthLabel)
         detailTableView.translatesAutoresizingMaskIntoConstraints = false
         
         detailLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 5).isActive = true
@@ -102,7 +108,11 @@ class CreditsDetailViewController: UIViewController {
         detailTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -10).isActive = true
         detailTableView.heightAnchor.constraint(equalToConstant: tableViewHeight).isActive = true
         
-        totalDebtLabel.topAnchor.constraint(equalTo: detailTableView.bottomAnchor, constant: 10).isActive = true
+        containerView.topAnchor.constraint(equalTo: detailTableView.bottomAnchor, constant: 10).isActive = true
+        containerView.leadingAnchor.constraint(equalTo: detailTableView.leadingAnchor).isActive = true
+        containerView.trailingAnchor.constraint(equalTo: detailTableView.trailingAnchor).isActive = true
+        
+        totalDebtLabel.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 20).isActive = true
         totalDebtLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         
         totalPaidDebtLabel.topAnchor.constraint(equalTo: totalDebtLabel.bottomAnchor, constant: 10).isActive = true
@@ -113,6 +123,8 @@ class CreditsDetailViewController: UIViewController {
         
         totalPaidMonthLabel.topAnchor.constraint(equalTo: remainingDebtLabel.bottomAnchor, constant: 10).isActive = true
         totalPaidMonthLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        
+        containerView.bottomAnchor.constraint(equalTo: totalPaidMonthLabel.bottomAnchor, constant: 20).isActive = true
     }
 }
 

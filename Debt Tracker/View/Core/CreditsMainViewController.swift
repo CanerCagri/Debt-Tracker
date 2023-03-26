@@ -29,7 +29,7 @@ class CreditsMainViewController: UIViewController {
     
     private func configureViewController() {
         title = "Create Credit"
-        view.setBackgroundColor()
+        view.backgroundColor = Colors.lightModeColor
         viewModel.delegate = self
         
         navigationItem.rightBarButtonItems = [

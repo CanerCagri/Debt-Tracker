@@ -278,7 +278,7 @@ class LoginViewController: UIViewController {
         facebookLoginButton.trailingAnchor.constraint(equalTo: loginButton.trailingAnchor).isActive = true
         facebookLoginButton.heightAnchor.constraint(equalToConstant: 40).isActive = true
         
-        let registerLabelTopConstant: CGFloat = DeviceTypes.isiPhoneSE || DeviceTypes.isiPhone8PlusZoomed || DeviceTypes.isiPhone8Standard || DeviceTypes.isiPhone8Zoomed || DeviceTypes.isiPhone8PlusStandard ? 100 : 150
+        let registerLabelTopConstant: CGFloat = DeviceTypes.isiPhoneSE || DeviceTypes.isiPhone8PlusZoomed || DeviceTypes.isiPhone8Standard || DeviceTypes.isiPhone8Zoomed || DeviceTypes.isiPhone8PlusStandard ? 80 : 150
         
         registerLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor).isActive = true
         registerLabel.topAnchor.constraint(equalTo: facebookLoginButton.bottomAnchor, constant: registerLabelTopConstant).isActive = true

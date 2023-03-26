@@ -40,8 +40,8 @@ class AddCreditViewController: UIViewController {
     let saveButton = DTButton(title: "SAVE", color: .systemGray2, systemImageName: SFSymbols.saveSymbol, size: 20)
     let creditNameLabel = DTTitleLabel(textAlignment: .left, fontSize: 22)
     var currencyButton = DTButton(title: "Select Currency", color: .systemRed, size: 20)
-    var amountTextField = CurrencyTextField(size: 18, placeHolder: "Credit Amount Received")
-    var monthlyTextField = CurrencyTextField(size: 18, placeHolder: "Monthly Installment")
+    var amountTextField = CurrencyTextField(size: 18, placeHolder: "Credit Received Amount")
+    var monthlyTextField = CurrencyTextField(size: 18, placeHolder: "Monthly Installment Amount")
     let monthlyInstallmentCountLabel = DTTitleLabel(textAlignment: .left, fontSize: 18, text: "Number Of Installments:")
     var monthlyInstallmentCountButton = DTButton(title: "12", color: .systemRed)
     let firstInstallmentLabel = DTTitleLabel(textAlignment: .left, fontSize: 18, text: "First Installment:")
@@ -270,7 +270,7 @@ class AddCreditViewController: UIViewController {
         constraintsOfContainers()
         setupSubviewsConstraints()
         
-        let saveButtonTopConstant: CGFloat = DeviceTypes.isiPhoneSE || DeviceTypes.isiPhone8PlusZoomed || DeviceTypes.isiPhone8Standard || DeviceTypes.isiPhone8Zoomed || DeviceTypes.isiPhone8PlusStandard ? 70 : 160
+        let saveButtonTopConstant: CGFloat = DeviceTypes.isiPhoneSE || DeviceTypes.isiPhone8PlusZoomed || DeviceTypes.isiPhone8Standard || DeviceTypes.isiPhone8Zoomed || DeviceTypes.isiPhone8PlusStandard ? 50 : 160
         
         saveButton.topAnchor.constraint(equalTo: calculated.bottomAnchor, constant: saveButtonTopConstant).isActive = true
         saveButton.leadingAnchor.constraint(equalTo: amountTextField.leadingAnchor).isActive = true
