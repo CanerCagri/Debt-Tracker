@@ -24,10 +24,13 @@ struct Colors {
     static let facebookBackgroundColor = UIColor(red: 88/255.0, green: 86/255.0, blue: 214/255.0, alpha: 1.0)
     static let darkModeColor = UIColor(red: 28/255, green: 30/255, blue: 33/255, alpha: 1.0)
     static let lightModeColor = UIColor.secondarySystemBackground
+    static let pastelBlueColor = UIColor(red: 179/255, green: 229/255, blue: 252/255, alpha: 1.0).cgColor
+    static let lightYellowColor = UIColor(red: 255/255, green: 255/255, blue: 178/255, alpha: 1.0)
 }
 
 struct SFSymbols {
-    static let createCreditTabSymbol = "plus.message"
+    static let createCreditTabSymbol = "creditcard.circle"
+    static let creditCircleFill = "creditcard.circle.fill"
     static let creditsTabSymbol = "list.bullet.circle"
     static let logoutSymbol = "power"
     static let hidePasswordSymbol = "eye.slash"
@@ -35,8 +38,11 @@ struct SFSymbols {
     static let closeSymbol = "xmark.circle.fill"
     static let emptyStateSymbol = "plus.message.fill"
     static let checkMarkSymbol = "checkmark.circle"
+    static let checkMarkFill = "checkmark.circle.fill"
     static let resetSymbol = "arrow.clockwise"
     static let saveSymbol = "square.and.arrow.down"
+    static let dollarSignFill = "dollarsign.square.fill"
+    static let handsClapFill = "hands.clap.fill"
 }
 
 enum ScreenSize {

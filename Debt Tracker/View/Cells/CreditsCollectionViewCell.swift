@@ -30,15 +30,14 @@ class CreditsCollectionViewCell: UICollectionViewCell {
     }
     
     private func configure() {
-        creditNameLabel.textColor = .systemRed
         creditNameLabel.numberOfLines = 2
         creditDetailLabel.numberOfLines = 2
         creditButton.isUserInteractionEnabled = false
         if traitCollection.userInterfaceStyle == .dark {
-            backgroundColor = Colors.darkModeColor
+            backgroundColor = .systemGray6
             
         } else {
-            backgroundColor = .systemGray5
+            backgroundColor = .systemGray
         }
         
         self.layer.cornerRadius = 14

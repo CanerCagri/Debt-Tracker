@@ -30,10 +30,10 @@ class CreditsDetailViewController: UIViewController {
         didSet
         {
             detailLabel.text = "\(creditModel.name) - \(creditModel.detail)"
-            totalDebtLabel.addIcon(icon: UIImage(systemName: "creditcard.circle.fill")!, text: "Total Debt: \(creditModel.totalDebt)", iconSize: CGSize(width: 20, height: 20), xOffset: -2, yOffset: -2)
-            totalPaidDebtLabel.addIcon(icon: UIImage(systemName: "checkmark.circle.fill")!, text: "Paid: \(creditModel.paidDebt)", iconSize: CGSize(width: 20, height: 20), xOffset: -2, yOffset: -2)
-            remainingDebtLabel.addIcon(icon: UIImage(systemName: "dollarsign.square.fill")!, text: "Remaining: \(creditModel.remainingDebt)", iconSize: CGSize(width: 20, height: 20), xOffset: -2, yOffset: -2)
-            totalPaidMonthLabel.addIcon(icon: UIImage(systemName: "hands.clap.fill")!, text: "\(String(creditModel.paidCount))/\(String(creditModel.installmentCount)) paid", iconSize: CGSize(width: 20, height: 20), xOffset: -2, yOffset: -2)
+            totalDebtLabel.addIcon(icon: UIImage(systemName: SFSymbols.creditCircleFill)!, text: "Total Debt: \(creditModel.totalDebt)", iconSize: CGSize(width: 20, height: 20), xOffset: -2, yOffset: -2)
+            totalPaidDebtLabel.addIcon(icon: UIImage(systemName: SFSymbols.checkMarkFill)!, text: "Paid: \(creditModel.paidDebt)", iconSize: CGSize(width: 20, height: 20), xOffset: -2, yOffset: -2)
+            remainingDebtLabel.addIcon(icon: UIImage(systemName: SFSymbols.dollarSignFill)!, text: "Remaining: \(creditModel.remainingDebt)", iconSize: CGSize(width: 20, height: 20), xOffset: -2, yOffset: -2)
+            totalPaidMonthLabel.addIcon(icon: UIImage(systemName: SFSymbols.handsClapFill)!, text: "\(String(creditModel.paidCount))/\(String(creditModel.installmentCount)) paid", iconSize: CGSize(width: 20, height: 20), xOffset: -2, yOffset: -2)
             
             dateFormatter.dateFormat = K.creditsDetailVcDateFormat
             date = dateFormatter.date(from: creditModel.firstInstallmentDate)!
@@ -62,7 +62,7 @@ class CreditsDetailViewController: UIViewController {
         viewModel.delegate = self
         
         containerView.translatesAutoresizingMaskIntoConstraints = false
-        containerView.backgroundColor = UIColor(red: 255/255, green: 255/255, blue: 178/255, alpha: 1.0)
+        containerView.backgroundColor = Colors.lightYellowColor
         containerView.layer.cornerRadius = 16
         
         let doneButton = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(dismissVC))
@@ -76,7 +76,7 @@ class CreditsDetailViewController: UIViewController {
         detailTableView.backgroundColor = .systemBackground
         detailTableView.layer.cornerRadius = 16
         detailTableView.layer.borderWidth = 2
-        detailTableView.layer.borderColor = UIColor(red: 179/255, green: 229/255, blue: 252/255, alpha: 1.0).cgColor
+        detailTableView.layer.borderColor = Colors.pastelBlueColor
         detailTableView.rowHeight = 40
         detailTableView.layer.cornerRadius = 14
         detailTableView.register(CreditsDetailTableViewCell.self, forCellReuseIdentifier:CreditsDetailTableViewCell.identifier)
@@ -144,7 +144,8 @@ extension CreditsDetailViewController: UITableViewDelegate, UITableViewDataSourc
             cell.backgroundColor = .systemGreen
             cell.isUserInteractionEnabled = false
         } else if indexPath.row == creditModel.paidCount {
-            cell.backgroundColor = .systemGray3
+            cell.backgroundColor = .systemYellow
+            cell.contentView.alpha = 0.8
             cell.isUserInteractionEnabled = true
         } else {
             cell.backgroundColor = .systemRed

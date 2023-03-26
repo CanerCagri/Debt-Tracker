@@ -37,10 +37,10 @@ class CreditsTableViewCell: UITableViewCell {
                 backgroundColor = .systemGreen
             } else {
                 if traitCollection.userInterfaceStyle == .dark {
-                    backgroundColor = Colors.darkModeColor
+                    backgroundColor = .systemGray6
                     
                 } else {
-                    backgroundColor = .systemGray5
+                    backgroundColor = .systemGray2
                 }
             }
         }
