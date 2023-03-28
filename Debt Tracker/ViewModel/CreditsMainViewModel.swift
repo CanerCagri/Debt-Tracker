@@ -32,8 +32,8 @@ class CreditsMainViewModel: CreditsMainViewModelProtocol {
     }
     
     func deleteAccountDocuments() {
-        AuthManager.shared.deleteAccountDocuments(documentName: "banks")
-        AuthManager.shared.deleteAccountDocuments(documentName: "credits")
+        AuthManager.shared.deleteAccountDocuments(documentName: K.banks)
+        AuthManager.shared.deleteAccountDocuments(documentName: K.credits)
     }
     
     func userSignout() {

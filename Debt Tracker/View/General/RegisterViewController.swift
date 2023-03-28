@@ -118,7 +118,7 @@ class RegisterViewController: UIViewController {
     }
     
     @objc func signInWithFacebookPressed() {
-        LoginManager().logIn(permissions: [K.facebookPublicProfile, K.facebookEmail], from: self) { [weak self] result, error in
+        LoginManager().logIn(permissions: [K.publicProfile, K.email], from: self) { [weak self] result, error in
             if error != nil {
                 print(error!.localizedDescription)
                 return

@@ -7,17 +7,6 @@
 
 import UIKit
 
-struct K {
-    static let facebookPublicProfile = "public_profile"
-    static let facebookEmail = "email"
-    static let string2fFormat = "%.2f"
-    static let dateFormatter02dFormat = "%02d"
-    static let creditsDetailVcDateFormat = "dd.MM.yyyy"
-    static let appleProviderID = "apple.com"
-    static let startingLocale = "en_US"
-    static let numberFormatterGroupingSeparator = "."
-    static let creditsCollectionViewCellIdentifier = "CreditsCollectionViewCell"
-}
 
 struct Colors {
     static let facebookTitleColor = UIColor.white
@@ -26,6 +15,10 @@ struct Colors {
     static let lightModeColor = UIColor.secondarySystemBackground
     static let pastelBlueColor = UIColor(red: 179/255, green: 229/255, blue: 252/255, alpha: 1.0).cgColor
     static let lightYellowColor = UIColor(red: 255/255, green: 255/255, blue: 178/255, alpha: 1.0)
+}
+
+struct ImageName {
+    static let facebookButton = "FacebookButton"
 }
 
 struct SFSymbols {
@@ -43,6 +36,7 @@ struct SFSymbols {
     static let saveSymbol = "square.and.arrow.down"
     static let dollarSignFill = "dollarsign.square.fill"
     static let handsClapFill = "hands.clap.fill"
+    static let gearShape = "gearshape"
 }
 
 enum ScreenSize {
@@ -69,4 +63,40 @@ enum DeviceTypes {
     static func isiPhoneXAspectRatio() -> Bool {
         return isiPhoneX || isiPhoneXsMaxAndXr
     }
+}
+
+struct K {
+    static let gillSansSemiBold = "GillSans-SemiBold"
+    static let timesNewRoman = "Times New Roman"
+    static let entryLocale = "en_EN"
+    static let entrySymbol = "$"
+    static let string2fFormat = "%.2f"
+    static let dateFormatter02dFormat = "%02d"
+    static let sha256Format = "%02x"
+    static let randomNonceString = "0123456789ABCDEFGHIJKLMNOPQRSTUVXYZabcdefghijklmnopqrstuvwxyz-._"
+    static let creditsDetailVcDateFormat = "dd.MM.yyyy"
+    static let appleProviderID = "apple.com"
+    static let startingLocale = "en_US"
+    static let numberFormatterGroupingSeparator = "."
+    static let creditsCollectionViewCellIdentifier = "CreditsCollectionViewCell"
+    static let publicProfile = "public_profile"
+    static let email = "email"
+    static let banks = "banks"
+    static let credits = "credits"
+    static let name = "name"
+    static let detail = "detail"
+    static let date = "date"
+    static let entryDebt = "entryDebt"
+    static let installmentCount = "installmentCount"
+    static let paidCount = "paidCount"
+    static let monthlyInstallment = "monthlyInstallment"
+    static let firstInstallmentDate = "firstInstallmentDate"
+    static let currentInstallmentDate = "currentInstallmentDate"
+    static let totalDebt = "totalDebt"
+    static let interestRate = "interestRate"
+    static let remainingDebt = "remainingDebt"
+    static let paidDebt = "paidDebt"
+    static let currency = "currency"
+    static let locale = "locale"
+    static let createDate = "createDate"
 }

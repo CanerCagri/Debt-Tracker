@@ -33,7 +33,7 @@ class CreditsMainViewController: UIViewController {
         view.setBackgroundColor()
         viewModel.delegate = self
         
-        leftBarButton = UIBarButtonItem(image: UIImage(systemName: "gearshape"), style: .done, target: self, action: #selector(settingsButtonTapped))
+        leftBarButton = UIBarButtonItem(image: UIImage(systemName: SFSymbols.gearShape), style: .done, target: self, action: #selector(settingsButtonTapped))
         navigationItem.leftBarButtonItem = leftBarButton
                                                            
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(rightBarButtonTapped))
@@ -41,6 +41,7 @@ class CreditsMainViewController: UIViewController {
         NotificationCenter.default.addObserver(forName: .createBankVcClosed, object: nil, queue: nil) { [weak self] (notification) in
             self?.isRightBarButtonTapped = false
         }
+        
         self.tabBarController?.delegate = self
     }
     
@@ -76,13 +77,13 @@ class CreditsMainViewController: UIViewController {
             alertController.addAction(deleteAction)
             alertController.addAction(cancelAction)
             present(alertController, animated: true)
+            
         default:
             break
         }
     }
     
     @objc func rightBarButtonTapped() {
-        
         if !isRightBarButtonTapped {
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.2 ) { [weak self] in
                 
@@ -91,6 +92,7 @@ class CreditsMainViewController: UIViewController {
                 popupVc.modalPresentationStyle = .overFullScreen
                 self?.present(popupVc, animated: true)
             }
+            
             isRightBarButtonTapped = true
         }
     }
@@ -102,7 +104,12 @@ class CreditsMainViewController: UIViewController {
         let alertController = UIAlertController(title: nil, message: "\n\(email)", preferredStyle: .actionSheet)
 
         let logoutAction = UIAlertAction(title: "Logout", style: .default) { [weak self] _ in
-            self?.viewModel.userSignout()
+            self?.showLoading()
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1 ) { [weak self] in
+                self?.dismissLoading()
+                self?.viewModel.userSignout()
+            }
+            
         }
         alertController.addAction(logoutAction)
 
@@ -111,10 +118,15 @@ class CreditsMainViewController: UIViewController {
             let alertController = UIAlertController(title: "Are you sure you want to delete account?", message: "There is no undo", preferredStyle: .alert)
             
             let deleteButton = UIAlertAction(title: "Delete", style: .destructive) { _ in
+                self?.showLoading()
                 self?.viewModel.removeAccount()
                 self?.viewModel.deleteAccountDocuments()
-                NotificationCenter.default.post(name: .signOutButtonTapped, object: nil)
-                self?.presentAlert(title: "Succesfull", message: "Account and all data successfully removed", buttonTitle: "OK")
+                
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1 ) { [weak self] in
+                    self?.dismissLoading()
+                    NotificationCenter.default.post(name: .signOutButtonTapped, object: nil)
+                    self?.presentAlert(title: "Succesfull", message: "Account and all data successfully removed", buttonTitle: "OK")
+                }
             }
             
             let cancelButton = UIAlertAction(title: "Cancel", style: .cancel)
@@ -122,7 +134,6 @@ class CreditsMainViewController: UIViewController {
             alertController.addAction(deleteButton)
             alertController.addAction(cancelButton)
             self?.present(alertController, animated: true)
-            
             
         }
         alertController.addAction(deleteAccountAction)
@@ -152,6 +163,15 @@ class CreditsMainViewController: UIViewController {
         snapShot.appendSections([.main])
         snapShot.appendItems(banks)
         
+        if viewModel.banks.isEmpty {
+            emptyState = DTEmptyStateView(message: "Currently don't have Bank\nAdd from (+)")
+            emptyState?.frame = view.bounds
+            view.addSubview(emptyState!)
+            
+        } else {
+            emptyState?.removeFromSuperview()
+        }
+        
         dataSource.apply(snapShot, animatingDifferences: true)
     }
 }
@@ -180,15 +200,7 @@ extension CreditsMainViewController: CreditsMainViewModelDelegate {
         case .success(let success):
             viewModel.banks = success.bankDetails
             viewModel.documentIds = success.stringArray
-            
-            if viewModel.banks.isEmpty {
-                emptyState = DTEmptyStateView(message: "Currently don't have Bank\nAdd from (+)")
-                emptyState?.frame = view.bounds
-                view.addSubview(emptyState!)
-                
-            } else {
-                emptyState?.removeFromSuperview()
-            }
+        
             DispatchQueue.main.async { [weak self] in
                 guard let self = self else { return }
                 self.creditsCollectionView.reloadData()
@@ -197,7 +209,7 @@ extension CreditsMainViewController: CreditsMainViewModelDelegate {
             updateData(banks: viewModel.banks)
             
         case .failure(let failure):
-            print("Önemsiz bir uyarı: \(failure.localizedDescription)")
+            print("Meaningless Warning: \(failure.localizedDescription)")
         }
     }
 }

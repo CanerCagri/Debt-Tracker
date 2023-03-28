@@ -47,8 +47,10 @@ class CreditsCollectionViewCell: UICollectionViewCell {
         creditNameLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: 10).isActive = true
         creditNameLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 10).isActive = true
         creditNameLabel.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -10).isActive = true
+        
+        let creditDetailLabelTopConstant: CGFloat = DeviceTypes.isiPhoneSE || DeviceTypes.isiPhone8PlusZoomed || DeviceTypes.isiPhone8Standard || DeviceTypes.isiPhone8Zoomed || DeviceTypes.isiPhone8PlusStandard ? 15 : 25
        
-        creditDetailLabel.topAnchor.constraint(equalTo: creditNameLabel.bottomAnchor, constant: 25).isActive = true
+        creditDetailLabel.topAnchor.constraint(equalTo: creditNameLabel.bottomAnchor, constant: creditDetailLabelTopConstant).isActive = true
         creditDetailLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 5).isActive = true
         creditDetailLabel.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -5).isActive = true
         

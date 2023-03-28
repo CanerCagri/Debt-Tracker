@@ -24,11 +24,10 @@ enum UIHelper {
         return flowLayout
     }
     
-    // Adapted from https://auth0.com/docs/api-auth/tutorials/nonce#generate-a-cryptographically-random-nonce
     static func randomNonceString(length: Int = 32) -> String {
         precondition(length > 0)
         let charset: [Character] =
-        Array("0123456789ABCDEFGHIJKLMNOPQRSTUVXYZabcdefghijklmnopqrstuvwxyz-._")
+        Array(K.randomNonceString)
         var result = ""
         var remainingLength = length
         
@@ -63,7 +62,7 @@ enum UIHelper {
         let inputData = Data(input.utf8)
         let hashedData = SHA256.hash(data: inputData)
         let hashString = hashedData.compactMap {
-            return String(format: "%02x", $0)
+            return String(format: K.sha256Format, $0)
         }.joined()
         
         return hashString

@@ -11,6 +11,7 @@ import FirebaseAuth
 import GoogleSignIn
 import FacebookLogin
 import FacebookCore
+import AuthenticationServices
 
 
 class LoginViewController: UIViewController {
@@ -44,8 +45,13 @@ class LoginViewController: UIViewController {
     let registerLabel = DTTitleLabel(textAlignment: .center, fontSize: 18, textColor: .systemGray2, text: "REGISTER")
     var googleSignInButton = GIDSignInButton()
     var facebookLoginButton = DTFacebookSigninButton(iconCentered: false)
-    var logoImageView = UIImageView()
+    private let appleSignInButton: ASAuthorizationAppleIDButton = ASAuthorizationAppleIDButton(
+        authorizationButtonType: .continue,
+        authorizationButtonStyle: UITraitCollection.current.userInterfaceStyle == .dark ? .white : .black
+    )
     
+    fileprivate var currentNonce: String?
+    var logoImageView = UIImageView()
     let viewModel = LoginViewModel()
     
     var isLoginTapped = false
@@ -67,6 +73,14 @@ class LoginViewController: UIViewController {
         isLoginTapped = false
         contentView.endEditing(true)
         
+        if Auth.auth().currentUser != nil {
+            showLoading()
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1 ) { [weak self] in
+                self?.openMainTabBarVc()
+                self?.dismissLoading()
+            }
+        }
+        
 #if DEBUG
         emailTextField.text = "1@gmail.com"
         passwordTextField.text = "123456"
@@ -82,14 +96,6 @@ class LoginViewController: UIViewController {
         } else {
             view.backgroundColor = Colors.lightModeColor
             contentView.backgroundColor = Colors.lightModeColor
-        }
-        
-        if Auth.auth().currentUser != nil {
-            showLoading()
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1 ) { [weak self] in
-                self?.openMainTabBarVc()
-                self?.dismissLoading()
-            }
         }
         
         passwordTextField.isSecureTextEntry = true
@@ -111,6 +117,7 @@ class LoginViewController: UIViewController {
         loginButton.addTarget(self, action: #selector(loginButtonTapped), for: .touchUpInside)
         googleSignInButton.addTarget(self, action: #selector(signInWithGooglePressed), for: .touchUpInside)
         facebookLoginButton.addTarget(self, action: #selector(signInWithFacebookPressed), for: .touchUpInside)
+        appleSignInButton.addTarget(self, action: #selector(signInWithAppleTapped), for: .touchUpInside)
         
         forgetPasswordLabel.isUserInteractionEnabled = true
         registerLabel.isUserInteractionEnabled = true
@@ -161,7 +168,7 @@ class LoginViewController: UIViewController {
     }
     
     @objc func signInWithFacebookPressed() {
-        LoginManager().logIn(permissions: [K.facebookPublicProfile, K.facebookEmail], from: self) { [weak self] result, error in
+        LoginManager().logIn(permissions: [K.publicProfile, K.email], from: self) { [weak self] result, error in
             if error != nil {
                 print(error!.localizedDescription)
                 return
@@ -172,6 +179,20 @@ class LoginViewController: UIViewController {
             self?.showLoading()
             self?.viewModel.signInUserWith(with: credential)
         }
+    }
+    
+    @objc func signInWithAppleTapped() {
+        let nonce = UIHelper.randomNonceString()
+        currentNonce = nonce
+        let appleIDProvider = ASAuthorizationAppleIDProvider()
+        let request = appleIDProvider.createRequest()
+        request.requestedScopes = [.fullName, .email]
+        request.nonce = UIHelper.sha256(nonce)
+        
+        let authorizationController = ASAuthorizationController(authorizationRequests: [request])
+        authorizationController.delegate = self
+        authorizationController.presentationContextProvider = self
+        authorizationController.performRequests()
     }
     
     @objc func signOutButton() {
@@ -247,8 +268,10 @@ class LoginViewController: UIViewController {
         forgetPasswordLabel.attributedText = forgetPasswordLabelString
         registerLabel.attributedText = registerLabelString
         
-        contentView.addSubviews(detailLabel, emailTextField, passwordTextField, loginButton, forgetPasswordLabel, googleSignInButton, facebookLoginButton, dontHaveAccLabel, registerLabel)
+        contentView.addSubviews(detailLabel, emailTextField, passwordTextField, loginButton, forgetPasswordLabel, googleSignInButton, facebookLoginButton, appleSignInButton, dontHaveAccLabel, registerLabel)
         containerView.addSubview(showPasswordButton)
+        
+        appleSignInButton.translatesAutoresizingMaskIntoConstraints = false
         
         detailLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor).isActive = true
         detailLabel.topAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.topAnchor, constant: 50).isActive = true
@@ -281,7 +304,12 @@ class LoginViewController: UIViewController {
         facebookLoginButton.trailingAnchor.constraint(equalTo: loginButton.trailingAnchor).isActive = true
         facebookLoginButton.heightAnchor.constraint(equalToConstant: 40).isActive = true
         
-        let registerLabelTopConstant: CGFloat = DeviceTypes.isiPhoneSE || DeviceTypes.isiPhone8PlusZoomed || DeviceTypes.isiPhone8Standard || DeviceTypes.isiPhone8Zoomed || DeviceTypes.isiPhone8PlusStandard ? 80 : 150
+        appleSignInButton.topAnchor.constraint(equalTo: facebookLoginButton.bottomAnchor, constant: 10).isActive = true
+        appleSignInButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20).isActive = true
+        appleSignInButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20).isActive = true
+        appleSignInButton.heightAnchor.constraint(equalToConstant: 40).isActive = true
+        
+        let registerLabelTopConstant: CGFloat = DeviceTypes.isiPhoneSE || DeviceTypes.isiPhone8PlusZoomed || DeviceTypes.isiPhone8Standard || DeviceTypes.isiPhone8Zoomed || DeviceTypes.isiPhone8PlusStandard ? 90 : 150
         
         registerLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor).isActive = true
         registerLabel.topAnchor.constraint(equalTo: facebookLoginButton.bottomAnchor, constant: registerLabelTopConstant).isActive = true
@@ -308,5 +336,39 @@ extension LoginViewController: LoginViewModelDelegate {
         }
         
         dismissLoading()
+    }
+}
+
+extension LoginViewController: ASAuthorizationControllerDelegate {
+    
+    func authorizationController(controller: ASAuthorizationController, didCompleteWithError error: Error) {
+        presentAlert(title: "Warning", message: error.localizedDescription, buttonTitle: "OK")
+    }
+    
+    func authorizationController(controller: ASAuthorizationController, didCompleteWithAuthorization authorization: ASAuthorization) {
+        if let appleIDCredential = authorization.credential as? ASAuthorizationAppleIDCredential {
+            guard let nonce = currentNonce else {
+                fatalError("Invalid state: A login callback was received, but no login request was sent.")
+            }
+            guard let appleIDToken = appleIDCredential.identityToken else {
+                print("Unable to fetch identity token")
+                return
+            }
+            guard let idTokenString = String(data: appleIDToken, encoding: .utf8) else {
+                print("Unable to serialize token string from data: \(appleIDToken.debugDescription)")
+                return
+            }
+            let credential = OAuthProvider.credential(withProviderID: K.appleProviderID,
+                                                      idToken: idTokenString,
+                                                      rawNonce: nonce)
+            showLoading()
+            viewModel.signInUserWith(with: credential)
+        }
+    }
+}
+
+extension LoginViewController: ASAuthorizationControllerPresentationContextProviding {
+    func presentationAnchor(for controller: ASAuthorizationController) -> ASPresentationAnchor {
+        return view.window!
     }
 }

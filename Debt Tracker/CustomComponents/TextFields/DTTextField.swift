@@ -21,7 +21,7 @@ class DTTextField: UITextField {
     
     init(placeholder: String, placeHolderSize: CGFloat, cornerRadius: CGFloat? = 10) {
         super.init(frame: .zero)
-        attributedPlaceholder = NSAttributedString(string: placeholder, attributes:[NSAttributedString.Key.foregroundColor: UIColor.lightGray, NSAttributedString.Key.font :UIFont(name: "Times New Roman", size: 12)!])
+        attributedPlaceholder = NSAttributedString(string: placeholder, attributes:[NSAttributedString.Key.foregroundColor: UIColor.lightGray, NSAttributedString.Key.font :UIFont(name: K.timesNewRoman, size: 12)!])
         layer.cornerRadius = cornerRadius!
         configure(textSize: placeHolderSize)
     }
@@ -34,7 +34,7 @@ class DTTextField: UITextField {
         textColor = .label
         tintColor = .label
         textAlignment = .center
-        font = UIFont(name: "GillSans-SemiBold", size: textSize)!
+        font = UIFont(name: K.gillSansSemiBold, size: textSize)!
         adjustsFontSizeToFitWidth = true
         minimumFontSize = 12
         

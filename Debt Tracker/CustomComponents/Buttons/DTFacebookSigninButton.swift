@@ -39,7 +39,7 @@ class DTFacebookSigninButton: UIButton {
         container.font = UIFont.boldSystemFont(ofSize: 14)
         configuration?.attributedTitle = AttributedString("Sign in with Facebook", attributes: container)
         
-        configuration?.image = UIImage(named: "FacebookButton")
+        configuration?.image = UIImage(named: ImageName.facebookButton)
         configuration?.imagePadding = 5
         configuration?.imagePlacement = .leading
         
@@ -67,7 +67,7 @@ class DTFacebookSigninButton: UIButton {
         container.font = UIFont.boldSystemFont(ofSize: 14)
         configuration?.attributedTitle = AttributedString("Continue with Facebook", attributes: container)
         
-        configuration?.image = UIImage(named: "FacebookButton")
+        configuration?.image = UIImage(named: ImageName.facebookButton)
         configuration?.imagePadding = 5
         configuration?.imagePlacement = .leading
         

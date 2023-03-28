@@ -19,7 +19,7 @@ class AddCreditViewController: UIViewController {
     var selectedCurrency: Currency? {
         didSet {
             var container = AttributeContainer()
-            container.font = UIFont(name: "GillSans-SemiBold", size: 20)
+            container.font = UIFont(name: K.gillSansSemiBold, size: 20)
             currencyButton.configuration?.attributedTitle = AttributedString(selectedCurrency!.retrieveDetailedInformation(), attributes: container)
             currencySymbol = "\(selectedCurrency!.retriviedCurrencySymbol())"
             entryDebt.text = "\(selectedCurrency!.retriviedCurrencySymbol())0"
@@ -61,10 +61,10 @@ class AddCreditViewController: UIViewController {
     
     let installmentBottomVc = SelectInstallmentBottomSheetVc()
     var monthCount = 12
-    var currencySymbol = "$"
+    var currencySymbol = K.entrySymbol
     var firstInstallmentDate = ""
     var interestRateCalculated = ""
-    var locale = "en_EN"
+    var locale = K.entryLocale
     var keyboardSaveButton: UIButton!
     var viewModel = AddCreditViewModel()
     

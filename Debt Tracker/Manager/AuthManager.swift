@@ -80,7 +80,7 @@ class AuthManager {
             if error == nil {
                 guard let documents = snapshot?.documents else {return }
                 for document in documents {
-                    let email = document.data()["email"] as? String ?? ""
+                    let email = document.data()[K.email] as? String ?? ""
                     if email == currentUserEmail {
                         document.reference.delete()
                     }

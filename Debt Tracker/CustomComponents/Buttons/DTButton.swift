@@ -31,7 +31,7 @@ class DTButton: UIButton {
         configuration?.baseForegroundColor = .white
     
         var container = AttributeContainer()
-        container.font = UIFont(name: "GillSans-SemiBold", size: size!)
+        container.font = UIFont(name: K.gillSansSemiBold, size: size!)
         configuration?.attributedTitle = AttributedString(title, attributes: container)
         
     }
@@ -46,7 +46,7 @@ class DTButton: UIButton {
         configuration?.baseForegroundColor = .white
         
         var container = AttributeContainer()
-        container.font = UIFont(name: "GillSans-SemiBold", size: size)
+        container.font = UIFont(name: K.gillSansSemiBold, size: size)
         configuration?.attributedTitle = AttributedString(title, attributes: container)
         
         configuration?.image = UIImage(systemName: systemImageName)

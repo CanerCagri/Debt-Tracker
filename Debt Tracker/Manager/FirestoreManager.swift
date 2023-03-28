@@ -31,10 +31,10 @@ class FirestoreManager {
         
         guard let userEmail = Auth.auth().currentUser?.email else { return }
         
-        db.collection("banks").addDocument(data: ["email": userEmail,
-                                                  "name": name,
-                                                  "detail": detail,
-                                                  "date": Date().timeIntervalSince1970 ]) { error in
+        db.collection(K.banks).addDocument(data: [K.email: userEmail,
+                                                  K.name: name,
+                                                  K.detail: detail,
+                                                  K.date: Date().timeIntervalSince1970 ]) { error in
             if let error = error {
                 completion(.failure(error))
             } else {
@@ -47,7 +47,7 @@ class FirestoreManager {
         var banks: [BankDetails] = []
         var documentIds: [String] = []
         
-        db.collection("banks").order(by: "date", descending: true).addSnapshotListener { querySnapShot, error in
+        db.collection(K.banks).order(by: K.date, descending: true).addSnapshotListener { querySnapShot, error in
             
             banks = []
             documentIds = []
@@ -59,10 +59,10 @@ class FirestoreManager {
                     for doc in querySnapShotDocuments {
                         let data = doc.data()
                         
-                        if let email = data["email"] as? String {
+                        if let email = data[K.email] as? String {
                             if email == Auth.auth().currentUser?.email {
                                 
-                                if let name = data["name"] as? String, let detail = data["detail"] as? String {
+                                if let name = data[K.name] as? String, let detail = data[K.detail] as? String {
                                     
                                     let bankModel = BankDetails(name: name, detail: detail, email: email)
                                     banks.append(bankModel)
@@ -78,7 +78,7 @@ class FirestoreManager {
     }
     
     func deleteBank(documentId: String) {
-        let documentRef = db.collection("banks").document(documentId)
+        let documentRef = db.collection(K.banks).document(documentId)
         
         documentRef.delete { error in
             if let error = error {
@@ -95,7 +95,7 @@ class FirestoreManager {
         var banks: [CreditDetailModel] = []
         var documentIds: [String] = []
         
-        banksListener = db.collection("credits").addSnapshotListener { querySnapShot, error in
+        banksListener = db.collection(K.credits).addSnapshotListener { querySnapShot, error in
             
             banks = []
             documentIds = []
@@ -107,22 +107,22 @@ class FirestoreManager {
                     for doc in querySnapShotDocuments {
                         let data = doc.data()
                         
-                        if let email = data["email"] as? String {
+                        if let email = data[K.email] as? String {
                             if email == Auth.auth().currentUser?.email {
-                                if let name = data["name"] as? String,
-                                   let detail = data["detail"] as? String,
-                                   let entryDebt = data["entryDebt"] as? String,
-                                   let installmentCount = data["installmentCount"] as? Int,
-                                   let paidCount = data["paidCount"] as? Int,
-                                   let monthlyInstallment = data["monthlyInstallment"] as? String,
-                                   let firstInstallmentDate = data["firstInstallmentDate"] as? String,
-                                   let currentInstallmentDate = data["currentInstallmentDate"] as? String,
-                                   let totalDebt = data["totalDebt"] as? String,
-                                   let interestRate = data["interestRate"] as? Double,
-                                   let remainingDebt = data["remainingDebt"] as? String,
-                                   let paidDebt = data["paidDebt"] as? String,
-                                   let currency = data["currency"] as? String,
-                                   let locale = data["locale"] as? String {
+                                if let name = data[K.name] as? String,
+                                   let detail = data[K.detail] as? String,
+                                   let entryDebt = data[K.entryDebt] as? String,
+                                   let installmentCount = data[K.installmentCount] as? Int,
+                                   let paidCount = data[K.paidCount] as? Int,
+                                   let monthlyInstallment = data[K.monthlyInstallment] as? String,
+                                   let firstInstallmentDate = data[K.firstInstallmentDate] as? String,
+                                   let currentInstallmentDate = data[K.currentInstallmentDate] as? String,
+                                   let totalDebt = data[K.totalDebt] as? String,
+                                   let interestRate = data[K.interestRate] as? Double,
+                                   let remainingDebt = data[K.remainingDebt] as? String,
+                                   let paidDebt = data[K.paidDebt] as? String,
+                                   let currency = data[K.currency] as? String,
+                                   let locale = data[K.locale] as? String {
                                     
                                     let creditModel = CreditDetailModel(name: name, detail: detail, entryDebt: entryDebt, installmentCount: installmentCount, paidCount: paidCount, monthlyInstallment: monthlyInstallment, firstInstallmentDate: firstInstallmentDate, currentInstallmentDate: currentInstallmentDate, totalDebt: totalDebt, interestRate: interestRate, remainingDebt: remainingDebt, paidDebt: paidDebt, email: email, currency: currency, locale: locale)
                                     banks.append(creditModel)
@@ -145,22 +145,22 @@ class FirestoreManager {
         
         guard let userEmail = Auth.auth().currentUser?.email else { return }
         
-        db.collection("credits").addDocument(data: ["email": userEmail,
-                                                    "name": creditModel.name,
-                                                    "detail": creditModel.detail,
-                                                    "entryDebt": creditModel.entryDebt,
-                                                    "installmentCount": creditModel.installmentCount,
-                                                    "paidCount": creditModel.paidCount,
-                                                    "monthlyInstallment": creditModel.monthlyInstallment,
-                                                    "firstInstallmentDate": creditModel.firstInstallmentDate,
-                                                    "currentInstallmentDate": creditModel.currentInstallmentDate,
-                                                    "totalDebt": creditModel.totalDebt,
-                                                    "interestRate": creditModel.interestRate,
-                                                    "remainingDebt": creditModel.remainingDebt,
-                                                    "paidDebt": creditModel.paidDebt,
-                                                    "createDate": Date().timeIntervalSince1970,
-                                                    "currency": creditModel.currency,
-                                                    "locale": creditModel.locale ]) { error in
+        db.collection(K.credits).addDocument(data: [K.email: userEmail,
+                                                    K.name: creditModel.name,
+                                                    K.detail: creditModel.detail,
+                                                    K.entryDebt: creditModel.entryDebt,
+                                                    K.installmentCount: creditModel.installmentCount,
+                                                    K.paidCount: creditModel.paidCount,
+                                                    K.monthlyInstallment: creditModel.monthlyInstallment,
+                                                    K.firstInstallmentDate: creditModel.firstInstallmentDate,
+                                                    K.currentInstallmentDate: creditModel.currentInstallmentDate,
+                                                    K.totalDebt: creditModel.totalDebt,
+                                                    K.interestRate: creditModel.interestRate,
+                                                    K.remainingDebt: creditModel.remainingDebt,
+                                                    K.paidDebt: creditModel.paidDebt,
+                                                    K.createDate: Date().timeIntervalSince1970,
+                                                    K.currency: creditModel.currency,
+                                                    K.locale: creditModel.locale ]) { error in
             if let error = error {
                 completion(.failure(error))
             } else {
@@ -171,22 +171,22 @@ class FirestoreManager {
     
     func editCredit(documentId: String, viewModel: CreditDetailModel, completion: @escaping (Result<Void, Error>) -> Void) {
         
-        let documentRef = db.collection("credits").document(documentId)
-        documentRef.setData(["email": viewModel.email,
-                             "name": viewModel.name,
-                             "detail": viewModel.detail,
-                             "entryDebt": viewModel.entryDebt,
-                             "installmentCount": viewModel.installmentCount,
-                             "paidCount": viewModel.paidCount,
-                             "monthlyInstallment": viewModel.monthlyInstallment,
-                             "firstInstallmentDate": viewModel.firstInstallmentDate,
-                             "currentInstallmentDate": viewModel.currentInstallmentDate,
-                             "totalDebt": viewModel.totalDebt,
-                             "interestRate": viewModel.interestRate,
-                             "remainingDebt": viewModel.remainingDebt,
-                             "paidDebt": viewModel.paidDebt,
-                             "currency": viewModel.currency,
-                             "locale": viewModel.locale ]) { error in
+        let documentRef = db.collection(K.credits).document(documentId)
+        documentRef.setData([K.email: viewModel.email,
+                             K.name: viewModel.name,
+                             K.detail: viewModel.detail,
+                             K.entryDebt: viewModel.entryDebt,
+                             K.installmentCount: viewModel.installmentCount,
+                             K.paidCount: viewModel.paidCount,
+                             K.monthlyInstallment: viewModel.monthlyInstallment,
+                             K.firstInstallmentDate: viewModel.firstInstallmentDate,
+                             K.currentInstallmentDate: viewModel.currentInstallmentDate,
+                             K.totalDebt: viewModel.totalDebt,
+                             K.interestRate: viewModel.interestRate,
+                             K.remainingDebt: viewModel.remainingDebt,
+                             K.paidDebt: viewModel.paidDebt,
+                             K.currency: viewModel.currency,
+                             K.locale: viewModel.locale ]) { error in
             if let error = error {
                 completion(.failure(error))
             } else {
@@ -197,7 +197,7 @@ class FirestoreManager {
     }
     
     func deleteCredit(documentId: String) {
-        let documentRef = db.collection("credits").document(documentId)
+        let documentRef = db.collection(K.credits).document(documentId)
         
         documentRef.delete { error in
             if let error = error {
