@@ -25,6 +25,7 @@ class FirestoreManager {
     let db = Firestore.firestore()
     var banksListener: ListenerRegistration?
     
+    // MARK: -- Bank Methods
     
     func createBank(name: String, detail: String, completion: @escaping (Result<Void, Error>) -> Void) {
         
@@ -87,6 +88,8 @@ class FirestoreManager {
             }
         }
     }
+    
+    // MARK: -- Credit Methods
     
     func fetchCredit(completion: @escaping(Result<CreditData, Error> )-> Void) {
         var banks: [CreditDetailModel] = []

@@ -6,10 +6,13 @@
 //
 
 import Foundation
+import Firebase
 
 protocol CreditsMainViewModelProtocol {
     var delegate: CreditsMainViewModelDelegate? {get set}
     func fetchBanks()
+    func removeAccount()
+    func deleteAccountDocuments()
     func removeBank(documentId: String)
 }
 

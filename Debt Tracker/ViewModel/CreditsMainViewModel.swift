@@ -10,7 +10,7 @@ import Firebase
 
 
 class CreditsMainViewModel: CreditsMainViewModelProtocol {
-    
+
     var delegate: CreditsMainViewModelDelegate?
     var banks: [BankDetails] = []
     var documentIds: [String] = []
@@ -23,6 +23,17 @@ class CreditsMainViewModel: CreditsMainViewModelProtocol {
 
     func removeBank(documentId: String) {
         FirestoreManager.shared.deleteBank(documentId: documentId)
+    }
+    
+    func removeAccount() {
+        guard let user = Auth.auth().currentUser else { return }
+        AuthManager.shared.deleteAccount(user: user)
+        
+    }
+    
+    func deleteAccountDocuments() {
+        AuthManager.shared.deleteAccountDocuments(documentName: "banks")
+        AuthManager.shared.deleteAccountDocuments(documentName: "credits")
     }
     
     func userSignout() {

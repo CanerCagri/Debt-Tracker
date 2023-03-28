@@ -17,6 +17,7 @@ class CreditsMainViewController: UIViewController {
     var creditsCollectionView: UICollectionView!
     var dataSource: UICollectionViewDiffableDataSource <Section, BankDetails>!
     var isRightBarButtonTapped = false
+    var leftBarButton: UIBarButtonItem!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -32,10 +33,10 @@ class CreditsMainViewController: UIViewController {
         view.setBackgroundColor()
         viewModel.delegate = self
         
-        navigationItem.rightBarButtonItems = [
-            UIBarButtonItem(image: UIImage(systemName: SFSymbols.logoutSymbol), style: .done, target: self, action: #selector(logoutButtonTapped)),
-            UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(rightBarButtonTapped))
-        ]
+        leftBarButton = UIBarButtonItem(image: UIImage(systemName: "gearshape"), style: .done, target: self, action: #selector(settingsButtonTapped))
+        navigationItem.leftBarButtonItem = leftBarButton
+                                                           
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(rightBarButtonTapped))
         
         NotificationCenter.default.addObserver(forName: .createBankVcClosed, object: nil, queue: nil) { [weak self] (notification) in
             self?.isRightBarButtonTapped = false
@@ -94,8 +95,48 @@ class CreditsMainViewController: UIViewController {
         }
     }
     
-    @objc func logoutButtonTapped() {
-        viewModel.userSignout()
+    @objc func settingsButtonTapped() {
+        
+        guard let email = Auth.auth().currentUser?.email else { return }
+        
+        let alertController = UIAlertController(title: nil, message: "\n\(email)", preferredStyle: .actionSheet)
+
+        let logoutAction = UIAlertAction(title: "Logout", style: .default) { [weak self] _ in
+            self?.viewModel.userSignout()
+        }
+        alertController.addAction(logoutAction)
+
+        let deleteAccountAction = UIAlertAction(title: "Delete Account", style: .destructive) { [weak self] _ in
+            
+            let alertController = UIAlertController(title: "Are you sure you want to delete account?", message: "There is no undo", preferredStyle: .alert)
+            
+            let deleteButton = UIAlertAction(title: "Delete", style: .destructive) { _ in
+                self?.viewModel.removeAccount()
+                self?.viewModel.deleteAccountDocuments()
+                NotificationCenter.default.post(name: .signOutButtonTapped, object: nil)
+                self?.presentAlert(title: "Succesfull", message: "Account and all data successfully removed", buttonTitle: "OK")
+            }
+            
+            let cancelButton = UIAlertAction(title: "Cancel", style: .cancel)
+            
+            alertController.addAction(deleteButton)
+            alertController.addAction(cancelButton)
+            self?.present(alertController, animated: true)
+            
+            
+        }
+        alertController.addAction(deleteAccountAction)
+
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        alertController.addAction(cancelAction)
+
+        alertController.setValue(NSAttributedString(string: "\n\(email)", attributes: [.font: UIFont.systemFont(ofSize: 17), .foregroundColor: UIColor.black]), forKey: "attributedMessage")
+
+        if let popoverController = alertController.popoverPresentationController {
+            popoverController.barButtonItem = leftBarButton
+        }
+
+        present(alertController, animated: true, completion: nil)
     }
     
     func configureDataSource() {

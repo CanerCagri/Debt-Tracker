@@ -44,6 +44,8 @@ class LoginViewController: UIViewController {
     let registerLabel = DTTitleLabel(textAlignment: .center, fontSize: 18, textColor: .systemGray2, text: "REGISTER")
     var googleSignInButton = GIDSignInButton()
     var facebookLoginButton = DTFacebookSigninButton(iconCentered: false)
+    var logoImageView = UIImageView()
+    
     let viewModel = LoginViewModel()
     
     var isLoginTapped = false
@@ -59,14 +61,6 @@ class LoginViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
-        if Auth.auth().currentUser != nil {
-            showLoading()
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1 ) { [weak self] in
-                self?.openMainTabBarVc()
-                self?.dismissLoading()
-            }
-        }
         
         emailTextField.text = ""
         passwordTextField.text = ""
@@ -89,6 +83,15 @@ class LoginViewController: UIViewController {
             view.backgroundColor = Colors.lightModeColor
             contentView.backgroundColor = Colors.lightModeColor
         }
+        
+        if Auth.auth().currentUser != nil {
+            showLoading()
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1 ) { [weak self] in
+                self?.openMainTabBarVc()
+                self?.dismissLoading()
+            }
+        }
+        
         passwordTextField.isSecureTextEntry = true
         passwordTextField.delegate = self
         emailTextField.delegate = self
