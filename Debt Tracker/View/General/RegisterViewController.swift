@@ -33,6 +33,18 @@ class RegisterViewController: UIViewController {
         return view
     }()
     
+    private let logoImageView: UIImageView = {
+        let imageView = UIImageView()
+        imageView.image = UIImage(named: ImageName.appLogo)
+        imageView.contentMode = .scaleAspectFill
+        imageView.layer.borderColor  = UIColor.gray.cgColor
+        imageView.layer.borderWidth  = 1
+        imageView.layer.cornerRadius = 18.75
+        imageView.layer.masksToBounds = true
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        return imageView
+    }()
+    
     let detailLabel = DTTitleLabel(textAlignment: .left, fontSize: 24, text: "Register Account")
     let emailTextField = DTTextField(placeholder: "Your Email", placeHolderSize: 15)
     let passwordTextField = DTTextField(placeholder: "Password", placeHolderSize: 15)
@@ -197,13 +209,16 @@ class RegisterViewController: UIViewController {
         scrollView.isScrollEnabled = false
         scrollView.addSubview(contentView)
         
-        contentView.addSubviews(detailLabel, emailTextField, passwordTextField, rePasswordTextField, registerButton, appleSignInButton, facebookSignInButton)
+        contentView.addSubviews(logoImageView, detailLabel, emailTextField, passwordTextField, rePasswordTextField, registerButton, appleSignInButton, facebookSignInButton)
         containerView.addSubview(showPasswordButton)
         reContainerView.addSubview(reShowPasswordButton)
         appleSignInButton.translatesAutoresizingMaskIntoConstraints = false
         
         detailLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor).isActive = true
         detailLabel.topAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.topAnchor, constant: 50).isActive = true
+        
+        logoImageView.centerXAnchor.constraint(equalTo: detailLabel.centerXAnchor).isActive = true
+        logoImageView.bottomAnchor.constraint(equalTo: detailLabel.topAnchor, constant: -10).isActive = true
         
         emailTextField.topAnchor.constraint(equalTo: detailLabel.bottomAnchor, constant: 50).isActive = true
         emailTextField.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20).isActive = true

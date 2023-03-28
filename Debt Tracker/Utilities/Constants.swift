@@ -19,6 +19,7 @@ struct Colors {
 
 struct ImageName {
     static let facebookButton = "FacebookButton"
+    static let appLogo = "AppLogo2"
 }
 
 struct SFSymbols {
