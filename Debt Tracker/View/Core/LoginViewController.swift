@@ -34,8 +34,8 @@ class LoginViewController: UIViewController {
     }()
     
     let detailLabel = DTTitleLabel(textAlignment: .left, fontSize: 24, text: "Login Account")
-    let emailTextField = DTTextField(placeholder: "Your Email", placeHolderSize: 15, cornerRadius: 14)
-    let passwordTextField = DTTextField(placeholder: "Password", placeHolderSize: 15, cornerRadius: 14)
+    let emailTextField = DTTextField(placeholder: "Your Email", placeHolderSize: 15)
+    let passwordTextField = DTTextField(placeholder: "Password", placeHolderSize: 15)
     let containerView = UIView(frame: CGRect(x: 0, y: 0, width: 40, height: 30))
     let showPasswordButton = UIButton(type: .system)
     let loginButton = DTButton(title: "LOGIN", color: .systemPink, systemImageName: SFSymbols.checkMarkSymbol, size: 20)

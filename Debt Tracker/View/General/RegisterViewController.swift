@@ -14,10 +14,13 @@ import FacebookCore
 class RegisterViewController: UIViewController {
     
     let detailLabel = DTTitleLabel(textAlignment: .left, fontSize: 24, text: "Register Account")
-    let emailTextField = DTTextField(placeholder: "Your Email", placeHolderSize: 15, cornerRadius: 14)
-    let passwordTextField = DTTextField(placeholder: "Password", placeHolderSize: 15, cornerRadius: 14)
+    let emailTextField = DTTextField(placeholder: "Your Email", placeHolderSize: 15)
+    let passwordTextField = DTTextField(placeholder: "Password", placeHolderSize: 15)
+    let rePasswordTextField = DTTextField(placeholder: "Re-Password", placeHolderSize: 15)
     let containerView = UIView(frame: CGRect(x: 0, y: 0, width: 40, height: 30))
+    let reContainerView = UIView(frame: CGRect(x: 0, y: 0, width: 40, height: 30))
     let showPasswordButton = UIButton(type: .system)
+    let reShowPasswordButton = UIButton(type: .system)
     let registerButton = DTButton(title: "REGISTER", color: .systemPink, systemImageName: SFSymbols.checkMarkSymbol, size: 20)
     private let appleSignInButton: ASAuthorizationAppleIDButton = ASAuthorizationAppleIDButton(
         authorizationButtonType: .continue,
@@ -47,6 +50,7 @@ class RegisterViewController: UIViewController {
         view.setBackgroundColor()
         hideKeyboardWheTappedAround()
         viewModel.delegate = self
+        emailTextField.delegate = self
         
         let leftPaddingView = UIView(frame: CGRect(x: 0, y: 0, width: 40, height: 30))
         passwordTextField.leftView = leftPaddingView
@@ -56,9 +60,21 @@ class RegisterViewController: UIViewController {
         passwordTextField.isSecureTextEntry = true
         passwordTextField.delegate = self
         
+        let reLeftPaddingView = UIView(frame: CGRect(x: 0, y: 0, width: 40, height: 30))
+        rePasswordTextField.leftView = reLeftPaddingView
+        rePasswordTextField.leftViewMode = .always
+        rePasswordTextField.rightView = reContainerView
+        rePasswordTextField.rightViewMode = .always
+        rePasswordTextField.isSecureTextEntry = true
+        rePasswordTextField.delegate = self
+        
         showPasswordButton.setImage(UIImage(systemName: SFSymbols.hidePasswordSymbol), for: .normal)
         showPasswordButton.frame = CGRect(x: -5, y: 0, width: 30, height: 30)
         showPasswordButton.addTarget(self, action: #selector(togglePasswordVisibility), for: .touchUpInside)
+        
+        reShowPasswordButton.setImage(UIImage(systemName: SFSymbols.hidePasswordSymbol), for: .normal)
+        reShowPasswordButton.frame = CGRect(x: -5, y: 0, width: 30, height: 30)
+        reShowPasswordButton.addTarget(self, action: #selector(reTogglePasswordVisibility), for: .touchUpInside)
         
         registerButton.addTarget(self, action: #selector(registerButtonTapped), for: .touchUpInside)
         appleSignInButton.addTarget(self, action: #selector(didTapSignInWithApple), for: .touchUpInside)
@@ -117,9 +133,15 @@ class RegisterViewController: UIViewController {
     }
     
     @objc func registerButtonTapped() {
-        if let email = emailTextField.text, let password = passwordTextField.text {
-            showLoading()
-            viewModel.createUser(email: email, password: password)
+        if let email = emailTextField.text, let password = passwordTextField.text, let rePassword = rePasswordTextField.text {
+            if password == rePassword {
+                showLoading()
+                viewModel.createUser(email: email, password: password)
+                
+            } else {
+                presentAlert(title: "Warning", message: "Passwords Do Not Match", buttonTitle: "OK")
+            }
+    
         }
     }
     
@@ -133,16 +155,26 @@ class RegisterViewController: UIViewController {
         }
     }
     
+    @objc func reTogglePasswordVisibility() {
+        rePasswordTextField.isSecureTextEntry.toggle()
+        
+        if rePasswordTextField.isSecureTextEntry {
+            reShowPasswordButton.setImage(UIImage(systemName: SFSymbols.hidePasswordSymbol), for: .normal)
+        } else {
+            reShowPasswordButton.setImage(UIImage(systemName: SFSymbols.showPasswordSymbol), for: .normal)
+        }
+    }
+    
     func openMainTabBarVc() {
         let tabBarVC = MainTabBarViewController()
         tabBarVC.navigationItem.hidesBackButton = true
         navigationController?.pushViewController(tabBarVC, animated: true)
-        
     }
     
     private func applyConstraints() {
-        view.addSubviews(detailLabel, emailTextField, passwordTextField, registerButton, appleSignInButton, facebookSignInButton)
+        view.addSubviews(detailLabel, emailTextField, passwordTextField, rePasswordTextField, registerButton, appleSignInButton, facebookSignInButton)
         containerView.addSubview(showPasswordButton)
+        reContainerView.addSubview(reShowPasswordButton)
         appleSignInButton.translatesAutoresizingMaskIntoConstraints = false
         
         detailLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
@@ -158,7 +190,12 @@ class RegisterViewController: UIViewController {
         passwordTextField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20).isActive = true
         passwordTextField.heightAnchor.constraint(equalToConstant: 40).isActive = true
         
-        registerButton.topAnchor.constraint(equalTo: passwordTextField.bottomAnchor, constant: 20).isActive = true
+        rePasswordTextField.topAnchor.constraint(equalTo: passwordTextField.bottomAnchor, constant: 10).isActive = true
+        rePasswordTextField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20).isActive = true
+        rePasswordTextField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20).isActive = true
+        rePasswordTextField.heightAnchor.constraint(equalToConstant: 40).isActive = true
+        
+        registerButton.topAnchor.constraint(equalTo: rePasswordTextField.bottomAnchor, constant: 20).isActive = true
         registerButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20).isActive = true
         registerButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20).isActive = true
         registerButton.heightAnchor.constraint(equalToConstant: 40).isActive = true
