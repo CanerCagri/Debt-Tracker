@@ -13,6 +13,26 @@ import FacebookCore
 
 class RegisterViewController: UIViewController {
     
+    let contentSizeHeight: CGFloat = DeviceTypes.isiPhoneSE || DeviceTypes.isiPhone8PlusZoomed || DeviceTypes.isiPhone8Standard || DeviceTypes.isiPhone8Zoomed || DeviceTypes.isiPhone8PlusStandard ? 150 : 0
+    
+    lazy var contentSize = CGSize(width: self.view.frame.width, height: self.view.frame.height + contentSizeHeight)
+    
+    lazy var scrollView: UIScrollView = {
+        let view = UIScrollView(frame: .zero)
+        view.contentSize = contentSize
+        view.frame = self.view.bounds
+        view.autoresizingMask = .flexibleHeight
+        view.bounces = true
+        view.showsHorizontalScrollIndicator = true
+        return view
+    }()
+    
+    lazy var contentView: UIView = {
+        let view = UIView()
+        view.frame.size = contentSize
+        return view
+    }()
+    
     let detailLabel = DTTitleLabel(textAlignment: .left, fontSize: 24, text: "Register Account")
     let emailTextField = DTTextField(placeholder: "Your Email", placeHolderSize: 15)
     let passwordTextField = DTTextField(placeholder: "Password", placeHolderSize: 15)
@@ -22,15 +42,15 @@ class RegisterViewController: UIViewController {
     let showPasswordButton = UIButton(type: .system)
     let reShowPasswordButton = UIButton(type: .system)
     let registerButton = DTButton(title: "REGISTER", color: .systemPink, systemImageName: SFSymbols.checkMarkSymbol, size: 20)
+    private let facebookSignInButton = DTFacebookSigninButton(iconCentered: true)
     private let appleSignInButton: ASAuthorizationAppleIDButton = ASAuthorizationAppleIDButton(
         authorizationButtonType: .continue,
         authorizationButtonStyle: UITraitCollection.current.userInterfaceStyle == .dark ? .white : .black
     )
-    private let facebookSignInButton = DTFacebookSigninButton(iconCentered: true)
     
     fileprivate var currentNonce: String?
-    var appleButtonTopConstraint: NSLayoutConstraint!
     let viewModel = RegisterViewModel()
+    var isKeyboardAppear = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -43,11 +63,12 @@ class RegisterViewController: UIViewController {
         super.viewWillAppear(animated)
         
         emailTextField.text = ""
-        view.endEditing(true)
+        contentView.endEditing(true)
     }
     
     private func configureViewController() {
         view.setBackgroundColor()
+        contentView.setBackgroundColor()
         hideKeyboardWheTappedAround()
         viewModel.delegate = self
         emailTextField.delegate = self
@@ -82,24 +103,25 @@ class RegisterViewController: UIViewController {
         
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
         
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
+        let tap = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        tap.cancelsTouchesInView = false
+        contentView.addGestureRecognizer(tap)
     }
     
     @objc func keyboardWillShow(notification: NSNotification) {
-        let appleButtonTopAnchor: CGFloat = DeviceTypes.isiPhoneSE || DeviceTypes.isiPhone8PlusZoomed || DeviceTypes.isiPhone8Standard || DeviceTypes.isiPhone8Zoomed || DeviceTypes.isiPhone8PlusStandard ? 10 : 50
-        
-        UIView.animate(withDuration: 0.3) {
-            self.appleButtonTopConstraint.constant = appleButtonTopAnchor
-            self.view.layoutIfNeeded()
+        if !isKeyboardAppear {
+            scrollView.isScrollEnabled = true
+            isKeyboardAppear = true
         }
     }
     
-    @objc func keyboardWillHide(notification: NSNotification) {
-        let appleButtonTopAnchor: CGFloat = 50
-        
-        UIView.animate(withDuration: 0.3) {
-            self.appleButtonTopConstraint.constant = appleButtonTopAnchor
-            self.view.layoutIfNeeded()
+    @objc func dismissKeyboard() {
+        if isKeyboardAppear {
+            scrollView.isScrollEnabled = false
+            let topRect = CGRect(x: 0, y: 0, width: 1, height: 1)
+            scrollView.scrollRectToVisible(topRect, animated: true)
+            contentView.endEditing(true)
+            isKeyboardAppear = false
         }
     }
     
@@ -141,7 +163,6 @@ class RegisterViewController: UIViewController {
             } else {
                 presentAlert(title: "Warning", message: "Passwords Do Not Match", buttonTitle: "OK")
             }
-    
         }
     }
     
@@ -172,38 +193,41 @@ class RegisterViewController: UIViewController {
     }
     
     private func applyConstraints() {
-        view.addSubviews(detailLabel, emailTextField, passwordTextField, rePasswordTextField, registerButton, appleSignInButton, facebookSignInButton)
+        view.addSubview(scrollView)
+        scrollView.isScrollEnabled = false
+        scrollView.addSubview(contentView)
+        
+        contentView.addSubviews(detailLabel, emailTextField, passwordTextField, rePasswordTextField, registerButton, appleSignInButton, facebookSignInButton)
         containerView.addSubview(showPasswordButton)
         reContainerView.addSubview(reShowPasswordButton)
         appleSignInButton.translatesAutoresizingMaskIntoConstraints = false
         
-        detailLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        detailLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 50).isActive = true
+        detailLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor).isActive = true
+        detailLabel.topAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.topAnchor, constant: 50).isActive = true
         
         emailTextField.topAnchor.constraint(equalTo: detailLabel.bottomAnchor, constant: 50).isActive = true
-        emailTextField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20).isActive = true
-        emailTextField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20).isActive = true
+        emailTextField.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20).isActive = true
+        emailTextField.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20).isActive = true
         emailTextField.heightAnchor.constraint(equalToConstant: 40).isActive = true
         
         passwordTextField.topAnchor.constraint(equalTo: emailTextField.bottomAnchor, constant: 10).isActive = true
-        passwordTextField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20).isActive = true
-        passwordTextField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20).isActive = true
+        passwordTextField.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20).isActive = true
+        passwordTextField.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20).isActive = true
         passwordTextField.heightAnchor.constraint(equalToConstant: 40).isActive = true
         
         rePasswordTextField.topAnchor.constraint(equalTo: passwordTextField.bottomAnchor, constant: 10).isActive = true
-        rePasswordTextField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20).isActive = true
-        rePasswordTextField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20).isActive = true
+        rePasswordTextField.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20).isActive = true
+        rePasswordTextField.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20).isActive = true
         rePasswordTextField.heightAnchor.constraint(equalToConstant: 40).isActive = true
         
         registerButton.topAnchor.constraint(equalTo: rePasswordTextField.bottomAnchor, constant: 20).isActive = true
-        registerButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20).isActive = true
-        registerButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20).isActive = true
+        registerButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20).isActive = true
+        registerButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20).isActive = true
         registerButton.heightAnchor.constraint(equalToConstant: 40).isActive = true
         
-        appleButtonTopConstraint = appleSignInButton.topAnchor.constraint(equalTo: registerButton.bottomAnchor, constant: 50)
-        appleButtonTopConstraint.isActive = true
-        appleSignInButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20).isActive = true
-        appleSignInButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20).isActive = true
+        appleSignInButton.topAnchor.constraint(equalTo: registerButton.bottomAnchor, constant: 50).isActive = true
+        appleSignInButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20).isActive = true
+        appleSignInButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20).isActive = true
         appleSignInButton.heightAnchor.constraint(equalToConstant: 40).isActive = true
         
         facebookSignInButton.topAnchor.constraint(equalTo: appleSignInButton.bottomAnchor, constant: 10).isActive = true
