@@ -29,6 +29,11 @@ class SelectCurrencyBottomVc: UIViewController {
         currencies = Currencies.retrieveAllCurrencies()
         setupSearchTable()
         searchBar.becomeFirstResponder()
+        
+        let doneButton = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(dismissVC))
+        
+        navigationItem.rightBarButtonItem = doneButton
+        
         configureTableView()
     }
     
@@ -54,6 +59,8 @@ class SelectCurrencyBottomVc: UIViewController {
         currencyTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
         currencyTableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor).isActive = true
     }
+    
+    @objc func dismissVC() { dismiss(animated: true) }
 }
 
 extension SelectCurrencyBottomVc: UITableViewDelegate, UITableViewDataSource {

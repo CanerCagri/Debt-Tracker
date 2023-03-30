@@ -270,7 +270,7 @@ class AddCreditViewController: UIViewController {
         constraintsOfContainers()
         setupSubviewsConstraints()
         
-        let saveButtonTopConstant: CGFloat = DeviceTypes.isiPhoneSE || DeviceTypes.isiPhone8PlusZoomed || DeviceTypes.isiPhone8Standard || DeviceTypes.isiPhone8Zoomed || DeviceTypes.isiPhone8PlusStandard ? 50 : 160
+        let saveButtonTopConstant: CGFloat = DeviceTypes.isiPhoneSE || DeviceTypes.isiPhone8PlusZoomed || DeviceTypes.isiPhone8Standard || DeviceTypes.isiPhone8Zoomed || DeviceTypes.isiPhone8PlusStandard ? 50 : 220
         
         saveButton.topAnchor.constraint(equalTo: calculated.bottomAnchor, constant: saveButtonTopConstant).isActive = true
         saveButton.leadingAnchor.constraint(equalTo: amountTextField.leadingAnchor).isActive = true

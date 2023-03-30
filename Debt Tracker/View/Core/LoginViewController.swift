@@ -356,7 +356,7 @@ extension LoginViewController: LoginViewModelDelegate {
 extension LoginViewController: ASAuthorizationControllerDelegate {
     
     func authorizationController(controller: ASAuthorizationController, didCompleteWithError error: Error) {
-        presentAlert(title: "Warning", message: error.localizedDescription, buttonTitle: "OK")
+        print(error.localizedDescription)
     }
     
     func authorizationController(controller: ASAuthorizationController, didCompleteWithAuthorization authorization: ASAuthorization) {

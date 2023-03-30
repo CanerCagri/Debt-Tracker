@@ -27,6 +27,13 @@ class CreditsMainViewModel: CreditsMainViewModelProtocol {
     
     func removeAccount() {
         guard let user = Auth.auth().currentUser else { return }
+        do {
+            try Auth.auth().signOut()
+            
+        } catch let signOutError as NSError {
+            print("Error when signing out: %@", signOutError)
+        }
+        
         AuthManager.shared.deleteAccount(user: user)
         
     }
