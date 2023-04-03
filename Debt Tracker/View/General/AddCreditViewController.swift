@@ -200,7 +200,8 @@ class AddCreditViewController: UIViewController {
     }
     
     @objc func openInstallmentBottomSheet() {
-        containerView.endEditing(true)
+        dismissKeyboard()
+        
         if let sheet = installmentBottomVc.sheetPresentationController {
             sheet.detents = [.medium()]
             sheet.prefersGrabberVisible = true

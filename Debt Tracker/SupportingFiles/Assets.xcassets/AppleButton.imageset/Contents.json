@@ -1,11 +1,11 @@
 {
   "images" : [
     {
-      "filename" : "AppLogo2.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
+      "filename" : "AppleButton.png",
       "idiom" : "universal",
       "scale" : "2x"
     },

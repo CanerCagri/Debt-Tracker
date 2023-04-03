@@ -97,7 +97,6 @@ class CreditsTableViewCell: UITableViewCell {
         
         nameLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: 10).isActive = true
         nameLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 10).isActive = true
-        nameLabel.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -90).isActive = true
         
         entryDebt.topAnchor.constraint(equalTo: self.topAnchor, constant: 10).isActive = true
         entryDebt.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -10).isActive = true
@@ -132,6 +131,9 @@ class CreditsTableViewCell: UITableViewCell {
         containerViewTwo.widthAnchor.constraint(equalToConstant: labelWidth).isActive = true
         containerViewTwo.heightAnchor.constraint(equalToConstant: 50).isActive = true
         
+        nameLabel.trailingAnchor.constraint(equalTo: containerViewTwo.trailingAnchor, constant: -50).isActive = true
+        monthlyDepth.trailingAnchor.constraint(equalTo: containerViewTwo.trailingAnchor, constant: -50).isActive = true
+
         containerViewOne.trailingAnchor.constraint(equalTo: containerViewTwo.leadingAnchor, constant: -2).isActive = true
         containerViewOne.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -15).isActive = true
         containerViewOne.widthAnchor.constraint(equalToConstant: labelWidth).isActive = true

@@ -31,6 +31,7 @@ class CreditsDetailTableViewCell: UITableViewCell {
         
         priceLabel.centerYAnchor.constraint(equalTo: self.centerYAnchor).isActive = true
         priceLabel.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
+        priceLabel.widthAnchor.constraint(equalToConstant: 100).isActive = true
         
         dateLabel.centerYAnchor.constraint(equalTo: self.centerYAnchor).isActive = true
         dateLabel.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -20).isActive = true

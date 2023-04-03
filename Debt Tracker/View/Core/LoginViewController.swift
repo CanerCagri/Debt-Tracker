@@ -38,8 +38,6 @@ class LoginViewController: UIViewController {
         let imageView = UIImageView()
         imageView.image = UIImage(named: ImageName.appLogo)
         imageView.contentMode = .scaleAspectFill
-        imageView.layer.borderColor  = UIColor.gray.cgColor
-        imageView.layer.borderWidth  = 1
         imageView.layer.cornerRadius = 18.75
         imageView.layer.masksToBounds = true
         imageView.translatesAutoresizingMaskIntoConstraints = false
@@ -57,10 +55,7 @@ class LoginViewController: UIViewController {
     let registerLabel = DTTitleLabel(textAlignment: .center, fontSize: 18, textColor: .systemGray2, text: "REGISTER")
     var googleSignInButton = GIDSignInButton()
     var facebookLoginButton = DTFacebookSigninButton(iconCentered: false)
-    private let appleSignInButton: ASAuthorizationAppleIDButton = ASAuthorizationAppleIDButton(
-        authorizationButtonType: .continue,
-        authorizationButtonStyle: UITraitCollection.current.userInterfaceStyle == .dark ? .white : .black
-    )
+    private let appleSignInButton = DTAppleButton()
     
     fileprivate var currentNonce: String?
     let viewModel = LoginViewModel()
@@ -100,14 +95,13 @@ class LoginViewController: UIViewController {
     
     private func configureViewController() {
         if traitCollection.userInterfaceStyle == .dark {
-            view.backgroundColor = Colors.darkModeColor
-            contentView.backgroundColor = Colors.darkModeColor
             forgetPasswordLabel.textColor = .systemGray
             registerLabel.textColor = .systemGray
-        } else {
-            view.backgroundColor = Colors.lightModeColor
-            contentView.backgroundColor = Colors.lightModeColor
         }
+        
+        view.setBackgroundColor()
+        contentView.setBackgroundColor()
+        logoImageView.setBackgroundColor()
         
         passwordTextField.isSecureTextEntry = true
         passwordTextField.delegate = self

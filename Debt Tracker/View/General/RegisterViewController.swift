@@ -37,8 +37,6 @@ class RegisterViewController: UIViewController {
         let imageView = UIImageView()
         imageView.image = UIImage(named: ImageName.appLogo)
         imageView.contentMode = .scaleAspectFill
-        imageView.layer.borderColor  = UIColor.gray.cgColor
-        imageView.layer.borderWidth  = 1
         imageView.layer.cornerRadius = 18.75
         imageView.layer.masksToBounds = true
         imageView.translatesAutoresizingMaskIntoConstraints = false
@@ -81,6 +79,8 @@ class RegisterViewController: UIViewController {
     private func configureViewController() {
         view.setBackgroundColor()
         contentView.setBackgroundColor()
+        logoImageView.setBackgroundColor()
+        
         hideKeyboardWheTappedAround()
         viewModel.delegate = self
         emailTextField.delegate = self

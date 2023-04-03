@@ -114,12 +114,16 @@ class CreditsDetailViewController: UIViewController {
         
         totalDebtLabel.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 20).isActive = true
         totalDebtLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        totalDebtLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20).isActive = true
+        totalDebtLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20).isActive = true
         
         totalPaidDebtLabel.topAnchor.constraint(equalTo: totalDebtLabel.bottomAnchor, constant: 10).isActive = true
         totalPaidDebtLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         
         remainingDebtLabel.topAnchor.constraint(equalTo: totalPaidDebtLabel.bottomAnchor, constant: 10).isActive = true
         remainingDebtLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        remainingDebtLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20).isActive = true
+        remainingDebtLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20).isActive = true
         
         totalPaidMonthLabel.topAnchor.constraint(equalTo: remainingDebtLabel.bottomAnchor, constant: 10).isActive = true
         totalPaidMonthLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
