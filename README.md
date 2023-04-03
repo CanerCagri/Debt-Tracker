@@ -1,5 +1,7 @@
 # Debt-Tracker
 
+***Appstore link:*** https://apps.apple.com/us/app/debt-tracker-credit-list/id6446231877
+
 The general purpose of the application is to be able to track our debts and credits in detail.
 
 Firebase Authentication has been used for authentication in the application. Users can create an account using with mail-password or Google, Facebook, or Apple Sign-in options whenever they want, and these accounts are linked with Firebase Authentication.  
