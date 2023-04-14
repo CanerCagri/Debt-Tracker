@@ -11,7 +11,7 @@ Powered by Swift - UIKit. Created Programmatically and with MVVM Architecture. F
 
 ## Previews
 
-<img src="https://user-images.githubusercontent.com/99286902/228683213-ef1dc2b8-37ac-43d2-99e3-512046169553.gif" width="250" height="500"/><img src="https://user-images.githubusercontent.com/99286902/228684691-20a106d5-39cf-4aa4-abff-4b77e24cbefc.gif" width="250" height="500"/><img src="https://user-images.githubusercontent.com/99286902/228686149-a340f8e8-dada-4827-8ded-a2135c613903.gif" width="250" height="500"/>
+<img src="https://user-images.githubusercontent.com/99286902/232055713-153edf01-b101-4ed0-96d1-def31370858b.gif" width="250" height="500"/><img src="https://user-images.githubusercontent.com/99286902/228684691-20a106d5-39cf-4aa4-abff-4b77e24cbefc.gif" width="250" height="500"/><img src="https://user-images.githubusercontent.com/99286902/228686149-a340f8e8-dada-4827-8ded-a2135c613903.gif" width="250" height="500"/>
 
 ## Tech Stack
 
